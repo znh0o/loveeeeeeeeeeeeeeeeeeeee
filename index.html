@@ -1284,8 +1284,10 @@ function listenRoom() {
       document.getElementById('songTitle').textContent = data.ourSong.title || '노래를 추가해봐요';
       document.getElementById('songArtist').textContent = data.ourSong.artist || '아직 선택한 노래가 없어요';
     }
-    // partner avatar
+    // partner slot
     const partnerSlot = mySlot === 'user1' ? 'user2' : 'user1';
+
+    // partner avatar
     if (data[partnerSlot]?.avatar) {
       document.getElementById('partnerAvatar').textContent = data[partnerSlot].avatar;
     }
@@ -1293,11 +1295,21 @@ function listenRoom() {
     if (data[mySlot]?.avatar) {
       document.getElementById('myAvatar').textContent = data[mySlot].avatar;
     }
+
+    // ── 기분 표시: 내 기분 + 상대 기분 모두 ──
+    const myMood = data[mySlot]?.mood || '';
+    const partnerMood = data[partnerSlot]?.mood || '';
+    const moodEl = document.getElementById('moodStatus');
+    let moodText = '';
+    if (myMood) moodText += `나: ${myMood}`;
+    if (partnerMood) moodText += (moodText ? '　' : '') + `${partnerName}: ${partnerMood}`;
+    if (moodText) moodEl.textContent = moodText;
   });
 }
 
 // ─── CHAT ───
 window.openChat = function() {
+  if (!roomId) { showToast('먼저 코드로 연결해요 💕'); return; }
   document.getElementById('homeScreen').classList.remove('active');
   document.getElementById('decoScreen').classList.remove('active');
   document.getElementById('chatScreen').classList.add('active');
@@ -1379,15 +1391,21 @@ window.sendMessage = async function() {
   const input = document.getElementById('msgInput');
   const text = input.value.trim();
   if (!text) return;
+  if (!roomId) { showToast('연결이 끊겼어요 😢'); return; }
   input.value = '';
   input.style.height = '';
 
-  const msgRef = push(ref(db, `chat/${roomId}`));
-  await set(msgRef, {
-    sender: myName,
-    text,
-    timestamp: Date.now()
-  });
+  try {
+    const msgRef = push(ref(db, `chat/${roomId}`));
+    await set(msgRef, {
+      sender: myName,
+      text,
+      timestamp: Date.now()
+    });
+  } catch(e) {
+    showToast('메세지 전송 실패 😢 Firebase 규칙을 확인해요');
+    input.value = text; // restore
+  }
 };
 
 window.handleKey = function(e) {
@@ -1412,10 +1430,12 @@ window.insertEmoji = function(e) {
 };
 
 // ─── MOOD ───
-window.setMood = async function(emoji, text) {
+window.setMood = async function(emoji, text, btn) {
   document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  document.getElementById('moodStatus').textContent = `나의 기분: ${emoji} ${text}`;
+  // find the clicked button
+  const clicked = event ? event.currentTarget : btn;
+  if (clicked) clicked.classList.add('active');
+  document.getElementById('moodStatus').textContent = `나: ${emoji} ${text}`;
   await update(ref(db, `rooms/${roomId}/${mySlot}`), { mood: `${emoji} ${text}` });
 };
 
@@ -1470,9 +1490,12 @@ window.saveAnniversary = async function() {
 
 function updateDday(dateStr) {
   if (!dateStr) return;
-  const start = new Date(dateStr);
+  // Parse as local time to avoid UTC timezone offset causing -1 day bug
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const start = new Date(y, m - 1, d);
   const now = new Date();
-  const diff = Math.floor((now - start) / 86400000);
+  const nowLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const diff = Math.floor((nowLocal - start) / 86400000) + 1; // +1 because day 1 = first day together
   document.getElementById('ddayCount').textContent = diff;
   document.getElementById('ddayLabel').textContent = '함께한 지';
   document.getElementById('ddaySince').textContent = `${dateStr.replaceAll('-','.')} 부터 함께 💕`;
