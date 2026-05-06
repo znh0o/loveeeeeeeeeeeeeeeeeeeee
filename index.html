@@ -1,0 +1,175 @@
+<!-- 🚀 HTML + Firebase Realtime DB 버전 (바로 배포 가능) -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Couple App</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
+  <style>
+    body { font-family: sans-serif; margin:0; background:#ffe4ec; }
+    .center { display:flex; justify-content:center; align-items:center; height:100vh; }
+    .card { background:white; padding:20px; border-radius:20px; width:300px; box-shadow:0 5px 20px rgba(0,0,0,0.1); }
+    input { width:100%; padding:10px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd; }
+    button { width:100%; padding:10px; border:none; border-radius:10px; background:#ff7aa2; color:white; }
+    .home { padding:20px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .box { background:white; padding:20px; border-radius:15px; text-align:center; cursor:pointer; }
+    .chat { display:flex; flex-direction:column; height:100vh; }
+    .messages { flex:1; overflow:auto; padding:10px; }
+    .msg { margin:5px 0; }
+    .me { text-align:right; }
+  </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+// 🔥 Firebase 설정
+const firebaseConfig = {
+  apiKey: "AIzaSyBmAhTVM2R6fvXtPYN3D1HutB0b6Sdaszg",
+  authDomain: "rather-app-995d7.firebaseapp.com",
+  databaseURL: "https://rather-app-995d7-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "rather-app-995d7",
+  storageBucket: "rather-app-995d7.firebasestorage.app",
+  messagingSenderId: "21809133829",
+  appId: "1:21809133829:web:ae211e8efd05e8685fdf6c"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let state = {
+  step: 'login',
+  name: '',
+  code: '',
+  room: ''
+};
+
+function generateCode(){
+  return Math.random().toString(36).substring(2,8);
+}
+
+function render(){
+  const app = document.getElementById('app');
+
+  if(state.step==='login'){
+    app.innerHTML = `
+      <div class="center">
+        <div class="card">
+          <h2>💖 Couple App</h2>
+          <input id="code" placeholder="코드 입력 (없으면 자동생성)" />
+          <input id="name" placeholder="이름 입력" />
+          <button onclick="login()">시작하기</button>
+        </div>
+      </div>
+    `;
+  }
+
+  if(state.step==='home'){
+    app.innerHTML = `
+      <div class="home">
+        <h2>🏠 홈</h2>
+        <p>내 코드: <b>${state.room}</b></p>
+        <div class="grid">
+          <div class="box" onclick="goChat()">💬 메신저</div>
+          <div class="box">📸 앨범</div>
+          <div class="box">❤️ 질문</div>
+        </div>
+      </div>
+    `;
+  }
+
+  if(state.step==='chat'){
+    app.innerHTML = `
+      <div class="chat">
+        <div style="background:#ff7aa2;color:white;padding:10px;">
+          💬 채팅방 <button onclick="back()">⬅️</button>
+        </div>
+        <div id="messages" class="messages"></div>
+        <div style="display:flex;">
+          <input id="msg" placeholder="메시지" />
+          <button onclick="send()">전송</button>
+        </div>
+      </div>
+    `;
+    listenMessages();
+  }
+}
+
+function login(){
+  const name = document.getElementById('name').value;
+  let code = document.getElementById('code').value;
+
+  if(!name) return alert('이름 입력');
+
+  if(!code) code = generateCode();
+
+  const roomRef = db.ref('rooms/'+code);
+
+  roomRef.once('value').then(snap=>{
+    if(!snap.exists()){
+      roomRef.set({ users:[name] });
+      alert('코드 생성: '+code);
+    } else {
+      const data = snap.val();
+      if(data.users.length>=2) return alert('가득 참');
+      roomRef.set({ ...data, users:[...data.users,name] });
+    }
+
+    state.name = name;
+    state.room = code;
+    state.step='home';
+    render();
+  });
+}
+
+function goChat(){
+  state.step='chat';
+  render();
+}
+
+function back(){
+  state.step='home';
+  render();
+}
+
+function send(){
+  const text = document.getElementById('msg').value;
+  if(!text) return;
+
+  db.ref('rooms/'+state.room+'/messages').push({
+    text,
+    sender: state.name,
+    createdAt: Date.now()
+  });
+
+  document.getElementById('msg').value='';
+}
+
+function listenMessages(){
+  const msgRef = db.ref('rooms/'+state.room+'/messages');
+
+  msgRef.on('value', snap=>{
+    const data = snap.val();
+    const container = document.getElementById('messages');
+    container.innerHTML='';
+
+    if(!data) return;
+
+    Object.values(data).forEach(m=>{
+      const div = document.createElement('div');
+      div.className = 'msg ' + (m.sender===state.name?'me':'');
+      div.innerText = m.sender+': '+m.text;
+      container.appendChild(div);
+    });
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>
