@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>우리둘만 💌</title>
+<title>우리두리 💌</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nanum+Myeongjo:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -326,10 +326,28 @@ body {
 .deco-body { padding: 20px 16px 100px; display: flex; flex-direction: column; gap: 16px; }
 
 .couple-card { background: linear-gradient(135deg, #ffeaea 0%, #fff4e8 100%); border-radius: var(--radius); padding: 24px; text-align: center; border: 1px solid var(--border); }
-.cpl-avs { display: flex; justify-content: center; align-items: center; margin-bottom: 14px; }
-.av-circle { width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, #ffb3b3 100%); display: flex; align-items: center; justify-content: center; font-size: 28px; border: 3px solid white; box-shadow: 0 2px 12px var(--shadow); }
-.av-circle:nth-child(3) { background: linear-gradient(135deg, var(--accent2) 0%, #e0f0eb 100%); margin-left: -14px; z-index: 1; }
-.cpl-heart { font-size: 20px; margin: 0 6px; z-index: 2; }
+.cpl-avs {
+  display: flex; justify-content: center; align-items: center;
+  gap: 0; margin-bottom: 14px; position: relative;
+}
+/* 각 아바타는 독립 크기, 하트는 position:absolute 정중앙 */
+.av-circle {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, #ffb3b3 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; border: 3px solid white;
+  box-shadow: 0 2px 12px var(--shadow);
+  overflow: hidden; flex-shrink: 0; cursor: pointer;
+  transition: transform .15s;
+}
+.av-circle:active { transform: scale(.96); }
+.av-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.av-circle.partner { background: linear-gradient(135deg, var(--accent2) 0%, #e0f0eb 100%); }
+.cpl-heart-wrap {
+  width: 36px; height: 36px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; z-index: 2;
+}
 .cpl-names { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
 .cpl-since { font-size: 12px; color: var(--text2); }
 .cpl-edit { font-size: 12px; color: var(--text2); margin-top: 12px; cursor: pointer; }
@@ -372,14 +390,65 @@ body {
 .m-cancel { flex: 1; padding: 13px; border: 2px solid var(--border); border-radius: 12px; background: white; font-family: 'Gowun Dodum',sans-serif; font-size: 14px; cursor: pointer; color: var(--text2); }
 .m-ok { flex: 1; padding: 13px; border: none; border-radius: 12px; background: var(--primary); color: white; font-family: 'Gowun Dodum',sans-serif; font-size: 14px; cursor: pointer; }
 
-/* loading dots */
-.ldots { display: flex; gap: 5px; justify-content: center; padding: 24px; }
+/* ── READ RECEIPT ── */
+.msg-read { font-size: 10px; color: var(--primary-soft); margin-top: 1px; text-align: right; }
+.msg-wrap.them .msg-read { text-align: left; }
+
+/* ── SEARCH BAR ── */
+.search-bar {
+  display: none; align-items: center; gap: 8px;
+  padding: 8px 16px; background: white; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.search-bar.open { display: flex; }
+.search-inp {
+  flex: 1; padding: 8px 12px; border: 2px solid var(--border); border-radius: 20px;
+  font-family: 'Gowun Dodum',sans-serif; font-size: 14px; outline: none; background: var(--bg);
+  color: var(--text);
+}
+.search-inp:focus { border-color: var(--primary-soft); }
+.search-nav { display: flex; gap: 4px; align-items: center; }
+.search-nav button { background: none; border: none; font-size: 18px; cursor: pointer; padding: 4px; color: var(--text2); }
+.search-nav button:active { color: var(--primary); }
+.search-count { font-size: 12px; color: var(--text3); white-space: nowrap; }
+.search-close { font-size: 18px; cursor: pointer; color: var(--text3); padding: 4px; }
+.msg-highlight { background: #ffe08a !important; color: var(--text) !important; border-radius: 3px; }
+
+/* ── DELETE CONFIRM ── */
+.del-confirm {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4);
+  backdrop-filter: blur(4px); z-index: 220; align-items: center; justify-content: center;
+}
+.del-confirm.open { display: flex; }
+.del-box {
+  background: white; border-radius: 20px; padding: 24px 24px 20px;
+  width: 280px; text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,.15);
+}
+.del-box p { font-size: 15px; margin-bottom: 18px; color: var(--text); }
+.del-btns { display: flex; gap: 8px; }
+.del-cancel { flex:1; padding:12px; border:2px solid var(--border); border-radius:12px; background:white; font-family:'Gowun Dodum',sans-serif; font-size:14px; cursor:pointer; color:var(--text2); }
+.del-ok     { flex:1; padding:12px; border:none; border-radius:12px; background:#ff7e7e; color:white; font-family:'Gowun Dodum',sans-serif; font-size:14px; cursor:pointer; }
 .ldot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary-soft); animation: blink 1.4s infinite; }
 .ldot:nth-child(2){animation-delay:.2s} .ldot:nth-child(3){animation-delay:.4s}
 
-/* scrollbar */
-::-webkit-scrollbar { width: 3px; }
+/* loading dots */
+.ldots { display: flex; gap: 5px; justify-content: center; padding: 24px; }
 ::-webkit-scrollbar-thumb { background: var(--primary-soft); border-radius: 2px; }
+
+/* 채팅창 스크롤바 완전 숨김 */
+#chatMsgs::-webkit-scrollbar { display: none; }
+#chatMsgs { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* 상대방 아바타 + 말풍선 레이아웃 */
+.them-row { display: flex; align-items: flex-end; gap: 6px; width: 100%; }
+.msg-pt-av {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: linear-gradient(135deg, #b5d8cc, #e0f0eb);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0;
+}
+.msg-pt-av.ghost { visibility: hidden; }
 
 /* desktop shadow */
 @media(min-width:430px) {
@@ -393,11 +462,26 @@ body {
 <!-- hidden file inputs -->
 <input type="file" id="inp-gallery" accept="image/*" style="display:none" onchange="onImgPicked(event)">
 <input type="file" id="inp-bg"      accept="image/*" style="display:none" onchange="onBgPicked(event)">
+<input type="file" id="inp-av"      accept="image/*" style="display:none" onchange="onAvPhotoPicked(event)">
+
+<!-- ════ SPLASH ════ -->
+<div id="splashScreen" style="
+  position:fixed;inset:0;z-index:999;
+  background:linear-gradient(160deg,#fff5f5 0%,#fde8e8 50%,#fdf0e8 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  transition:opacity .4s ease;
+">
+  <div style="font-size:56px;animation:float 2s ease-in-out infinite">💌</div>
+  <div style="font-family:'Nanum Myeongjo',serif;font-size:28px;font-weight:700;color:#3a2e2e">우리두리</div>
+  <div style="display:flex;gap:6px;margin-top:8px">
+    <div class="ldot"></div><div class="ldot"></div><div class="ldot"></div>
+  </div>
+</div>
 
 <!-- ════ LOGIN ════ -->
-<div id="loginScreen" class="screen active">
+<div id="loginScreen" class="screen">
   <div class="login-deco">💌</div>
-  <div class="login-title">우리둘만</div>
+  <div class="login-title">우리두리</div>
   <div class="login-sub">둘만의 소중한 공간</div>
   <div class="login-card">
     <div class="ig"><label class="lbl">내 이름</label>
@@ -426,8 +510,24 @@ body {
 <div id="homeScreen" class="screen">
   <div class="h-header">
     <div class="h-top">
-      <div><div class="h-greeting" id="hGreet">안녕 💕</div><div class="h-date" id="hDate"></div></div>
-      <div class="p-badge"><div class="p-dot"></div><span id="pBadge">상대방</span></div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <!-- 아바타 표시 -->
+        <div style="display:flex;align-items:center">
+          <div id="hMyAv" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ff7e7e,#ffb3b3);display:flex;align-items:center;justify-content:center;font-size:20px;border:2px solid white;box-shadow:0 2px 8px rgba(255,126,126,.2)">🐰</div>
+          <div id="hPtAv" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#b5d8cc,#e0f0eb);display:flex;align-items:center;justify-content:center;font-size:20px;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-left:-10px">🐻</div>
+        </div>
+        <div><div class="h-greeting" id="hGreet">안녕 💕</div><div class="h-date" id="hDate"></div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="p-badge"><div class="p-dot" id="pDot"></div><span id="pBadge">상대방</span></div>
+        <button onclick="doLogout()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);padding:4px;" title="로그아웃">🚪</button>
+      </div>
+    </div>
+    <!-- 커플 코드 표시 -->
+    <div style="display:flex;align-items:center;gap:6px;margin-top:8px">
+      <span style="font-size:11px;color:var(--text3)">커플 코드</span>
+      <span id="displayCode" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--primary);letter-spacing:3px;background:var(--primary-pale);padding:3px 10px;border-radius:20px;border:1px solid var(--primary-soft)"></span>
+      <span onclick="copyDisplayCode()" style="font-size:11px;color:var(--text3);cursor:pointer;">복사</span>
     </div>
   </div>
   <div class="h-body">
@@ -514,7 +614,19 @@ body {
       <div class="c-name" id="cName">연인</div>
       <div class="c-status">💕 연결됨</div>
     </div>
+    <span onclick="toggleSearch()" style="font-size:20px;cursor:pointer;padding:4px;color:var(--text2)">🔍</span>
     <span style="font-size:22px">💕</span>
+  </div>
+
+  <!-- search bar -->
+  <div class="search-bar" id="searchBar">
+    <input class="search-inp" id="searchInp" placeholder="메시지 검색..." oninput="doSearch()" onkeydown="if(event.key==='Escape')closeSearch()">
+    <div class="search-nav">
+      <span class="search-count" id="searchCount"></span>
+      <button onclick="searchStep(-1)">↑</button>
+      <button onclick="searchStep(1)">↓</button>
+    </div>
+    <span class="search-close" onclick="closeSearch()">✕</span>
   </div>
 
   <div id="chatMsgs">
@@ -562,6 +674,17 @@ body {
   <img id="ivImg" src="" alt="">
 </div>
 
+<!-- delete confirm -->
+<div class="del-confirm" id="delConfirm">
+  <div class="del-box">
+    <p>이 메시지를 삭제할까요?</p>
+    <div class="del-btns">
+      <button class="del-cancel" onclick="document.getElementById('delConfirm').classList.remove('open')">취소</button>
+      <button class="del-ok" id="delOkBtn">삭제</button>
+    </div>
+  </div>
+</div>
+
 <!-- ════ DECO ════ -->
 <div id="decoScreen" class="screen">
   <div class="deco-hdr">🎨 우리 공간 꾸미기</div>
@@ -570,10 +693,11 @@ body {
     <!-- couple profile -->
     <div class="couple-card">
       <div class="cpl-avs">
-        <div class="av-circle" id="myAv">🐰</div>
-        <div class="cpl-heart">💗</div>
-        <div class="av-circle" id="ptAv">🐻</div>
+        <div class="av-circle" id="myAv" onclick="pickAvPhoto('my')" title="사진으로 바꾸기">🐰</div>
+        <div class="cpl-heart-wrap">💗</div>
+        <div class="av-circle partner" id="ptAv">🐻</div>
       </div>
+      <div style="font-size:10px;color:var(--text3);margin-bottom:10px">내 아바타를 탭하면 사진으로 바꿀 수 있어요</div>
       <div class="cpl-names" id="cplNames">우리 둘</div>
       <div class="cpl-since" id="cplSince">기념일을 설정해요</div>
       <div class="cpl-edit" onclick="openDecoModal()">✏️ 커플 정보 수정하기</div>
@@ -598,6 +722,7 @@ body {
         <div class="opt-item" onclick="setAv(this,'🦊')">🦊</div>
         <div class="opt-item" onclick="setAv(this,'🐸')">🐸</div>
         <div class="opt-item" onclick="setAv(this,'🐧')">🐧</div>
+        <div class="opt-item opt-photo" onclick="pickAvPhoto('my')">📷<small>사진</small></div>
       </div>
     </div>
 
@@ -666,6 +791,8 @@ const db      = getDatabase(fbApp);
 let myName='', roomId='', partnerName='', mySlot='';
 let msgUnsub=null, roomUnsub=null;
 let lastDate='', chatOpen=false;
+let searchMatches=[], searchIdx=0;
+let pendingDelKey=null;
 
 /* ── UTILS ── */
 function genCode() {
@@ -733,11 +860,22 @@ window.copyCode = function() {
   navigator.clipboard?.writeText(code).then(() => toast('코드를 복사했어요! 💕'));
 };
 
+/* ── SESSION PERSIST (localStorage) ── */
+function saveSession() {
+  localStorage.setItem('wdm_session', JSON.stringify({ myName, roomId, mySlot, partnerName }));
+}
+function loadSession() {
+  try { return JSON.parse(localStorage.getItem('wdm_session')); } catch{ return null; }
+}
+
 /* ── ENTER APP ── */
 function enterApp() {
+  saveSession();
+  // 스플래시가 아직 있으면 숨김
+  const splash = document.getElementById('splashScreen');
+  if (splash && splash.style.display !== 'none') hideSplash(false);
   document.getElementById('loginScreen').classList.remove('active');
   document.getElementById('homeScreen').classList.add('active');
-  // home init
   document.getElementById('hGreet').textContent = `안녕, ${myName} 💕`;
   const n = new Date();
   document.getElementById('hDate').textContent =
@@ -745,7 +883,46 @@ function enterApp() {
   document.getElementById('chatNm').textContent = partnerName || '연인';
   document.getElementById('cName').textContent  = partnerName || '연인';
   document.getElementById('pBadge').textContent = partnerName || '상대방';
+  document.getElementById('displayCode').textContent = roomId;
   listenRoom();
+}
+
+window.copyDisplayCode = function() {
+  navigator.clipboard?.writeText(roomId).then(() => toast('코드를 복사했어요! 💕'));
+};
+
+window.doLogout = function() {
+  if (!confirm('로그아웃 할까요?\n(코드로 다시 입장할 수 있어요)')) return;
+  localStorage.removeItem('wdm_session');
+  location.reload();
+};
+
+/* ── AUTO LOGIN on page load ── */
+(async function tryAutoLogin() {
+  const s = loadSession();
+  if (!s || !s.roomId || !s.myName) {
+    // no session → show login, hide splash
+    hideSplash(true);
+    return;
+  }
+  try {
+    const snap = await get(ref(db, `rooms/${s.roomId}`));
+    if (!snap.exists()) { localStorage.removeItem('wdm_session'); hideSplash(true); return; }
+    myName = s.myName; roomId = s.roomId; mySlot = s.mySlot; partnerName = s.partnerName;
+    enterApp();
+    hideSplash(false);
+  } catch(e) {
+    hideSplash(true);
+  }
+})();
+
+function hideSplash(showLogin) {
+  const splash = document.getElementById('splashScreen');
+  splash.style.opacity = '0';
+  setTimeout(() => {
+    splash.style.display = 'none';
+    if (showLogin) document.getElementById('loginScreen').classList.add('active');
+  }, 400);
 }
 
 /* ── ROOM LISTENER ── */
@@ -760,8 +937,19 @@ function listenRoom() {
       document.getElementById('songArt').textContent = d.ourSong.artist || '아직 없어요';
     }
     const ps = mySlot==='user1' ? 'user2' : 'user1';
-    if (d[ps]?.avatar)    document.getElementById('ptAv').textContent = d[ps].avatar;
-    if (d[mySlot]?.avatar) document.getElementById('myAv').textContent = d[mySlot].avatar;
+
+    // 상대방 아바타
+    const ptEmoji = d[ps]?.avatar || '🐻';
+    document.getElementById('ptAv').textContent = ptEmoji;
+    document.getElementById('hPtAv').textContent = ptEmoji;
+    // 헤더 채팅방용 아바타 캐시
+    window._ptAvEmoji = ptEmoji;
+
+    if (d[mySlot]?.avatar) {
+      document.getElementById('myAv').textContent = d[mySlot].avatar;
+      document.getElementById('hMyAv').textContent = d[mySlot].avatar;
+    }
+
     // mood
     const mm = d[mySlot]?.mood||'', pm = d[ps]?.mood||'';
     let mt = '';
@@ -778,6 +966,8 @@ window.openChat = function() {
   document.getElementById('chatScreen').classList.add('active');
   chatOpen = true;
   document.getElementById('chatBadge').classList.remove('show');
+  // 내가 채팅 열면 현재 시각을 lastReadAt으로 저장
+  update(ref(db, `rooms/${roomId}/${mySlot}`), { lastReadAt: Date.now() });
   loadMsgs();
 };
 window.goHome = function() {
@@ -786,72 +976,162 @@ window.goHome = function() {
   document.getElementById('homeScreen').classList.add('active');
 };
 
+/* ── UTILS: 몇분전 ── */
+function timeAgo(ts) {
+  if (!ts) return '';
+  const diff = Math.floor((Date.now() - ts) / 1000);
+  if (diff < 60)  return '방금 읽음';
+  if (diff < 3600) return `${Math.floor(diff/60)}분 전 읽음`;
+  if (diff < 86400) return `${Math.floor(diff/3600)}시간 전 읽음`;
+  return `${Math.floor(diff/86400)}일 전 읽음`;
+}
+
 /* ── RENDER MESSAGES ── */
-function renderMsgs(data) {
+function renderMsgs(data, partnerLastReadAt) {
   const box = document.getElementById('chatMsgs');
-  const scrolledToBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 60;
+  const atBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
   box.innerHTML = '';
   lastDate = '';
+  searchMatches = [];
   if (!data || !Object.keys(data).length) {
     box.innerHTML = '<div style="text-align:center;padding:40px 16px;color:var(--text3);font-size:13px">첫 메세지를 보내봐요 💌</div>';
     return;
   }
-  const msgs = Object.values(data).sort((a,b) => (a.timestamp||0)-(b.timestamp||0));
+
+  const entries = Object.entries(data).sort((a,b) => (a[1].timestamp||0)-(b[1].timestamp||0));
+  const ptEmoji = window._ptAvEmoji || '🐻';
+
+  // 내 메시지 중 마지막 것의 인덱스 찾기
+  let lastMyIdx = -1;
+  entries.forEach(([,msg], idx) => { if (msg.sender === myName) lastMyIdx = idx; });
+
   let prevSender = '';
-  msgs.forEach(msg => {
+
+  entries.forEach(([msgKey, msg], idx) => {
     const isMe = msg.sender === myName;
+    const isLastMsg = idx === entries.length - 1;
+    const isLastMine = isMe && idx === lastMyIdx;
     const ds = fmtDate(msg.timestamp);
+
     if (ds !== lastDate) {
       const d = document.createElement('div'); d.className='msg-date-div'; d.textContent=ds;
       box.appendChild(d); lastDate = ds; prevSender = '';
     }
-    // wrapper row — full width, justify pushes content left or right
+
+    // 상대 메시지: them-row = [아바타] [inner]
+    // 내 메시지:   msg-wrap.me > inner
     const wrap = document.createElement('div');
     wrap.className = `msg-wrap ${isMe ? 'me' : 'them'}`;
 
-    // inner column — holds sender label + bubble + time, max-width 72%
-    const inner = document.createElement('div');
-    inner.className = 'msg-inner';
+    if (!isMe) {
+      // 아바타 (연속이면 ghost)
+      const avEl = document.createElement('div');
+      avEl.className = 'msg-pt-av' + (prevSender === msg.sender ? ' ghost' : '');
+      avEl.textContent = ptEmoji;
 
-    // sender label (only for partner's first in a run)
-    if (!isMe && prevSender !== msg.sender) {
-      const sn = document.createElement('div'); sn.className='msg-sender'; sn.textContent=msg.sender;
-      inner.appendChild(sn);
-    }
+      const inner = document.createElement('div');
+      inner.className = 'msg-inner';
 
-    if (msg.type === 'image' && (msg.imageData || msg.imageUrl)) {
-      const src = msg.imageData || msg.imageUrl;
-      const ib = document.createElement('div'); ib.className='img-bubble';
-      const im = document.createElement('img'); im.src=src; im.alt='사진'; im.loading='lazy';
-      im.onclick = () => { document.getElementById('ivImg').src=src; document.getElementById('imgViewer').classList.add('open'); };
-      ib.appendChild(im); inner.appendChild(ib);
+      if (prevSender !== msg.sender) {
+        const sn = document.createElement('div'); sn.className='msg-sender'; sn.textContent=msg.sender;
+        inner.appendChild(sn);
+      }
+
+      if (msg.type === 'image' && (msg.imageData || msg.imageUrl)) {
+        const src = msg.imageData || msg.imageUrl;
+        const ib = document.createElement('div'); ib.className='img-bubble';
+        const im = document.createElement('img'); im.src=src; im.alt='사진'; im.loading='lazy';
+        im.onclick = () => { document.getElementById('ivImg').src=src; document.getElementById('imgViewer').classList.add('open'); };
+        ib.appendChild(im); inner.appendChild(ib);
+      } else {
+        const bbl = document.createElement('div');
+        bbl.className = 'msg-bubble' + (prevSender===msg.sender?' cont':'');
+        bbl.textContent = msg.text||'';
+        searchMatches.push({ el:bbl, text:msg.text||'' });
+        inner.appendChild(bbl);
+      }
+
+      const tm = document.createElement('div'); tm.className='msg-time'; tm.textContent=fmtTime(msg.timestamp);
+      inner.appendChild(tm);
+
+      // them-row: 아바타 + inner 나란히
+      const row = document.createElement('div'); row.className='them-row';
+      row.appendChild(avEl); row.appendChild(inner);
+      wrap.appendChild(row);
+
     } else {
-      const bbl = document.createElement('div');
-      bbl.className = `msg-bubble${prevSender===msg.sender?' cont':''}`;
-      bbl.textContent = msg.text || '';
-      inner.appendChild(bbl);
+      // 내 메시지
+      const inner = document.createElement('div');
+      inner.className = 'msg-inner';
+
+      if (msg.type === 'image' && (msg.imageData || msg.imageUrl)) {
+        const src = msg.imageData || msg.imageUrl;
+        const ib = document.createElement('div'); ib.className='img-bubble';
+        const im = document.createElement('img'); im.src=src; im.alt='사진'; im.loading='lazy';
+        im.onclick = () => { document.getElementById('ivImg').src=src; document.getElementById('imgViewer').classList.add('open'); };
+        ib.appendChild(im); inner.appendChild(ib);
+      } else {
+        const bbl = document.createElement('div');
+        bbl.className = 'msg-bubble' + (prevSender===msg.sender?' cont':'');
+        bbl.textContent = msg.text||'';
+        searchMatches.push({ el:bbl, text:msg.text||'' });
+        // 길게 눌러 삭제
+        let pressTimer;
+        const startDel = () => { pressTimer = setTimeout(() => showDeleteConfirm(msgKey), 500); };
+        const cancelDel = () => clearTimeout(pressTimer);
+        bbl.addEventListener('touchstart', startDel, {passive:true});
+        bbl.addEventListener('touchend',   cancelDel);
+        bbl.addEventListener('touchmove',  cancelDel);
+        bbl.addEventListener('mousedown',  startDel);
+        bbl.addEventListener('mouseup',    cancelDel);
+        bbl.style.cursor = 'pointer';
+        inner.appendChild(bbl);
+      }
+
+      // 읽음 표시 — 내 마지막 메시지에만
+      if (isLastMine) {
+        const rd = document.createElement('div');
+        rd.className = 'msg-read';
+        // partnerLastReadAt 이 이 메시지 이후면 읽음
+        if (partnerLastReadAt && msg.timestamp && partnerLastReadAt >= msg.timestamp) {
+          rd.textContent = timeAgo(partnerLastReadAt);
+        } else {
+          rd.textContent = '';
+        }
+        inner.appendChild(rd);
+      }
+
+      const tm = document.createElement('div'); tm.className='msg-time'; tm.textContent=fmtTime(msg.timestamp);
+      inner.appendChild(tm);
+      wrap.appendChild(inner);
     }
 
-    const tm = document.createElement('div'); tm.className='msg-time'; tm.textContent=fmtTime(msg.timestamp);
-    inner.appendChild(tm);
-    wrap.appendChild(inner);
     box.appendChild(wrap);
     prevSender = msg.sender;
   });
 
-  // chat preview
-  const last = msgs[msgs.length-1];
+  const last = entries[entries.length-1][1];
   document.getElementById('chatLast').textContent = last.type==='image' ? '📷 사진' : (last.text||'');
-
-  if (scrolledToBottom) box.scrollTop = box.scrollHeight;
+  if (atBottom) box.scrollTop = box.scrollHeight;
 }
 
 function loadMsgs() {
   const box = document.getElementById('chatMsgs');
   if (msgUnsub) msgUnsub();
   box.innerHTML = '<div class="ldots"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div></div>';
+  const ps = mySlot==='user1' ? 'user2' : 'user1';
+  let partnerLastReadAt = 0;
+  let cachedData = null;
+  // 상대 lastReadAt 바뀌면 즉시 읽음 업데이트
+  onValue(ref(db, `rooms/${roomId}/${ps}/lastReadAt`), snap => {
+    partnerLastReadAt = snap.val() || 0;
+    if (cachedData !== null) renderMsgs(cachedData, partnerLastReadAt);
+  });
   msgUnsub = onValue(ref(db, `chat/${roomId}`), snap => {
-    renderMsgs(snap.exists() ? snap.val() : null);
+    cachedData = snap.exists() ? snap.val() : null;
+    // 채팅 열려있으면 새 메시지 올 때마다 읽음 시각 갱신
+    if (chatOpen) update(ref(db, `rooms/${roomId}/${mySlot}`), { lastReadAt: Date.now() });
+    renderMsgs(cachedData, partnerLastReadAt);
   });
 }
 
@@ -1066,6 +1346,75 @@ window.saveDecoInfo   = async function() {
     document.getElementById('cplNames').textContent=name;
   }
   closeDecoModal(); toast('저장됐어요 💕');
+};
+
+/* ── DELETE MESSAGE ── */
+function showDeleteConfirm(msgKey) {
+  pendingDelKey = msgKey;
+  document.getElementById('delConfirm').classList.add('open');
+  document.getElementById('delOkBtn').onclick = async function() {
+    if (!pendingDelKey) return;
+    try {
+      const { remove } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+      await remove(ref(db, `chat/${roomId}/${pendingDelKey}`));
+    } catch(e) { toast('삭제 실패 😢'); }
+    document.getElementById('delConfirm').classList.remove('open');
+    pendingDelKey = null;
+  };
+}
+
+/* ── SEARCH ── */
+window.toggleSearch = function() {
+  const bar = document.getElementById('searchBar');
+  bar.classList.toggle('open');
+  if (bar.classList.contains('open')) {
+    setTimeout(() => document.getElementById('searchInp').focus(), 100);
+  } else {
+    closeSearch();
+  }
+};
+window.closeSearch = function() {
+  document.getElementById('searchBar').classList.remove('open');
+  document.getElementById('searchInp').value = '';
+  document.getElementById('searchCount').textContent = '';
+  // remove highlights
+  document.querySelectorAll('.msg-highlight').forEach(el => {
+    el.outerHTML = el.outerHTML.replace(/<mark[^>]*>/g,'').replace(/<\/mark>/g,'');
+  });
+  searchMatches.forEach(m => {
+    m.el.innerHTML = m.el.innerHTML.replace(/<mark[^>]*class="msg-highlight"[^>]*>(.*?)<\/mark>/g, '$1');
+  });
+  searchIdx = 0;
+};
+window.doSearch = function() {
+  const q = document.getElementById('searchInp').value.trim().toLowerCase();
+  const countEl = document.getElementById('searchCount');
+  // clear old highlights
+  searchMatches.forEach(m => {
+    m.el.textContent = m.text; // reset to plain text
+  });
+  if (!q) { countEl.textContent=''; searchIdx=0; return; }
+  const hits = searchMatches.filter(m => m.text.toLowerCase().includes(q));
+  hits.forEach(m => {
+    const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+    m.el.innerHTML = m.text.replace(re, '<mark class="msg-highlight">$1</mark>');
+  });
+  searchIdx = 0;
+  if (hits.length) {
+    countEl.textContent = `1 / ${hits.length}`;
+    hits[0].el.closest('.msg-wrap')?.scrollIntoView({ behavior:'smooth', block:'center' });
+  } else {
+    countEl.textContent = '없음';
+  }
+};
+window.searchStep = function(dir) {
+  const q = document.getElementById('searchInp').value.trim().toLowerCase();
+  if (!q) return;
+  const hits = searchMatches.filter(m => m.text.toLowerCase().includes(q));
+  if (!hits.length) return;
+  searchIdx = (searchIdx + dir + hits.length) % hits.length;
+  document.getElementById('searchCount').textContent = `${searchIdx+1} / ${hits.length}`;
+  hits[searchIdx].el.closest('.msg-wrap')?.scrollIntoView({ behavior:'smooth', block:'center' });
 };
 
 /* ── NAV ── */
