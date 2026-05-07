@@ -197,13 +197,13 @@ body {
 #chatMsgs {
   flex: 1;
   overflow-y: auto;
-  overflow-x: hidden;           /* prevent horizontal scroll on Android */
-  padding: 14px 12px;
+  overflow-x: hidden;
+  padding: 14px 10px 14px 12px;
   display: flex;
   flex-direction: column;
   gap: 3px;
   scroll-behavior: smooth;
-  width: 100%;                  /* explicit full width */
+  width: 100%;
   background-size: cover !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
@@ -213,10 +213,10 @@ body {
 .msg-wrap {
   display: flex;
   flex-direction: column;
-  width: 100%;                  /* FULL WIDTH — this was the Android bug */
+  width: 100%;
 }
-.msg-wrap.me  { align-items: flex-end; }   /* my messages → right */
-.msg-wrap.them { align-items: flex-start; } /* their messages → left */
+.msg-wrap.me  { align-items: flex-end; padding-right: 0; }
+.msg-wrap.them { align-items: flex-start; }
 
 .msg-sender { font-size: 11px; color: var(--text3); margin-bottom: 3px; padding: 0 4px; }
 
@@ -231,15 +231,17 @@ body {
 .msg-wrap.me .msg-bubble {
   background: var(--primary); color: white;
   border-bottom-right-radius: 4px;
+  margin-right: 0;
 }
 .msg-wrap.them .msg-bubble {
   background: rgba(245,237,232,.97); color: var(--text);
   border-bottom-left-radius: 4px;
+  margin-left: 0;
 }
 .msg-wrap.me  .msg-bubble.cont { border-top-right-radius: 4px; }
 .msg-wrap.them .msg-bubble.cont { border-top-left-radius: 4px; }
 
-.msg-time { font-size: 10px; color: var(--text3); margin-top: 3px; padding: 0 4px; }
+.msg-time { font-size: 10px; color: var(--text3); margin-top: 3px; padding: 0; }
 
 .msg-date-div {
   text-align: center; font-size: 11px; color: var(--text3);
