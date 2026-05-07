@@ -209,19 +209,29 @@ body {
   background-repeat: no-repeat !important;
 }
 
-/* ── THE FIX: each row spans full width, uses flex to push me/them ── */
+/* ── MESSAGE ROWS: row layout, justify pushes bubbles left/right ── */
 .msg-wrap {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;          /* row 방향으로 변경 */
   width: 100%;
+  box-sizing: border-box;
 }
-.msg-wrap.me  { align-items: flex-end; padding-right: 0; }
-.msg-wrap.them { align-items: flex-start; }
+.msg-wrap.me   { justify-content: flex-end; }   /* 오른쪽 끝 */
+.msg-wrap.them { justify-content: flex-start; }  /* 왼쪽 끝 */
 
-.msg-sender { font-size: 11px; color: var(--text3); margin-bottom: 3px; padding: 0 4px; }
+/* bubble wrapper — column inside for sender/bubble/time stacking */
+.msg-inner {
+  display: flex;
+  flex-direction: column;
+  max-width: 72%;
+}
+.msg-wrap.me   .msg-inner { align-items: flex-end; }
+.msg-wrap.them .msg-inner { align-items: flex-start; }
+
+.msg-sender { font-size: 11px; color: var(--text3); margin-bottom: 3px; }
 
 .msg-bubble {
-  max-width: 72%;
+  max-width: 100%;              /* msg-inner의 72%가 이미 제한함 */
   padding: 10px 14px;
   border-radius: 18px;
   font-size: 14px; line-height: 1.55;
@@ -795,31 +805,36 @@ function renderMsgs(data) {
       const d = document.createElement('div'); d.className='msg-date-div'; d.textContent=ds;
       box.appendChild(d); lastDate = ds; prevSender = '';
     }
-    // wrapper — full width, flex-end for me
+    // wrapper row — full width, justify pushes content left or right
     const wrap = document.createElement('div');
     wrap.className = `msg-wrap ${isMe ? 'me' : 'them'}`;
+
+    // inner column — holds sender label + bubble + time, max-width 72%
+    const inner = document.createElement('div');
+    inner.className = 'msg-inner';
 
     // sender label (only for partner's first in a run)
     if (!isMe && prevSender !== msg.sender) {
       const sn = document.createElement('div'); sn.className='msg-sender'; sn.textContent=msg.sender;
-      wrap.appendChild(sn);
+      inner.appendChild(sn);
     }
 
     if (msg.type === 'image' && (msg.imageData || msg.imageUrl)) {
-      const src = msg.imageData || msg.imageUrl;   // imageData = base64, imageUrl = legacy
+      const src = msg.imageData || msg.imageUrl;
       const ib = document.createElement('div'); ib.className='img-bubble';
       const im = document.createElement('img'); im.src=src; im.alt='사진'; im.loading='lazy';
       im.onclick = () => { document.getElementById('ivImg').src=src; document.getElementById('imgViewer').classList.add('open'); };
-      ib.appendChild(im); wrap.appendChild(ib);
+      ib.appendChild(im); inner.appendChild(ib);
     } else {
       const bbl = document.createElement('div');
       bbl.className = `msg-bubble${prevSender===msg.sender?' cont':''}`;
       bbl.textContent = msg.text || '';
-      wrap.appendChild(bbl);
+      inner.appendChild(bbl);
     }
 
     const tm = document.createElement('div'); tm.className='msg-time'; tm.textContent=fmtTime(msg.timestamp);
-    wrap.appendChild(tm);
+    inner.appendChild(tm);
+    wrap.appendChild(inner);
     box.appendChild(wrap);
     prevSender = msg.sender;
   });
