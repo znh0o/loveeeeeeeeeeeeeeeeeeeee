@@ -13,13 +13,10 @@
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
 
   <title>우리두리</title>
-  <!-- HTML, CSS, 앱 로직, PWA 아이콘/manifest를 이 파일 하나에 통합 -->
-
-  <!-- 단일 파일용 내장 PWA 메타: manifest와 아이콘을 Data URI로 포함 -->
   <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22%EC%9A%B0%EB%A6%AC%EB%91%90%EB%A6%AC%22%2C%22short_name%22%3A%22%EC%9A%B0%EB%A6%AC%EB%91%90%EB%A6%AC%22%2C%22description%22%3A%22%EB%91%98%EB%A7%8C%EC%9D%98%20%EC%8B%A4%EC%8B%9C%EA%B0%84%20%EC%BB%A4%ED%94%8C%20%EB%A9%94%EC%8B%A0%EC%A0%80%22%2C%22lang%22%3A%22ko-KR%22%2C%22start_url%22%3A%22.%22%2C%22scope%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22display_override%22%3A%5B%22standalone%22%2C%22minimal-ui%22%5D%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%23FFF8F7%22%2C%22theme_color%22%3A%22%23FFF8F7%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAHo0lEQVR4nO3dv24bRxDH8XHghmU6Fxb8BHqLuEupV4iBdDFS2AjgFA5gJIVgdwGYV2CZLnoLPUEQF%2B5c0p1SWGudaO7x%2Fszuzux8P40DSD4zd7%2Ffzh5JiQ9uPu1vBAjqm9YPAGiJAiA0CoDQKABCowAIjQIgNAqA0CgAQqMACI0CIDQKgNAoAEKjAAiNAiA0CoDQKABCowAIjQIgtIetH0BRL960fgT%2Bffft77O%2B%2F%2BmPLws9kiIedPMzwYRdx9zAn2K8EL4LQOh1aIc%2Bx2AZfBaA4K9XK%2FQ5RsrgqwAEf73WwT%2FUuAg%2BCkDwdVgLf9KwBLYLQPB1WA3%2BoQZFsPs6AOHX4SX8IiL%2F%2FFn9sdqbAARfj6fwD1WcBLYKQPh1eA3%2BoQpFsLMFIvw6egm%2FSJUtkY0CEH4dPYU%2FKVyC9gUg%2FDp6DH9SsARtC0D40Vi7AhB%2BPT2v%2FkmhKdCmAIRfT4TwJwVKUL8AhF9PpPAnyiWoWwDCD2PaPwuEZSKu%2FoniFKhXAFZ%2FPZHDnyiVoE4BCD%2BMYgvkDav%2FHYUpUL4ArP4wjAmA0MoWgNVfF9ufr63cBjEBEFq5ArD6wwEmgBdsf%2FJWbIPKFIDVH04wARAaBUBo%2BgVg%2B6OP%2Ff9pC%2B8DmAAIjQIgNAqA0CgAQtMtADfAcIYJgNAoAEKjAAiNAiA0CoDQKABCowAeXH008Zm6pi38NJmH2o%2BjmXevWz%2BC0myV4O%2B3XbxBz38B%2Bg%2B%2BTd8%2F%2F1xI50XwvQUi%2FO2lIjil%2BymRtd4KQfBtajUNVnyapO8JAKzk5x7g%2BQ93%2F%2F3vf%2B0eB%2FLOL%2B5W4uudi3sDPxPg7V%2BtHwGmqhn%2BlR%2Bm7WcCiIg8Ofv8JxPApnR9rts%2BjDn8TIDhjW860bBjeE0cPTPkawIMMQ1saLkYrdz%2BiHiaADlMg3Y6OPd%2BJ8CQkWmw%2F%2Fm37Nc2l6%2BaH0%2BNheArrP4ivRQgeXLWpARjQT38ninB1T6eKgvhv%2Fr4Up7qHMr%2FFujQk7OqF2lKWOd8v%2FbxVFkIv7L%2BCpBUuFhLw5f7e9rHU1N5URml%2FNbwfgsgUvTCrQ3d4d%2FXPp4aK8EXKfJzEX0XIFG%2BiFphS8fRPp4KS6u%2BSLEfCopRABF7F9SyQOcpTgGSlRdXe6th6nhWF4mCPxIarwAiNi9ya1bPSeGfh45ZABG7q10LVs9DhV8G0NcLYUs0evHMhMDBT%2BJOgKGI08Dq%2F2%2FlXwFDAYashkKT5bI3%2BP1HbIEOGXljXREE%2FytMgJxMWJq%2BC3OCo4%2BPVT%2BLCTCmh2lA8EdRgCkOninaXL6q%2By7Mie6t%2FhaDbyT0QxRgqoNpYK0EZsNvMPRD3APMNQiXlfsBk%2BG%2F%2BvjSevhFKMAyhkrw5d%2B3fKNrGFugpQZbohTCmlsik6u%2BQ0yAtVqGj1V%2FNQqg4TaItbZDm8tXBF8JBdBUoQSb3ZbwK6IA2ginKxSggM1u6%2Bq4kVGAQrTDSvjLoAAIjQIUpLVqs%2FqXQwEK2l88u5b1HxdxfXscFEABCtEOLSUog7dCKMsE9VpEzhcc7t6x0rE3u%2B2SY%2BEIJoCi3Cq92W3P5%2B7jN7ttNuhMAz1MAAVjwV977HSMw3%2BDaaCDCbDSnPBPnQLHvo9pUAYTYKGlq%2F5mt5X9xbPRr498jWmgjAkw0%2F7iWfZpyVoBZBroYQLMoBX83BSYc6PMNNDBBJggt%2BrfPruzKGiHYV%2F6ai%2FTYB0KcELr7c4UuSKObdfwGQXIKLHqHznWvT8Vjsc0mIkCHFFz1S%2FwtmmmwQwUYKDGql8L02AaCnDLw15%2FLqbBaeEL0NOqn8M0yAtdgB5X%2FRymwXEhCxBh1c9hGtwXrgCRVv0cpsGdMAWIvOrnMA0CvBdo7GJGDf5Q9PcUdT0BTvyEVtcXdq6o06DLCcA%2Bf5mI06C7CUD414s0DR7cfNrfqB3txRu1Qx317nX2SwS%2FjEXn9adfiz2eL%2F74ReUwXUwAwl9O79PA1wQQuTcFCH5dk853jdVfJPAEuD3BhL%2B%2Bk9OgVvgVuZsA%2B%2FcfCL4B2QXo8aM61yHiBCD8dmSnQeYaWeWiAPv3H66PndjN40e8oNXQZrc9P7bi566XRS5eCNs8fnR%2BeEK%2FnPi07xx5ihQFDPb7o9fHOBcFELk7ydkT6%2FAGrCfpuoxeI4NcbIESTyc2Km%2FXyFUBAG26BVB6agoYpZgzJgBCowAIjQIgNAqA0PQLwI0wSlLOFxMAoVEAhFamAGyDUEKBXDEBEFq5AjAFoKlQnpgACK1sAZgC0FAwR0wAhFa%2BAEwBrFE4P0wAhFanAEwBLFEhN%2FUmACXAHJXywhYIodUtAFMAU1TMSf0JQAkwpnI%2B2myBKAGOaZCLdvcAlABDjfLQ9iaYEkCkaQ7aPwtECWJrfP3bF0Ck%2BUlAIwauu40CiJg4GajIyPW2UwARMycFhRm6zrofkaSpxgfuoS5DwU9sTYAhgycLKxi9nnYnwBDTwC%2BjwU98FCChCH4YD37iqwAJRbDLSfATnwVIKIIdzoKf%2BC7AEGWoz2noh%2FopwDGUQk8HYT%2Bm7wIAJ9h9HQCogAIgNAqA0CgAQqMACI0CIDQKgNAoAEKjAAiNAiA0CoDQKABCowAIjQIgNAqA0CgAQqMACO1%2FVt0MHOcVtiQAAAAASUVORK5CYII%3D%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAVnklEQVR4nO3du64c15UG4E1ByQknUyBBT8C3GGUT6hUswJkNBxIMaAIZEOxAsDIDnFdgOJn1FnwCYxQoU3iYcQKq6T6X7q7Lrn1Z6%2FsyGxRPFdm1%2F3%2Bvqmq%2BePf2%2Fl0BAFL5qPcBAADtKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkJACAAAJKQAAkNDHvQ%2BABL7%2BvvcRwJz%2B9ufbv%2Baf%2F%2Fhr1Z%2F5xe%2B%2Fqfr7MawX797ev%2Bt9EExOwMOx%2FvM%2F6ob8VspBKAoA6wh7ONYoYb%2BUUjAtBYDrBD4ca7bAv0UhmIYCwEMCH44XLfQvUQaGpgAg9KGFLKF%2FiTIwHAUgK6EPx8se%2BpcoA0NQADIR%2BnA8ob%2BOMtCNApCB4IfjCf59FIHmFICohD60IfjrUgSaUQCiEfzQhuA%2FliJwOAUgCsEPbQj%2BthSBwygAsxP80Ibg70sRqE4BmJXghzYE%2F1gUgWoUgNkIfmhH%2BI9JCahCAZiJ8Ic2BP8cFIFdFIAZCH5oR%2FjPRQnYTAEYmeCHdgT%2F3BSB1T7qfQBcIPyhHeE%2Fv3%2F%2Bw9%2FhSiYAoxH80I7gj8k0YBETgJEIf2hH%2BMdlGrCIAjAK4Q%2FtCP%2F4lICb3ALoTfBDW8I%2FF7cDLlIAehL%2B0I7gz00ReMItgF6EP7Qj%2FHFL4AkTgNYEP7Ql%2FDlnEvCBCUBLwh%2FaEv48ZhLwgQLQivCHtoQ%2FlygBpRQFoA3hD20Jf25RAhSAwwl%2FaEv4s1TyEqAAHEn4Q1vCn7USlwAF4CjCH9oS%2FmyVtAQoAEcQ%2FtCW8GevhCVAAahN%2BENbwp9akpUABaAm4Q9tCX9qS1QCFIBahD8AE1EAahD%2B0J7dP0dJMgVQAPYS%2FtCe8OdoCUqAArCH8If2hD%2BtBC8BCsBWwh%2FaE%2F60FrgEKABbCH8AJqcArCX8oQ%2B7f3oJOgVQAIDxCX96C1gCFIA17P4BCEIBWEr4Qx92%2F4wi2BRAAVhC%2BEMfwp%2FRBCoBCgAAJKQA3GL3D33Y%2FTOqIFMABeAa4Q99CH9GF6AEKACXCH8AAlMAgLHY%2FTOLyacACsBz7P4BCE4BeEz4Qz92%2F8xm4imAAgAACSkA5%2Bz%2BoR%2B7f2Y16RRAAQCAhBSAE7t%2F6Mfun9lNOAVQAEoR%2FgCkowAAfdn9E8VkUwAFwO4fgIQUAKAfu3%2BimWgKkLsA2P0DkFTuAgAASeUtAHb%2F0JfxP1FNchsgbwEAgMRyFgC7f%2BjL7p%2FoJpgC5CwAAJBcvgJg9w8ACQsA0JfxP1kMfhtAAQCAhHIVAON%2FACilZCsAAEApJVMBsPuH%2Ftz%2FJ5uBnwPIUwAAgA8UAABIKEcBMP4HgAdyFACgP%2Ff%2FyWrQ5wAUAABIKH4BMP4HgCfiFwAA4AkFAAASil0AjP9hDB4AJLsBHwSMXQAAgGcpAACQkAIAAAnFLQDu%2FwPARXELAABwkQIAAAkpAMCxvAII7w32KmDMAuD%2BPwBcFbMAAABXKQAAkJACAAAJKQAAkFC8AuABQAC4KV4BAABuUgAAICEFAAASUgAAICEFAAASUgAAICEFAAASilUAfAcAACwSqwAAAIsoAACQkAIAAAkpAACQkAIAHOunX7%2FpfQgwhC9%2BP9S1oAAAQEIKAAAkpAAAQEIKAAAkpAAAQEIKAAAkpAAAx%2FMqINkN9gpgKQoAAKSkAABAQh%2F3PgAm8ON3vY%2BAGIYbgYb2v3%2F%2Fa%2B9DYGwKAE8JfJjff%2F3xYeFSCHjkxbu39%2B96H0Q1X3%2Ff%2BwjmJvghPkWgvQEfACzFBAChD7mcTwaUgdQ8BJiZ8IfcHt8mIBUTgIwEP3ByKgGmAemYAGQj%2FIHnmAYcY9D7%2F6UoALkIf%2BAaJSAVBSAL4Q8soQSkoQBkIPyBNZSAFBSA6IQ%2FsIUSsN%2FA9%2F9LUQBiE%2F7AHkpAaApAVMIfqEEJCEsBiEj4AzUpAesNPv4vRQEAgJT8Y0Cz%2B%2BPveh8BkNWb17498DkT7P5LMQGY39%2F%2Fp%2FcRABkJ%2F%2Bn5twAiOJUA0wDgaII%2FDBOASD7%2FrPcRAJFZY26bZPxfigIQx%2BnJ%2F88%2Fc5ECdZ2vK94ICEMBiEoJAGqwliw30e6%2FFAUghkvv%2FZsGAFtdWz9MAUJQADJQAoA1rBnrTbb7L8VbAHmcLuh%2F%2FV%2Ff4wDGJfhTMQHIxgUOPMfasN2Eu%2F9SFID5bfnef88GACdb1wPPAUxPAchMCYDcrAH7Tbr7L8UzAHg2APIR%2FBQTAE4sCJCDa72eiXf%2FpZgAcM40oKn7P%2F1l8a%2B9%2B%2BHbA4%2FkGNHPb0rCnzMKAE99%2FpkScIA1gXjrvx0xMKOf39QEf32T7%2F5LUQC4xDSgmj3BeOv3HCEoo5%2Ff9IR%2FfQHCvxQFgFtMAzY7Ihgv%2FYweQRn9%2FKYn%2BLlBAeA2JWCVFsF46We2CMro5xeC8D%2FOT79%2BU77ofRB1eAuAZXx50CI9wrHlz49%2BftNznR7rp19DjP5PFADWsbhcNEo4HXUc0c9veq5NVnILgPU8IPjAiIFUc2Qe%2FfymJ%2FjbCLb7L8UEgD0sPEOG47m9xxf9%2FKbnGmwjYPiXogCwV%2BJ7jrOEz9bjjH5%2BU0t83VGPAkAdFiNow7XWVtDdfykKADUl2pXMtutce7zRz29aSa6vYQQO%2F1IUAI4QfJGaNWyWHnf085tSonI9jODhX4oCwFGCLlizh8yt449%2BflMKeB0NL0H4l6IAcDSLF2wTtEQzDgWA4wVZyKLsLi%2BdR%2FTzm0qA62VaSXb%2FpSgAtGRRg%2BuClOVpJQr%2FUhQAWpt0gQuxqzzz%2BHyin98UJrwuQkkW%2FqUoAPRisYP3Ji3FoSQM%2F1IUAHqaZNGbcje5wOm8op%2Ff0Ca5BkJLGv6l%2BMeA6M0%2FLERGgn8MicO%2FFBMARmFBJAuf9TEkD%2F9STAAYiWkAkQn%2BcQj%2FUooJACMaaKGc4j7yDs6vkYE%2B0%2BkJ%2Fw8UAMbkyWii8Dkeh%2FB%2FQAFgbBZPZqXEjkX4P%2BEZAMbn2QBmI%2FjHIfgvMgFgHhZVRmfXPxbhf5UCwFwssIzK53Iswv8mBYA5WWwZhVI6HuG%2FiGcAmJdnA%2BhN8I9F8K9iAsD8LMK0Ztc%2FHuG%2FmgkAMZgG0IrgH4vg38wEgFgszhzFrn88wn8XBYB4Ki7Udz98W%2BX3oY9qf3%2BCfyw%2F%2FfqN8N9PASAuizZ72fWPR%2FBX4xkAYvv8M88FsI3gH4vgr04BID4PCLKW8B%2BH4D%2BMWwDksXFR9xzAnDb9vRn5j8N9%2FsOZAJCLaQCXCP4xCP1mTADIaeVibwowl1V%2FX3b9Y7Djb84EgLxMAxD8%2FQn9bhQAWPimwN0P35b7P%2F2lwQGxx6Ldv%2BDvS%2BgPQQGAUkwDMhH%2BfQj94SgAcO7GNMAUYGxXd%2F%2BCvz2hPzQFAB67MQ1QAsYk%2FAch9KehAMAlV6YBSsBYLoa%2F4D%2BewJ%2BW1wDhGq%2BIzcvf2%2FGE%2F9QUAFjimTDx3QBjePbvQfjDTQoALPXMNEAJ6OvJn7%2BJDSzmGQBY69GzAacQ8kxAO3b9sJ8JAGxhGtCNXT%2FUoQDAHkpAU8%2BGP7CJWwCwl1sChxP8UJ8CADU88%2BVBisB%2B7vXDcdwCgJq8LliNe%2F1wLAUAavOA4G5G%2FnA8BQCOIrT2s%2BuHwygAcKSzADMFWObDn5Pgh0MpANCCErDI3Q%2Ff2vVDI94CgFaE2m3%2BjKAZEwBo7O71q96HMCR%2FLtCWAgAdCLuH%2FHlAewoAACSkAEAndr3v%2BXOAPhQA6Ch7%2BGU%2Ff%2BhJAQCAhBQA6CzrLjjrecMoFAAYQLYwzHa%2BMCIFAAASUgBgEFl2xVnOE0anAMBAoodj9PODmSgAAJCQAgCDibpLjnpeMCsFAAYULSyjnQ9EoAAAQEIKAAwqyq45ynlANAoADGz28Jz9%2BCEyBQAAElIAYHCz7qJnPW7I4uPeBwBcdv%2FlV2%2FO%2FufLbgey3pv7L78qpZRy9%2FrVTMcNaZgAwKAehf%2B0opwHRGMCAIO5EphvyhxTgCfHfzon0wAYhwkADOL%2By6%2FeLNgtj76bvnp8pgEwDgUABpApGBcWHeBgbgFARxuDcNRbAavOxW0B6MsEADrZugu%2Be%2F3q5Wiv2N29frU5yE0DoA8FABrbMwIffbe8pwQoAtCWAgAN7dz1v3z0%2F9U5qJ0eH8dzx7qUEgDteAYAGjhqx3%2F3%2BlU5feFOD9dKyN3rVy%2B3nLdnA6ANEwA4UORx%2FxKmATAuEwA4SKvg7zUFWHML4nROa%2F9MTAPgOCYAUFmPXX%2Fr5wG2%2FjzTABiHCQBUlHncv5RpAIzBBAAqGOFef6spQK2f45VB6EsBgJ1qvtq319EloPbv7yFB6MctANio944%2FEq8MQnsmALDSCOP%2BGz9jqt%2F37Pc3DYCGFABYYaRx%2F42fN%2FTvd%2BNneTYAGlAAYIHRd%2F3RmAbA8TwDADfMGvy1viCo57854JVBOI4JAFwQYde%2FN7wH%2BgeHTAOgMhMAeMbswR%2BRaQDUpQDAmYjBv%2FVWwCi7%2F8e8Mgh1uAUAv4kY%2Fidrw3zU8D%2FxkCDsZwJAepGDPzrTANjOBIC0Ijzkt8bSXf3ou%2F%2FHTANgGwWAlGb5Qp%2FaboX7bOF%2FzhcIwToKAKlk2%2FVnYxoAy3kGgDQE%2F3uX3gqYeff%2FmFcG4TYTAMKz63%2FqcdhHCv9zpgFwmQkAoQl%2BTAPgeSYAhLR11z%2F7Q35rnHb9UXf%2Fj5kGwEMmAISyZ7HOEvznsoT%2FiWkA%2FJsJAGFkfbWP9bwyCAoAAXjIjy28Mkh2CgBTs%2BtnL9MAslIAmJJdPzWZBpCRhwCZjuDnKB4SJBMTAKbh1T5aMQ0gAxMAhufVPnowDSA6EwCG5iE%2FejMNICoTAIZk189ITAOIyASA4dj1MyqvDBKJAsAwvNrHDLwySBQKAEOw62c2pgHMzjMAdGXHz8y2Phtw%2Bm98junJBIBuhD9RmAYwIxMAmhP8RGQawGwUAJrxah8ZeGWQWbgFQBMe8iMbbwowOhMADmXXT2amAYzMBIDD2PXDex4SZEQKANX5Qh94yhcIMRoFgKrs%2BuE60wBG4RkAqrDjh%2BW8MsgITADYxbgftjMNoCcFYHZ%2F%2BO9uP9q4H%2Fab9tmAjmsPdbgFwGpe7YP6vDJIayYArGLXD8eachrAlEwAWMSuH9oxDaAFE4AIDr4XZ9cPfQz7kKD7%2FyGYAHCRp%2FuhP68MchQTgCgqNnKv9sF4hpkG2P2HoQDwgHE%2FjGvaVwYZkgJAKcWuH2YyzDSAqSkAkWwczdn1w3y6TAOM%2F0N58e7t%2FbveB1HN19%2F3PoIx%2FPjdol%2Fm1T6I4%2FAJnvD%2Ft7%2F9ufcRVGECkJRdP8Ti2QDWMgGI6sIUwH1%2BiK%2F6dW73%2F5AJAEN75oIV%2FpBD1YcEhX9YJgDR%2Ffid4IfEdl3%2Fwv95JgCM7v7nX7zaB8ntmgb8%2FIvnAwLzVcBBbb1wBT%2FEs%2BvrhH%2F%2B5c3dp59YFwIyAQjm%2FudfNrd24Q%2BxbZ4G7FhXGJcJQCCCH7jFNIATBSCAPc1c%2BENOW4vAab1RBObnFsDkNu%2F6P%2F3EF%2FoAm4PcLYH5KQCT2npP7u7TT15%2BuOC94gO5%2FbYGPFgXVvBswNzcApjU3aefvFx74T17gZ%2BXgIX%2FhgAwsSvFv9q6whQUgAQWX6CnhUERgHgWTvxO64WdfXwKwMSWtPVN7fzxQqEQwHx23uI7bH1hGArA5C5dpFUvTM8KQErXpgHCf36xHgIM8v3Me7kwgZqsKWcC5UysApDU6eLc%2BiQvwC3n64t1JgYFIAgXJNCCtSYOBQAAElIAACAhBQAAElIAACAhBQAAEopXAAK9ownAQILlS7wCAADcpAAAQEIKAAAkpAAAQEIxC0CwBzUA6CxgrsQsAADAVQoAACSkAABAQnELQMD7NQB0EDRP4hYAAOAiBQAAElIAACCh2AUg6H0bABoJnCOxCwAA8CwFAAASil8AAo9vADhQ8PyIXwAAgCcUAABIKEcBCD7GAaCyBLmRowAAAA8oAACQUJ4CkGCcA0AFSfIiTwEAAD7IVQCStDoANkqUE7kKAABQSlEAACClfAUg0XgHgBWS5UO%2BAgAAJC0AyVoeADckzIWcBQAAkstbABK2PQCekTQP8hYAAEgsdwFI2voA%2BE3iHMhdAAAgKQUgcfsDSC35%2Bq8AAEBCCkAp6VsgQDrWfQXgAx8GgBys96UUBQAAUlIAzmmFALFZ5z9QAAAgIQXgMe0QICbr%2BwMKwHN8SABisa4%2FoQAAQEIKwCXaIkAM1vNnKQDX%2BNAAzM06fpECcIsPD8CcrN9XKQAAkJACsIQWCTAX6%2FZNCsBSPkwAc7BeL6IArOFDBTA26%2FRiCgAAJKQArKVdAozJ%2BryKArCFDxnAWKzLqykAW%2FmwAYzBeryJArCHDx1AX9bhzRSAvXz4APqw%2Fu6iANTgQwjQlnV3NwWgFh9GgDast1UoADX5UAIcyzpbjQJQmw8nwDGsr1UpAEfwIQWoy7panQJwFB9WgDqsp4dQAI7kQwuwj3X0MArA0Xx4Abaxfh5KAWjBhxhgHevm4RSAVnyYAZaxXjahALTkQw1wnXWymRfv3t6%2F630QKX39fe8jABiH4G%2FOBKAXH3aA96yHXSgAPfnQA9lZB7txC2AUbgkAmQj%2B7kwARuFiALKw3g1BARiJiwKIzjo3DLcARuWWABCJ4B%2BOCcCoXCxAFNazIZkAzMA0AJiR4B%2BaAjATRQCYgeCfglsAM3FRAaOzTk3DBGBWpgHASAT%2FdBSA2SkCQE%2BCf1oKQBSKANCS4J%2BeAhCNIgAcSfCHoQBEpQgANQn%2BcBSADJQBYAuhH5oCkIkiACwh%2BFNQALJSBoBzQj8dBQBlALIS%2BqkpADykDEBsQp%2FfKABcpxDA3AQ%2BFygArKMQwNgEPgspAOynFEAfwp4dFACOpyDANgKeAykAAJDQR70PAABoTwEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABISAEAgIQUAABI6P8BFpv4hLLJIXMAAAAASUVORK5CYII%3D%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
   <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
   <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAHo0lEQVR4nO3dv24bRxDH8XHghmU6Fxb8BHqLuEupV4iBdDFS2AjgFA5gJIVgdwGYV2CZLnoLPUEQF+5c0p1SWGudaO7x/szuzux8P40DSD4zd7/fzh5JiQ9uPu1vBAjqm9YPAGiJAiA0CoDQKABCowAIjQIgNAqA0CgAQqMACI0CIDQKgNAoAEKjAAiNAiA0CoDQKABCowAIjQIgtIetH0BRL960fgT+ffft77O+/+mPLws9kiIedPMzwYRdx9zAn2K8EL4LQOh1aIc+x2AZfBaA4K9XK/Q5RsrgqwAEf73WwT/UuAg+CkDwdVgLf9KwBLYLQPB1WA3+oQZFsPs6AOHX4SX8IiL//Fn9sdqbAARfj6fwD1WcBLYKQPh1eA3+oQpFsLMFIvw6egm/SJUtkY0CEH4dPYU/KVyC9gUg/Dp6DH9SsARtC0D40Vi7AhB+PT2v/kmhKdCmAIRfT4TwJwVKUL8AhF9PpPAnyiWoWwDCD2PaPwuEZSKu/oniFKhXAFZ/PZHDnyiVoE4BCD+MYgvkDav/HYUpUL4ArP4wjAmA0MoWgNVfF9ufr63cBjEBEFq5ArD6wwEmgBdsf/JWbIPKFIDVH04wARAaBUBo+gVg+6OP/f9pC+8DmAAIjQIgNAqA0CgAQtMtADfAcIYJgNAoAEKjAAiNAiA0CoDQKABCowAeXH008Zm6pi38NJmH2o+jmXevWz+C0myV4O+3XbxBz38B+g++Td8//1xI50XwvQUi/O2lIjil+ymRtd4KQfBtajUNVnyapO8JAKzk5x7g+Q93//3vf+0eB/LOL+5W4uudi3sDPxPg7V+tHwGmqhn+lR+m7WcCiIg8Ofv8JxPApnR9rts+jDn8TIDhjW860bBjeE0cPTPkawIMMQ1saLkYrdz+iHiaADlMg3Y6OPd+J8CQkWmw//m37Nc2l6+aH0+NheArrP4ivRQgeXLWpARjQT38ninB1T6eKgvhv/r4Up7qHMr/FujQk7OqF2lKWOd8v/bxVFkIv7L+CpBUuFhLw5f7e9rHU1N5URml/NbwfgsgUvTCrQ3d4d/XPp4aK8EXKfJzEX0XIFG+iFphS8fRPp4KS6u+SLEfCopRABF7F9SyQOcpTgGSlRdXe6th6nhWF4mCPxIarwAiNi9ya1bPSeGfh45ZABG7q10LVs9DhV8G0NcLYUs0evHMhMDBT+JOgKGI08Dq/2/lXwFDAYashkKT5bI3+P1HbIEOGXljXREE/ytMgJxMWJq+C3OCo4+PVT+LCTCmh2lA8EdRgCkOninaXL6q+y7Mie6t/haDbyT0QxRgqoNpYK0EZsNvMPRD3APMNQiXlfsBk+G/+vjSevhFKMAyhkrw5d+3fKNrGFugpQZbohTCmlsik6u+Q0yAtVqGj1V/NQqg4TaItbZDm8tXBF8JBdBUoQSb3ZbwK6IA2ginKxSggM1u6+q4kVGAQrTDSvjLoAAIjQIUpLVqs/qXQwEK2l88u5b1HxdxfXscFEABCtEOLSUog7dCKMsE9VpEzhcc7t6x0rE3u+2SY+EIJoCi3Cq92W3P5+7jN7ttNuhMAz1MAAVjwV977HSMw3+DaaCDCbDSnPBPnQLHvo9pUAYTYKGlq/5mt5X9xbPRr498jWmgjAkw0/7iWfZpyVoBZBroYQLMoBX83BSYc6PMNNDBBJggt+rfPruzKGiHYV/6ai/TYB0KcELr7c4UuSKObdfwGQXIKLHqHznWvT8Vjsc0mIkCHFFz1S/wtmmmwQwUYKDGql8L02AaCnDLw15/LqbBaeEL0NOqn8M0yAtdgB5X/RymwXEhCxBh1c9hGtwXrgCRVv0cpsGdMAWIvOrnMA0CvBdo7GJGDf5Q9PcUdT0BTvyEVtcXdq6o06DLCcA+f5mI06C7CUD414s0DR7cfNrfqB3txRu1Qx317nX2SwS/jEXn9adfiz2eL/74ReUwXUwAwl9O79PA1wQQuTcFCH5dk853jdVfJPAEuD3BhL++k9OgVvgVuZsA+/cfCL4B2QXo8aM61yHiBCD8dmSnQeYaWeWiAPv3H66PndjN40e8oNXQZrc9P7bi566XRS5eCNs8fnR+eEK/nPi07xx5ihQFDPb7o9fHOBcFELk7ydkT6/AGrCfpuoxeI4NcbIESTyc2Km/XyFUBAG26BVB6agoYpZgzJgBCowAIjQIgNAqA0PQLwI0wSlLOFxMAoVEAhFamAGyDUEKBXDEBEFq5AjAFoKlQnpgACK1sAZgC0FAwR0wAhFa+AEwBrFE4P0wAhFanAEwBLFEhN/UmACXAHJXywhYIodUtAFMAU1TMSf0JQAkwpnI+2myBKAGOaZCLdvcAlABDjfLQ9iaYEkCkaQ7aPwtECWJrfP3bF0Ck+UlAIwauu40CiJg4GajIyPW2UwARMycFhRm6zrofkaSpxgfuoS5DwU9sTYAhgycLKxi9nnYnwBDTwC+jwU98FCChCH4YD37iqwAJRbDLSfATnwVIKIIdzoKf+C7AEGWoz2noh/opwDGUQk8HYT+m7wIAJ9h9HQCogAIgNAqA0CgAQqMACI0CIDQKgNAoAEKjAAiNAiA0CoDQKABCowAIjQIgNAqA0CgAQqMACO1/Vt0MHOcVtiQAAAAASUVORK5CYII=">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
   <style>
@@ -1083,6 +1080,19 @@
           </button>
         </article>
 
+        <article class="card content-card push-card">
+          <div class="card-head"><div class="card-title">푸시 알림</div></div>
+          <div class="push-summary">
+            <div class="push-icon">🔔</div>
+            <div class="push-copy">
+              <b id="pushStatusTitle">알림이 꺼져 있어요</b>
+              <span id="pushStatusMeta">새 메시지와 스토리를 잠금 화면에서 받을 수 있어요.</span>
+            </div>
+          </div>
+          <button id="enablePushButton" class="push-action">푸시 알림 켜기</button>
+          <div id="pushHelpText" class="push-help">iPhone은 Safari에서 홈 화면에 추가한 앱으로 열어야 알림을 켤 수 있어요.</div>
+        </article>
+
         <article class="card content-card">
           <div class="card-head"><div class="card-title">현재 위치</div></div>
           <div class="location-card">
@@ -1337,6 +1347,8 @@
     const CLIENT_KEY = "wdm_client_id_v1";
     const STORY_DURATION = 6000;
     const MAX_IMAGE_BYTES = 840_000;
+    const WEB_PUSH_PUBLIC_KEY = "BBfHpRyDJ2a7ETgh2SE10GxSOG83dlqXWaqt5v6Go1ZU-Z0FFsIPCZZt1Ht8EjkwCahLpEGdTTqCGPKfgBgwm0o";
+    const PUSH_SW_PATH = "./push-sw.js";
 
     const state = {
       roomId:"",
@@ -1370,7 +1382,10 @@
       batteryHandlers:[],
       locationWatchId:null,
       lastLocationWriteAt:0,
-      lastLocationCoords:null
+      lastLocationCoords:null,
+      pushRegistration:null,
+      pushSubscription:null,
+      pushBusy:false
     };
 
     const partnerSlot = () => state.mySlot === "user1" ? "user2" : "user1";
@@ -1865,12 +1880,14 @@
       setPresence(true).catch(console.error);
       startHeartbeat();
       startBatterySync();
+      syncExistingPushSubscription();
       if(localStorage.getItem(locationPreferenceKey())==="on") startLocationSharing(false);
     }
 
     async function logout(){
       if(!confirm("로그아웃할까요?")) return;
       try{await Promise.race([setPresence(false),wait(1200)])}catch{}
+      await Promise.race([detachPushFromCurrentRoom(),wait(1200)]).catch(()=>{});
       stopLocationSharing(false);
       state.batteryHandlers.forEach(({target,type,handler})=>target.removeEventListener(type,handler));
       state.batteryHandlers=[];
@@ -1897,6 +1914,157 @@
       switchScreen("loginScreen");
       showToast("로그아웃했어요. 같은 코드로 다시 입장할 수 있어요");
     }
+
+
+    /* =========================================================
+       WEB PUSH
+       - 표준 Push API 사용: 기존 Firebase 설정은 변경하지 않는다.
+       - 구독 정보만 현재 방의 내 사용자 슬롯 아래에 저장한다.
+    ========================================================= */
+    function isIosDevice(){return /iphone|ipad|ipod/i.test(navigator.userAgent)}
+    function isStandalonePwa(){return window.matchMedia?.("(display-mode: standalone)")?.matches||navigator.standalone===true}
+    function pushSupported(){return window.isSecureContext&&"serviceWorker" in navigator&&"PushManager" in window&&"Notification" in window}
+
+    function base64UrlToUint8Array(value){
+      const padding="=".repeat((4-value.length%4)%4);
+      const base64=(value+padding).replace(/-/g,"+").replace(/_/g,"/");
+      const raw=atob(base64);
+      return Uint8Array.from([...raw].map(char=>char.charCodeAt(0)));
+    }
+
+    async function getPushRegistration(){
+      if(state.pushRegistration) return state.pushRegistration;
+      if(!pushSupported()) return null;
+      state.pushRegistration=await navigator.serviceWorker.register(PUSH_SW_PATH,{scope:"./"});
+      await navigator.serviceWorker.ready;
+      return state.pushRegistration;
+    }
+
+    function pushSubscriptionRef(){
+      return ref(db,`rooms/${state.roomId}/${state.mySlot}/pushSubscriptions/${state.clientId}`);
+    }
+
+    function currentAppUrl(){
+      const url=new URL(location.href);
+      url.hash="";url.search="";
+      return url.href;
+    }
+
+    async function storePushSubscription(subscription){
+      if(!state.roomId||!state.mySlot||!subscription) return;
+      const value=subscription.toJSON();
+      await set(pushSubscriptionRef(),{
+        endpoint:value.endpoint,
+        expirationTime:value.expirationTime||null,
+        keys:value.keys||{},
+        appUrl:currentAppUrl(),
+        clientId:state.clientId,
+        updatedAt:Date.now(),
+        userAgent:navigator.userAgent.slice(0,240)
+      });
+    }
+
+    async function syncExistingPushSubscription(){
+      renderPushStatus();
+      if(!pushSupported()||Notification.permission!=="granted"||!state.roomId||!state.mySlot) return;
+      try{
+        const registration=await getPushRegistration();
+        const subscription=await registration.pushManager.getSubscription();
+        if(subscription){
+          state.pushSubscription=subscription;
+          await storePushSubscription(subscription);
+        }
+      }catch(error){console.warn("push sync failed",error)}
+      renderPushStatus();
+    }
+
+    async function enablePushNotifications(){
+      if(state.pushBusy) return;
+      if(!state.roomId||!state.mySlot) return showToast("먼저 커플방에 들어가요");
+      if(!window.isSecureContext) return showToast("푸시 알림은 HTTPS 주소에서만 사용할 수 있어요");
+      if(isIosDevice()&&!isStandalonePwa()){
+        $("pushStatusMeta").textContent="Safari 공유 버튼에서 홈 화면에 추가한 뒤, 그 아이콘으로 앱을 열어주세요.";
+        return showToast("iPhone에서는 홈 화면에 설치한 앱에서 켤 수 있어요");
+      }
+      if(!pushSupported()) return showToast("이 브라우저는 웹 푸시 알림을 지원하지 않아요");
+
+      state.pushBusy=true;
+      renderPushStatus();
+      try{
+        const permission=await Notification.requestPermission();
+        if(permission!=="granted") throw new Error(permission==="denied"?"PUSH_DENIED":"PUSH_NOT_GRANTED");
+        const registration=await getPushRegistration();
+        let subscription=await registration.pushManager.getSubscription();
+        if(!subscription){
+          subscription=await registration.pushManager.subscribe({
+            userVisibleOnly:true,
+            applicationServerKey:base64UrlToUint8Array(WEB_PUSH_PUBLIC_KEY)
+          });
+        }
+        state.pushSubscription=subscription;
+        await storePushSubscription(subscription);
+        renderPushStatus();
+        showToast("푸시 알림을 켰어요");
+        try{
+          await registration.showNotification("우리두리 알림이 켜졌어요 💌",{
+            body:"이제 앱을 닫아도 새 메시지를 받을 수 있어요.",
+            tag:"push-enabled",data:{url:currentAppUrl()}
+          });
+        }catch{}
+      }catch(error){
+        console.error("push enable failed",error);
+        const message=error?.message==="PUSH_DENIED"
+          ? "알림이 차단되어 있어요. 기기 설정에서 우리두리 알림을 허용해요"
+          : "알림 구독에 실패했어요. HTTPS와 서비스 워커 파일을 확인해요";
+        showToast(message);
+      }finally{
+        state.pushBusy=false;
+        renderPushStatus();
+      }
+    }
+
+    async function detachPushFromCurrentRoom(){
+      if(!state.roomId||!state.mySlot) return;
+      try{await remove(pushSubscriptionRef())}catch(error){console.warn("push detach failed",error)}
+      state.pushSubscription=null;
+    }
+
+    function renderPushStatus(){
+      const title=$("pushStatusTitle"),meta=$("pushStatusMeta"),button=$("enablePushButton"),help=$("pushHelpText");
+      if(!title||!meta||!button||!help) return;
+      button.disabled=state.pushBusy;
+      if(state.pushBusy){title.textContent="알림을 연결하고 있어요";meta.textContent="브라우저 구독을 준비하는 중이에요.";button.textContent="연결 중…";return}
+      if(!window.isSecureContext){title.textContent="HTTPS가 필요해요";meta.textContent="다운로드 파일이나 HTTP 주소에서는 푸시 알림을 사용할 수 없어요.";button.textContent="푸시 알림 켜기";return}
+      if(isIosDevice()&&!isStandalonePwa()){
+        title.textContent="홈 화면 설치가 필요해요";
+        meta.textContent="Safari에서 홈 화면에 추가한 뒤 앱 아이콘으로 열어주세요.";
+        button.textContent="설치 후 알림 켜기";
+        return;
+      }
+      if(!pushSupported()){
+        title.textContent="이 기기에서는 지원되지 않아요";meta.textContent="브라우저의 Push API 또는 서비스 워커를 사용할 수 없어요.";button.textContent="지원하지 않음";button.disabled=true;return
+      }
+      if(Notification.permission==="denied"){
+        title.textContent="알림이 차단됐어요";meta.textContent="기기 설정의 알림 메뉴에서 우리두리를 허용해야 해요.";button.textContent="알림 설정 확인";return
+      }
+      if(Notification.permission==="granted"&&state.pushSubscription){
+        title.textContent="푸시 알림 켜짐";meta.textContent="새 메시지와 스토리를 앱 밖에서도 받을 수 있어요.";button.textContent="알림 연결됨";button.disabled=true;return
+      }
+      title.textContent="알림이 꺼져 있어요";meta.textContent="새 메시지와 스토리를 잠금 화면에서 받을 수 있어요.";button.textContent="푸시 알림 켜기";
+    }
+
+    if("serviceWorker" in navigator){
+      navigator.serviceWorker.addEventListener("message",event=>{
+        const payload=event.data||{};
+        if(payload.type!=="WOORIDURI_PUSH") return;
+        if(payload.roomId&&payload.roomId!==state.roomId) return;
+        if(document.visibilityState==="visible"){
+          showToast(payload.body||"새 알림이 도착했어요");
+          if("setAppBadge" in navigator) navigator.setAppBadge(1).catch(()=>{});
+        }
+      });
+    }
+
 
     /* =========================================================
        PRESENCE / REALTIME LISTENERS
@@ -3042,6 +3210,7 @@
       $("saveNoteButton").addEventListener("click",saveNote);
       $("saveCoupleButton").addEventListener("click",saveCoupleName);
       $("locationShareButton").addEventListener("click",toggleLocationSharing);
+      $("enablePushButton").addEventListener("click",enablePushNotifications);
       $("openPartnerMapButton").addEventListener("click",openPartnerMap);
       $("anniversaryInput").addEventListener("change",saveAnniversary);
 
@@ -3118,5 +3287,6 @@
     restoreSession();
   </script>
 <!-- build: rejoin-fix-20260726 -->
+<!-- build: github-pages-web-push-ready-20260726 -->
 </body>
-  </html>
+                                                                                                    </html>
