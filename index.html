@@ -1349,6 +1349,7 @@
     const MAX_IMAGE_BYTES = 840_000;
     const WEB_PUSH_PUBLIC_KEY = "BBfHpRyDJ2a7ETgh2SE10GxSOG83dlqXWaqt5v6Go1ZU-Z0FFsIPCZZt1Ht8EjkwCahLpEGdTTqCGPKfgBgwm0o";
     const PUSH_SW_PATH = "./push-sw.js";
+    const PUSH_WORKER_URL = "https://wooriduri-push.yeojunho1210.workers.dev/notify";
 
     const state = {
       roomId:"",
@@ -1948,6 +1949,24 @@
       const url=new URL(location.href);
       url.hash="";url.search="";
       return url.href;
+    }
+
+    async function requestBackgroundPush(messageId){
+      if(!messageId||!state.roomId) return;
+      try{
+        const response=await fetch(PUSH_WORKER_URL,{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({roomId:state.roomId,messageId})
+        });
+        const result=await response.json().catch(()=>({}));
+        if(!response.ok||result.ok===false){
+          console.warn("push worker response",response.status,result);
+        }
+      }catch(error){
+        // 메시지 저장 자체는 성공했으므로 푸시 실패가 채팅을 막지는 않게 한다.
+        console.warn("background push request failed",error);
+      }
     }
 
     async function storePushSubscription(subscription){
@@ -2583,13 +2602,14 @@
       focusMessageInput();
       try{
         const now=Date.now();
-        await push(messagesRef(),{
+        const created=await push(messagesRef(),{
           sender:state.myName,
           senderSlot:state.mySlot,
           senderName:state.myName,
           type:"text",text,imageData:"",
           timestamp:now,clientCreatedAt:now,createdAt:now
         });
+        requestBackgroundPush(created.key);
       }catch(error){
         console.error(error);
         input.value=text;
@@ -2612,13 +2632,14 @@
         state.upload={active:true,label:"사진을 보내고 있어요",detail:"Firebase에 저장 중"};
         renderMessages();
         const now=Date.now();
-        await push(messagesRef(),{
+        const created=await push(messagesRef(),{
           sender:state.myName,
           senderSlot:state.mySlot,
           senderName:state.myName,
           type:"image",text:"",imageData,
           timestamp:now,clientCreatedAt:now,createdAt:now
         });
+        requestBackgroundPush(created.key);
       }catch(error){
         console.error(error);
         showToast(error.message==="IMAGE_TOO_LARGE"?"압축 후에도 사진이 너무 커요":"사진 전송에 실패했어요");
@@ -2965,6 +2986,7 @@
         const created=await push(storiesRef(),payload);
         const verify=await get(created);
         if(!verify.exists()) throw new Error("STORY_VERIFY_FAILED");
+        requestBackgroundPush(created.key);
         setStoryBusy(false);
         closeStoryCreator();
         showToast("스토리를 올렸어요");
@@ -3113,11 +3135,12 @@
       if(!story||story.ownerSlot===state.mySlot) return;
       try{
         const now=Date.now();
-        await push(messagesRef(),{
+        const created=await push(messagesRef(),{
           sender:state.myName,senderSlot:state.mySlot,senderName:state.myName,type:"text",
           text:`${emoji} ${story.ownerName}님의 스토리에 반응했어요`,imageData:"",
           timestamp:now,clientCreatedAt:now,createdAt:now
         });
+        requestBackgroundPush(created.key);
         showToast("반응을 보냈어요");
       }catch(error){console.error(error);showToast("반응을 보내지 못했어요")}
     }
@@ -3287,6 +3310,6 @@
     restoreSession();
   </script>
 <!-- build: rejoin-fix-20260726 -->
-<!-- build: github-pages-web-push-ready-20260726 -->
+<!-- build: github-pages-cloudflare-push-connected-20260726 -->
 </body>
-                                                                                                    </html>
+              </html>
