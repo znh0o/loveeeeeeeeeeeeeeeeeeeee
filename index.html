@@ -315,26 +315,94 @@
     .cancel-button{background:var(--surface-muted);color:var(--text-secondary)}
     .confirm-button{background:linear-gradient(135deg,var(--primary),var(--primary-strong));color:white}
 
-    .story-creator{display:none;position:fixed;inset:0;z-index:500;background:#181315;color:white;flex-direction:column}
-    .story-creator.is-open{display:flex}
-    .story-topbar{display:flex;align-items:center;justify-content:space-between;padding:max(18px,env(safe-area-inset-top)) 16px 12px}
-    .story-topbar b{font-size:15px}
-    .story-topbar button{background:transparent;color:white;font-size:17px;padding:8px}
-    .story-tabs{display:flex;gap:6px;padding:0 16px 12px}
-    .story-tab{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.72);font-size:12px}
-    .story-tab.is-active{background:white;color:#251f20;font-weight:750}
-    .story-preview{position:relative;flex:1;margin:0 14px 14px;border-radius:25px;overflow:hidden;background:linear-gradient(135deg,#ff7281,#ffad8d);display:flex;align-items:center;justify-content:center;min-height:0}
-    .story-preview img{width:100%;height:100%;object-fit:cover}
-    .story-preview-text{padding:28px;text-align:center;font-size:27px;font-weight:800;line-height:1.35;word-break:keep-all}
-    .story-preview-caption{position:absolute;left:16px;right:16px;bottom:18px;padding:10px 12px;border-radius:14px;background:rgba(0,0,0,.38);font-size:13px;line-height:1.45}
-    .story-editor{padding:0 16px calc(18px + env(safe-area-inset-bottom))}
-    .story-editor textarea,.story-editor input{width:100%;border:1px solid rgba(255,255,255,.18);border-radius:15px;background:rgba(255,255,255,.10);color:white;padding:13px 14px;outline:none;font-size:15px}
-    .story-editor textarea{height:78px;resize:none;line-height:1.5}
-    .story-editor input::placeholder,.story-editor textarea::placeholder{color:rgba(255,255,255,.48)}
-    .gradient-list{display:flex;gap:9px;margin:11px 0;overflow-x:auto;scrollbar-width:none}
-    .gradient-dot{width:36px;height:36px;flex:0 0 36px;border-radius:50%;border:3px solid transparent}
-    .gradient-dot.is-selected{border-color:white}
-    .story-publish{width:100%;height:48px;border-radius:15px;background:white;color:#251f20;font-size:14px;font-weight:800}
+    .story-creator{
+      display:none;position:fixed;inset:0;z-index:500;
+      height:var(--app-height,100dvh);overflow:hidden;
+      background:
+        radial-gradient(circle at 8% 4%,rgba(255,188,198,.30),transparent 28%),
+        radial-gradient(circle at 92% 12%,rgba(255,222,167,.32),transparent 26%),
+        linear-gradient(180deg,#fffaf8 0%,#fff3f4 100%);
+      color:var(--text);flex-direction:column;
+    }
+    .story-creator.is-open{display:flex;animation:storyCreatorIn .2s ease-out}
+    @keyframes storyCreatorIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .story-topbar{
+      min-height:68px;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;
+      padding:max(10px,env(safe-area-inset-top)) 16px 8px;
+    }
+    .story-topbar-copy{text-align:center;line-height:1.15}
+    .story-topbar-copy b{display:block;font-size:17px;font-weight:800;letter-spacing:-.03em}
+    .story-topbar-copy small{display:block;margin-top:5px;font-size:10px;font-weight:600;color:var(--text-tertiary)}
+    .story-close-button{
+      width:40px;height:40px;border-radius:14px;background:rgba(255,255,255,.82);
+      border:1px solid var(--line);box-shadow:var(--shadow-sm);font-size:20px;display:grid;place-items:center;
+    }
+    .story-body{flex:1;min-height:0;overflow-y:auto;padding:5px 16px calc(18px + env(safe-area-inset-bottom));scrollbar-width:none}
+    .story-body::-webkit-scrollbar{display:none}
+    .story-tabs{
+      width:100%;display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:5px;
+      margin:0 auto 12px;border-radius:17px;background:rgba(231,217,219,.48);border:1px solid rgba(230,215,217,.68);
+    }
+    .story-tab{
+      height:40px;border-radius:13px;background:transparent;color:var(--text-secondary);
+      font-size:13px;font-weight:700;transition:background .16s ease,box-shadow .16s ease,color .16s ease;
+    }
+    .story-tab.is-active{background:white;color:var(--primary-strong);box-shadow:0 5px 14px rgba(94,58,64,.08)}
+    .story-preview{
+      position:relative;width:min(100%,330px);aspect-ratio:9/14;margin:0 auto 13px;
+      border-radius:28px;overflow:hidden;background:linear-gradient(145deg,#ff8e9d,#ffc0a8);
+      display:flex;align-items:center;justify-content:center;
+      border:6px solid rgba(255,255,255,.82);box-shadow:0 16px 36px rgba(101,60,66,.14);
+      isolation:isolate;
+    }
+    .story-preview::after{
+      content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+      background:linear-gradient(180deg,rgba(255,255,255,.10),transparent 28%,transparent 68%,rgba(50,25,30,.12));
+    }
+    .story-preview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;cursor:pointer}
+    .story-preview-text{
+      position:relative;z-index:1;padding:30px;text-align:center;color:white;
+      font-size:26px;font-weight:800;line-height:1.4;word-break:keep-all;text-shadow:0 2px 12px rgba(70,35,42,.16);
+    }
+    .story-preview-caption{
+      position:absolute;z-index:2;left:15px;right:15px;bottom:15px;padding:11px 13px;
+      border-radius:15px;background:rgba(36,24,28,.46);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+      color:white;font-size:13px;font-weight:650;line-height:1.45;text-align:center;
+    }
+    .story-photo-picker{
+      position:relative;z-index:2;width:164px;min-height:126px;padding:18px;border-radius:24px;
+      background:rgba(255,255,255,.90);border:1.5px dashed rgba(246,83,101,.42);
+      box-shadow:0 10px 26px rgba(71,42,48,.10);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+    }
+    .story-photo-picker span{width:52px;height:52px;border-radius:18px;background:var(--surface-soft);display:grid;place-items:center;font-size:25px}
+    .story-photo-picker b{font-size:14px;font-weight:800;color:var(--text)}
+    .story-photo-picker small{font-size:10px;color:var(--text-tertiary)}
+    .story-loading{
+      position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+      background:rgba(54,35,40,.52);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:white;
+    }
+    .story-loading-spinner{width:34px;height:34px;border-radius:50%;border:3px solid rgba(255,255,255,.35);border-top-color:white;animation:spin .75s linear infinite}
+    .story-loading b{font-size:13px;font-weight:750}
+    .story-editor{width:min(100%,360px);margin:0 auto;padding:0}
+    .story-editor textarea,.story-editor input{
+      width:100%;border:1.5px solid var(--line);border-radius:17px;background:rgba(255,255,255,.88);
+      color:var(--text);padding:13px 15px;outline:none;font-size:15px;box-shadow:0 6px 18px rgba(83,50,56,.05);
+    }
+    .story-editor textarea{height:70px;resize:none;line-height:1.5}
+    .story-editor input{height:50px}
+    .story-editor input::placeholder,.story-editor textarea::placeholder{color:var(--text-tertiary)}
+    .story-editor textarea:focus,.story-editor input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(255,111,125,.10)}
+    .story-color-label{display:block;margin:11px 3px 7px;font-size:10px;font-weight:700;color:var(--text-tertiary)}
+    .gradient-list{display:flex;justify-content:center;gap:10px;margin:0 0 13px;overflow-x:auto;scrollbar-width:none}
+    .gradient-dot{width:38px;height:38px;flex:0 0 38px;border-radius:50%;border:3px solid white;box-shadow:0 3px 11px rgba(77,45,51,.11);outline:2px solid transparent;transition:transform .14s ease,outline-color .14s ease}
+    .gradient-dot:active{transform:scale(.93)}
+    .gradient-dot.is-selected{outline-color:var(--primary);transform:scale(1.06)}
+    .story-publish{
+      width:100%;height:52px;border-radius:17px;background:linear-gradient(135deg,var(--primary),var(--primary-strong));
+      color:white;font-size:14px;font-weight:800;box-shadow:0 10px 23px rgba(246,83,101,.23);transition:transform .15s ease,opacity .15s ease;
+    }
+    .story-publish:active{transform:scale(.985)}
+    .story-publish:disabled{opacity:.52;cursor:default;box-shadow:none}
 
     .story-viewer{display:none;position:fixed;inset:0;z-index:600;background:#120e10;color:white;align-items:center;justify-content:center}
     .story-viewer.is-open{display:flex}
@@ -868,6 +936,16 @@
       .code-value{font-size:23px}
       .code-copy{min-width:66px;padding:0 10px}
     }
+
+
+    /* PWA virtual keyboard: 채팅 화면을 실제 보이는 영역 높이에 맞춤 */
+    :root{--visual-viewport-height:100dvh}
+    body.chat-mode{height:var(--visual-viewport-height);min-height:0;overflow:hidden}
+    body.chat-mode .app-frame{height:var(--visual-viewport-height);min-height:0}
+    body.chat-mode #chatScreen{height:var(--visual-viewport-height);min-height:0}
+    body.chat-mode .chat-input-bar{position:relative;z-index:20}
+    body.chat-mode.keyboard-open .chat-input-bar{padding-bottom:8px}
+    .message-input{scroll-padding-bottom:12px}
 </style>
 </head>
 <body>
@@ -1070,7 +1148,7 @@
       <div class="chat-input-bar">
         <button id="toolboxToggleButton" class="input-action" aria-label="이모지">😊</button>
         <button id="galleryButton" class="input-action" aria-label="사진 첨부">📎</button>
-        <textarea id="messageInput" class="message-input" rows="1" placeholder="메시지를 입력해요"></textarea>
+        <textarea id="messageInput" class="message-input" rows="1" placeholder="메시지를 입력해요" enterkeyhint="send" autocapitalize="sentences" autocomplete="off"></textarea>
         <button id="sendMessageButton" class="send-button" aria-label="전송">➤</button>
       </div>
     </section>
@@ -1157,28 +1235,44 @@
   </div>
 
   <!-- STORY CREATOR -->
-  <div id="storyCreator" class="story-creator">
-    <div class="story-topbar"><button id="closeStoryCreatorButton">✕</button><b>새 스토리</b><span style="width:34px"></span></div>
-    <div class="story-tabs">
-      <button class="story-tab is-active" data-story-mode="text">텍스트</button>
-      <button class="story-tab" data-story-mode="photo">사진</button>
+  <div id="storyCreator" class="story-creator" role="dialog" aria-modal="true" aria-label="스토리 만들기">
+    <div class="story-topbar">
+      <button id="closeStoryCreatorButton" class="story-close-button" aria-label="닫기">‹</button>
+      <div class="story-topbar-copy"><b>스토리 만들기</b><small>24시간 동안 둘만 볼 수 있어요</small></div>
+      <span aria-hidden="true"></span>
     </div>
-    <div id="storyPreview" class="story-preview">
-      <div id="storyPreviewText" class="story-preview-text">오늘의 순간을 남겨봐요</div>
-      <img id="storyPreviewImage" hidden alt="스토리 사진 미리보기">
-      <div id="storyPreviewCaption" class="story-preview-caption" hidden></div>
-    </div>
-    <div class="story-editor">
-      <textarea id="storyTextInput" maxlength="120" placeholder="스토리에 남길 문장"></textarea>
-      <input id="storyCaptionInput" maxlength="100" placeholder="사진에 덧붙일 말" hidden>
-      <div id="gradientList" class="gradient-list">
-        <button class="gradient-dot is-selected" data-gradient="linear-gradient(135deg,#ff6f7d,#ffb38e)" style="background:linear-gradient(135deg,#ff6f7d,#ffb38e)"></button>
-        <button class="gradient-dot" data-gradient="linear-gradient(135deg,#7f7fd5,#86a8e7,#91eae4)" style="background:linear-gradient(135deg,#7f7fd5,#86a8e7,#91eae4)"></button>
-        <button class="gradient-dot" data-gradient="linear-gradient(135deg,#ff9966,#ff5e62)" style="background:linear-gradient(135deg,#ff9966,#ff5e62)"></button>
-        <button class="gradient-dot" data-gradient="linear-gradient(135deg,#43cea2,#185a9d)" style="background:linear-gradient(135deg,#43cea2,#185a9d)"></button>
-        <button class="gradient-dot" data-gradient="linear-gradient(135deg,#654ea3,#eaafc8)" style="background:linear-gradient(135deg,#654ea3,#eaafc8)"></button>
+
+    <div class="story-body">
+      <div class="story-tabs" aria-label="스토리 형식">
+        <button class="story-tab is-active" data-story-mode="text">✏️ 글</button>
+        <button class="story-tab" data-story-mode="photo">🖼️ 사진</button>
       </div>
-      <button id="publishStoryButton" class="story-publish">스토리 올리기</button>
+
+      <div id="storyPreview" class="story-preview">
+        <div id="storyPreviewText" class="story-preview-text">오늘의 순간을<br>남겨봐요</div>
+        <img id="storyPreviewImage" hidden alt="스토리 사진 미리보기">
+        <button id="storyPhotoPicker" class="story-photo-picker" hidden type="button">
+          <span>📷</span><b>사진 고르기</b><small>자동으로 작게 압축돼요</small>
+        </button>
+        <div id="storyPreviewCaption" class="story-preview-caption" hidden></div>
+        <div id="storyLoading" class="story-loading" hidden>
+          <div class="story-loading-spinner"></div><b id="storyLoadingText">사진을 준비하고 있어요</b>
+        </div>
+      </div>
+
+      <div class="story-editor">
+        <textarea id="storyTextInput" maxlength="120" placeholder="오늘 있었던 일을 짧게 적어봐요"></textarea>
+        <input id="storyCaptionInput" maxlength="100" placeholder="사진에 한마디 남기기" hidden>
+        <span id="storyColorLabel" class="story-color-label">배경 고르기</span>
+        <div id="gradientList" class="gradient-list">
+          <button class="gradient-dot is-selected" aria-label="복숭아색" data-gradient="linear-gradient(145deg,#ff8e9d,#ffc0a8)" style="background:linear-gradient(145deg,#ff8e9d,#ffc0a8)"></button>
+          <button class="gradient-dot" aria-label="라벤더색" data-gradient="linear-gradient(145deg,#a99bf3,#d7b8f3)" style="background:linear-gradient(145deg,#a99bf3,#d7b8f3)"></button>
+          <button class="gradient-dot" aria-label="하늘색" data-gradient="linear-gradient(145deg,#79c8e8,#a9e2d2)" style="background:linear-gradient(145deg,#79c8e8,#a9e2d2)"></button>
+          <button class="gradient-dot" aria-label="노을색" data-gradient="linear-gradient(145deg,#ffad79,#f27f91)" style="background:linear-gradient(145deg,#ffad79,#f27f91)"></button>
+          <button class="gradient-dot" aria-label="밤색" data-gradient="linear-gradient(145deg,#5d5b9e,#8c79b9)" style="background:linear-gradient(145deg,#5d5b9e,#8c79b9)"></button>
+        </div>
+        <button id="publishStoryButton" class="story-publish" type="button">스토리 올리기</button>
+      </div>
     </div>
   </div>
 
@@ -1269,6 +1363,7 @@
       storyMode:"text",
       storyGradient:"linear-gradient(135deg,#ff6f7d,#ffb38e)",
       storyImageData:"",
+      storyBusy:false,
       activeStoryIndex:-1,
       storyTimer:null,
       batteryManager:null,
@@ -1281,7 +1376,8 @@
     const partnerSlot = () => state.mySlot === "user1" ? "user2" : "user1";
     const roomRef = () => ref(db,`rooms/${state.roomId}`);
     const messagesRef = () => ref(db,`chat/${state.roomId}`);
-    const storiesRef = () => ref(db,`stories/${state.roomId}`);
+    const storiesRef = () => messagesRef();
+    const storyItemRef = id => ref(db,`chat/${state.roomId}/${id}`);
 
     /* =========================================================
        UTILITIES
@@ -1488,8 +1584,40 @@
       }
     }
 
+    function getViewportHeight(){
+      return Math.round(window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight);
+    }
+
+    function syncVisualViewport(){
+      const viewportHeight=getViewportHeight();
+      document.documentElement.style.setProperty("--visual-viewport-height",`${viewportHeight}px`);
+      const keyboardOpen=Boolean(window.visualViewport && window.innerHeight-window.visualViewport.height>120);
+      document.body.classList.toggle("keyboard-open",state.chatOpen&&keyboardOpen);
+      if(state.chatOpen){
+        requestAnimationFrame(()=>{
+          const box=$("chatMessages");
+          if(box) box.scrollTop=box.scrollHeight;
+        });
+      }
+    }
+
+    function focusMessageInput(){
+      if(!state.chatOpen) return;
+      const input=$("messageInput");
+      if(!input) return;
+      try{input.focus({preventScroll:true})}catch{input.focus()}
+      requestAnimationFrame(()=>{
+        const end=input.value.length;
+        try{input.setSelectionRange(end,end)}catch{}
+        const box=$("chatMessages");
+        if(box) box.scrollTop=box.scrollHeight;
+      });
+    }
+
     function switchScreen(screenId){
       ["loginScreen","homeScreen","chatScreen","decoScreen"].forEach(id=>$(id).classList.toggle("is-active",id===screenId));
+      document.body.classList.toggle("chat-mode",screenId==="chatScreen");
+      syncVisualViewport();
     }
 
     function hideSplash(){setTimeout(()=>$("splash").classList.add("is-hidden"),180)}
@@ -1584,64 +1712,86 @@
       try{
         const found=await findRoomByCode(inputCode);
         if(!found) throw new Error("ROOM_NOT_FOUND");
+
         const actualCode=found.key;
         const targetRef=ref(db,`rooms/${actualCode}`);
-
+        let room=found.data||{};
         let assignedSlot="";
-        let failure="";
-        const result=await runTransaction(targetRef,current=>{
-          if(!current){failure="ROOM_NOT_FOUND";return;}
+        const now=Date.now();
 
-          if(current.user1?.clientId===state.clientId){
-            assignedSlot="user1";
-            current.user1.online=true;
-            current.user1.lastSeenAt=Date.now();
-            return current;
-          }
-          if(current.user2?.clientId===state.clientId){
-            assignedSlot="user2";
-            current.user2.online=true;
-            current.user2.lastSeenAt=Date.now();
-            return current;
-          }
+        /*
+         * 재입장은 transaction을 사용하지 않는다.
+         * RTDB transaction 콜백은 로컬 캐시가 비어 있으면 실제 방이 있어도
+         * 첫 호출에서 null을 받을 수 있다. 이전 코드는 이 null을 곧바로
+         * ROOM_NOT_FOUND로 처리해 로그아웃 뒤 재입장만 실패했다.
+         */
+        if(room.user1?.clientId===state.clientId){
+          assignedSlot="user1";
+        }else if(room.user2?.clientId===state.clientId){
+          assignedSlot="user2";
+        }else{
+          const nameMatches=["user1","user2"].filter(slot=>room[slot]?.name===name);
+          if(nameMatches.length===1) assignedSlot=nameMatches[0];
+        }
 
-          // 파일명 변경·브라우저 데이터 정리로 clientId가 달라져도
-          // 이름이 한 자리와 정확히 일치하면 기존 자리로 복귀시킨다.
-          const nameMatches=["user1","user2"].filter(slot=>current[slot]?.name===name);
-          if(nameMatches.length===1){
-            assignedSlot=nameMatches[0];
-            current[assignedSlot].clientId=state.clientId;
-            current[assignedSlot].online=true;
-            current[assignedSlot].lastSeenAt=Date.now();
-            return current;
-          }
+        if(assignedSlot){
+          await update(ref(db,`rooms/${actualCode}/${assignedSlot}`),{
+            name,
+            clientId:state.clientId,
+            online:true,
+            lastSeenAt:now
+          });
+          const refreshed=await get(targetRef);
+          if(!refreshed.exists()) throw new Error("ROOM_NOT_FOUND");
+          room=refreshed.val();
+        }else if(!room.user2){
+          // 비어 있는 user2 자리를 차지할 때만 transaction을 사용한다.
+          let claimed=false;
+          const result=await runTransaction(targetRef,current=>{
+            // 첫 콜백의 null은 서버 데이터가 없다는 뜻이 아닐 수 있다.
+            // undefined를 반환해 중단하지 말고 null을 그대로 반환해 서버 재시도를 허용한다.
+            if(current===null) return current;
 
-          if(!current.user2){
-            // 생성자가 같은 이름으로 다시 입장하는 경우 user2를 만들지 않는다.
-            if(current.user1?.name===name){
+            if(current.user1?.clientId===state.clientId||current.user1?.name===name){
               assignedSlot="user1";
-              current.user1.clientId=state.clientId;
-              current.user1.online=true;
-              current.user1.lastSeenAt=Date.now();
+              current.user1={...current.user1,name,clientId:state.clientId,online:true,lastSeenAt:now};
+              claimed=true;
               return current;
             }
-            assignedSlot="user2";
-            current.user2={
-              name,avatar:"🐻",clientId:state.clientId,joined:Date.now(),joinedAt:Date.now(),
-              lastReadAt:0,lastSeenAt:Date.now(),online:true
-            };
-            current.typing=current.typing||{};
-            current.typing.user2=current.typing.user2||{active:false,at:0};
-            return current;
+            if(current.user2?.clientId===state.clientId||current.user2?.name===name){
+              assignedSlot="user2";
+              current.user2={...current.user2,name,clientId:state.clientId,online:true,lastSeenAt:now};
+              claimed=true;
+              return current;
+            }
+            if(!current.user2){
+              assignedSlot="user2";
+              current.user2={
+                name,avatar:"🐻",clientId:state.clientId,joined:now,joinedAt:now,
+                lastReadAt:0,lastSeenAt:now,online:true
+              };
+              current.typing=current.typing||{};
+              current.typing.user2=current.typing.user2||{active:false,at:0};
+              claimed=true;
+              return current;
+            }
+            return; // 실제로 두 자리가 모두 찬 경우에만 중단
+          },{applyLocally:false});
+
+          if(!result.snapshot.exists()) throw new Error("ROOM_NOT_FOUND");
+          room=result.snapshot.val();
+
+          // transaction 재시도 과정에서 외부 변수 반영이 누락된 경우 서버 결과로 다시 판정
+          if(!assignedSlot){
+            if(room.user1?.clientId===state.clientId) assignedSlot="user1";
+            else if(room.user2?.clientId===state.clientId) assignedSlot="user2";
           }
+          if(!claimed&&!assignedSlot) throw new Error("ROOM_FULL");
+        }else{
+          throw new Error("ROOM_FULL");
+        }
 
-          failure="ROOM_FULL";
-          return;
-        },{applyLocally:false});
-
-        if(failure) throw new Error(failure);
-        if(!result.committed||!assignedSlot) throw new Error("JOIN_ABORTED");
-        const room=result.snapshot.val();
+        if(!assignedSlot||!room?.[assignedSlot]) throw new Error("JOIN_ABORTED");
 
         state.roomId=actualCode;
         state.mySlot=assignedSlot;
@@ -1651,9 +1801,9 @@
         await enterApp();
       }catch(error){
         console.error(error);
-        if(error.message==="ROOM_NOT_FOUND") return showToast("코드가 실제 데이터베이스에 없어요. 복사한 6자리를 다시 확인해요");
-        if(error.message==="DATABASE_READ_FAILED") return showToast("코드는 조회하지 못했어요. 인터넷 연결 또는 Firebase 읽기 권한 문제예요");
-        if(error.message==="ROOM_FULL") return showToast("이미 두 사람이 연결된 코드예요. 기존 이름으로 다시 들어가요");
+        if(error.message==="ROOM_NOT_FOUND") return showToast("존재하지 않는 코드예요. 코드를 다시 확인해요");
+        if(error.message==="DATABASE_READ_FAILED") return showToast("코드를 조회하지 못했어요. 인터넷 또는 Firebase 읽기 권한 문제예요");
+        if(error.message==="ROOM_FULL") return showToast("이미 두 사람이 연결된 코드예요. 처음 사용한 이름이나 기기로 다시 들어가요");
         showToast("연결하지 못했어요. 잠시 후 다시 시도해요");
       }
     }
@@ -2024,6 +2174,7 @@
       const unsubMessages=onValue(messageQuery,snapshot=>{
         const data=snapshot.val()||{};
         state.messages=Object.entries(data)
+          .filter(([,value])=>value?.type!=="story")
           .map(([id,value])=>({id,...value}))
           .sort((a,b)=>(a.clientCreatedAt||a.timestamp||0)-(b.clientCreatedAt||b.timestamp||0));
         renderMessages();
@@ -2034,7 +2185,8 @@
       const unsubStories=onValue(storyQuery,snapshot=>{
         const data=snapshot.val()||{};
         state.stories=Object.entries(data)
-          .map(([id,value])=>({id,...value}))
+          .filter(([,value])=>value?.type==="story")
+          .map(([id,value])=>({id,...value,type:value.storyType||"text"}))
           .filter(story=>!story.expiresAt||story.expiresAt>Date.now())
           .sort((a,b)=>(a.createdAtMs||0)-(b.createdAtMs||0));
         renderStoryStrip();
@@ -2110,6 +2262,7 @@
       switchScreen("chatScreen");
       closeSearch();
       markChatRead();
+      syncVisualViewport();
       requestAnimationFrame(()=>$("chatMessages").scrollTop=$("chatMessages").scrollHeight);
     }
 
@@ -2249,12 +2402,17 @@
     async function sendMessage(){
       const input=$("messageInput");
       const text=input.value.trim();
-      if(!text) return;
-      if(!isPaired()) return showToast("상대방이 연결된 뒤 메시지를 보낼 수 있어요");
+      if(!text){focusMessageInput();return}
+      if(!isPaired()){
+        focusMessageInput();
+        showToast("상대방이 연결된 뒤 메시지를 보낼 수 있어요");
+        return;
+      }
 
       input.value="";
       resizeMessageInput();
       setTyping(false);
+      focusMessageInput();
       try{
         const now=Date.now();
         await push(messagesRef(),{
@@ -2269,6 +2427,8 @@
         input.value=text;
         resizeMessageInput();
         showToast("메시지 전송에 실패했어요");
+      }finally{
+        focusMessageInput();
       }
     }
 
@@ -2514,79 +2674,139 @@
     /* =========================================================
        STORIES
     ========================================================= */
+    function setStoryBusy(active,label="처리하고 있어요"){
+      state.storyBusy=active;
+      $("storyLoading").hidden=!active;
+      $("storyLoadingText").textContent=label;
+      $("publishStoryButton").disabled=active;
+      $("closeStoryCreatorButton").disabled=active;
+    }
+
     function openStoryCreator(mode="text"){
       state.storyMode=mode;
       state.storyImageData="";
+      state.storyGradient="linear-gradient(145deg,#ff8e9d,#ffc0a8)";
       $("storyTextInput").value="";
       $("storyCaptionInput").value="";
+      $("storyPreviewImage").src="";
       $("storyPreviewImage").hidden=true;
       $("storyPreviewCaption").hidden=true;
-      $("storyPreviewText").textContent="오늘의 순간을 남겨봐요";
+      $("storyPreviewText").innerHTML="오늘의 순간을<br>남겨봐요";
+      document.querySelectorAll("[data-gradient]").forEach((item,index)=>item.classList.toggle("is-selected",index===0));
+      setStoryBusy(false);
       setStoryMode(mode);
       $("storyCreator").classList.add("is-open");
-      if(mode==="photo") setTimeout(()=>$("storyImageInput").click(),80);
+      document.body.style.overflow="hidden";
+      if(mode==="text") setTimeout(()=>$("storyTextInput").focus({preventScroll:true}),180);
     }
 
-    function closeStoryCreator(){$("storyCreator").classList.remove("is-open")}
+    function closeStoryCreator(){
+      if(state.storyBusy) return;
+      $("storyCreator").classList.remove("is-open");
+      document.body.style.overflow="";
+    }
 
     function setStoryMode(mode){
       state.storyMode=mode;
+      const isText=mode==="text";
       document.querySelectorAll("[data-story-mode]").forEach(button=>button.classList.toggle("is-active",button.dataset.storyMode===mode));
-      $("storyTextInput").hidden=mode!=="text";
-      $("storyCaptionInput").hidden=mode!=="photo";
-      $("gradientList").hidden=mode!=="text";
-      $("storyPreviewText").hidden=mode!=="text";
-      $("storyPreviewImage").hidden=mode!=="photo"||!state.storyImageData;
-      if(mode==="photo"&&!state.storyImageData) $("storyImageInput").click();
+      $("storyTextInput").hidden=!isText;
+      $("storyCaptionInput").hidden=isText;
+      $("gradientList").hidden=!isText;
+      $("storyColorLabel").hidden=!isText;
+      $("storyPreviewText").hidden=!isText;
+      $("storyPreviewImage").hidden=isText||!state.storyImageData;
+      $("storyPhotoPicker").hidden=isText||Boolean(state.storyImageData);
+      $("storyPreview").style.background=isText?state.storyGradient:"linear-gradient(145deg,#fff0f2,#ffe3df)";
       updateStoryPreview();
     }
 
     function updateStoryPreview(){
       if(state.storyMode==="text"){
         $("storyPreview").style.background=state.storyGradient;
-        $("storyPreviewText").textContent=$("storyTextInput").value.trim()||"오늘의 순간을 남겨봐요";
+        const value=$("storyTextInput").value.trim();
+        $("storyPreviewText").textContent=value||"오늘의 순간을\n남겨봐요";
+        $("storyPreviewText").style.whiteSpace="pre-line";
         $("storyPreviewCaption").hidden=true;
       }else{
         const caption=$("storyCaptionInput").value.trim();
         $("storyPreviewCaption").textContent=caption;
         $("storyPreviewCaption").hidden=!caption;
+        $("storyPhotoPicker").hidden=Boolean(state.storyImageData);
+        $("storyPreviewImage").hidden=!state.storyImageData;
       }
     }
 
     async function handleStoryImage(file){
       if(!file) return;
+      if(!file.type?.startsWith("image/")) return showToast("사진 파일을 선택해요");
+      setStoryMode("photo");
+      setStoryBusy(true,"사진을 예쁘게 줄이고 있어요");
       try{
-        showToast("스토리 사진을 압축하고 있어요");
-        state.storyImageData=await compressImage(file,{maxWidth:800,quality:.74,maxBytes:MAX_IMAGE_BYTES});
+        state.storyImageData=await compressImage(file,{maxWidth:800,quality:.76,maxBytes:MAX_IMAGE_BYTES});
         $("storyPreviewImage").src=state.storyImageData;
         $("storyPreviewImage").hidden=false;
-        $("storyPreviewText").hidden=true;
-      }catch(error){console.error(error);showToast("스토리 사진을 준비하지 못했어요")}
+        $("storyPhotoPicker").hidden=true;
+        updateStoryPreview();
+      }catch(error){
+        console.error("story image error",error);
+        state.storyImageData="";
+        $("storyPreviewImage").src="";
+        $("storyPreviewImage").hidden=true;
+        $("storyPhotoPicker").hidden=false;
+        showToast(error?.message==="IMAGE_TOO_LARGE"?"사진 용량을 줄이지 못했어요. 다른 사진을 골라요":"사진을 준비하지 못했어요");
+      }finally{
+        setStoryBusy(false);
+      }
     }
 
     async function publishStory(){
-      if(!isPaired()) return showToast("상대방이 연결된 뒤 스토리를 올릴 수 있어요");
+      if(state.storyBusy) return;
+      if(!state.roomId||!state.mySlot||!state.myName) return showToast("먼저 커플방에 들어가요");
+
+      const now=Date.now();
+      const storyType=state.storyMode;
       const base={
+        type:"story",
+        storyType,
         ownerSlot:state.mySlot,
         ownerName:state.myName,
-        createdAt:Date.now(),
-        createdAtMs:Date.now(),
-        expiresAt:Date.now()+86_400_000,
+        senderSlot:state.mySlot,
+        senderName:state.myName,
+        sender:state.myName,
+        createdAt:now,
+        createdAtMs:now,
+        clientCreatedAt:now,
+        timestamp:now,
+        expiresAt:now+86_400_000,
         viewers:{}
       };
 
+      let payload;
+      if(storyType==="text"){
+        const text=$("storyTextInput").value.trim();
+        if(!text) return showToast("스토리에 남길 말을 입력해요");
+        payload={...base,text,gradient:state.storyGradient,imageData:"",caption:""};
+      }else{
+        if(!state.storyImageData) return showToast("먼저 사진을 골라요");
+        payload={...base,text:"",gradient:"",imageData:state.storyImageData,caption:$("storyCaptionInput").value.trim()};
+      }
+
+      setStoryBusy(true,"스토리를 올리고 있어요");
       try{
-        if(state.storyMode==="text"){
-          const text=$("storyTextInput").value.trim();
-          if(!text) return showToast("스토리 문장을 입력해요");
-          await push(storiesRef(),{...base,type:"text",text,gradient:state.storyGradient,imageData:"",caption:""});
-        }else{
-          if(!state.storyImageData) return showToast("사진을 선택해요");
-          await push(storiesRef(),{...base,type:"photo",text:"",gradient:"",imageData:state.storyImageData,caption:$("storyCaptionInput").value.trim()});
-        }
+        const created=await push(storiesRef(),payload);
+        const verify=await get(created);
+        if(!verify.exists()) throw new Error("STORY_VERIFY_FAILED");
+        setStoryBusy(false);
         closeStoryCreator();
         showToast("스토리를 올렸어요");
-      }catch(error){console.error(error);showToast("스토리를 올리지 못했어요")}
+      }catch(error){
+        console.error("story publish error",error);
+        const code=String(error?.code||"").toLowerCase();
+        showToast(code.includes("permission")?"스토리 저장 권한이 없어요":"스토리를 올리지 못했어요. 인터넷을 확인해요");
+      }finally{
+        setStoryBusy(false);
+      }
     }
 
     function renderStoryStrip(){
@@ -2687,7 +2907,7 @@
       progress.children[ownerPosition]?.firstChild?.animate([{width:"0%"},{width:"100%"}],{duration:STORY_DURATION,fill:"forwards",easing:"linear"});
 
       if(story.ownerSlot!==state.mySlot&&!story.viewers?.[state.mySlot]){
-        update(ref(db,`stories/${state.roomId}/${story.id}`),{[`viewers/${state.mySlot}`]:Date.now()}).catch(console.error);
+        update(storyItemRef(story.id),{[`viewers/${state.mySlot}`]:Date.now()}).catch(console.error);
       }
       state.storyTimer=setTimeout(nextStory,STORY_DURATION);
     }
@@ -2748,7 +2968,7 @@
       const story=state.stories[state.activeStoryIndex];
       if(!story||story.ownerSlot!==state.mySlot) return;
       if(!confirm("이 스토리를 삭제할까요?")) return;
-      try{await remove(ref(db,`stories/${state.roomId}/${story.id}`));closeStoryViewer()}
+      try{await remove(storyItemRef(story.id));closeStoryViewer()}
       catch(error){console.error(error);showToast("스토리를 삭제하지 못했어요")}
     }
 
@@ -2765,11 +2985,35 @@
       $("logoutButton").addEventListener("click",logout);
       $("chatPreview").addEventListener("click",openChat);
       $("chatBackButton").addEventListener("click",closeChat);
-      $("sendMessageButton").addEventListener("click",sendMessage);
+      // 버튼을 누를 때 textarea 포커스가 유지되어 키보드가 내려가지 않음
+      let sendPointerHandled=false;
+      $("sendMessageButton").addEventListener("pointerdown",event=>event.preventDefault());
+      $("sendMessageButton").addEventListener("pointerup",event=>{
+        event.preventDefault();
+        sendPointerHandled=true;
+        sendMessage();
+        setTimeout(()=>{sendPointerHandled=false},0);
+      });
+      $("sendMessageButton").addEventListener("pointercancel",()=>{sendPointerHandled=false});
+      $("sendMessageButton").addEventListener("click",event=>{
+        event.preventDefault();
+        if(!sendPointerHandled) sendMessage();
+      });
       $("galleryButton").addEventListener("click",()=>$("galleryInput").click());
-      $("toolboxToggleButton").addEventListener("click",()=>$("chatToolbox").classList.toggle("is-open"));
+      $("toolboxToggleButton").addEventListener("click",()=>{
+        $("chatToolbox").classList.toggle("is-open");
+        focusMessageInput();
+      });
+      $("messageInput").addEventListener("focus",()=>{
+        syncVisualViewport();
+        setTimeout(()=>{
+          syncVisualViewport();
+          $("chatMessages").scrollTop=$("chatMessages").scrollHeight;
+        },120);
+      });
       $("messageInput").addEventListener("input",handleTyping);
       $("messageInput").addEventListener("keydown",event=>{
+        if(event.isComposing||event.keyCode===229) return;
         if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();sendMessage()}
       });
 
@@ -2784,6 +3028,10 @@
       });
       $("storyImageInput").addEventListener("change",event=>{
         const file=event.target.files[0];event.target.value="";handleStoryImage(file);
+      });
+      $("storyPhotoPicker").addEventListener("click",()=>$("storyImageInput").click());
+      $("storyPreviewImage").addEventListener("click",()=>{
+        if(state.storyMode==="photo"&&!state.storyBusy) $("storyImageInput").click();
       });
 
       $("searchToggleButton").addEventListener("click",toggleSearch);
@@ -2857,10 +3105,18 @@
         }
       });
       window.addEventListener("pagehide",()=>{setTyping(false);setPresence(false).catch(()=>{})});
+      window.addEventListener("resize",syncVisualViewport,{passive:true});
+      window.addEventListener("orientationchange",()=>setTimeout(syncVisualViewport,120),{passive:true});
+      if(window.visualViewport){
+        window.visualViewport.addEventListener("resize",syncVisualViewport,{passive:true});
+        window.visualViewport.addEventListener("scroll",syncVisualViewport,{passive:true});
+      }
+      syncVisualViewport();
     }
 
     bindEvents();
     restoreSession();
   </script>
+<!-- build: rejoin-fix-20260726 -->
 </body>
-</html>
+  </html>
