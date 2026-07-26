@@ -219,151 +219,6 @@
     .nav-item span{font-size:9px;font-weight:650}
     .nav-create{width:50px;height:50px;margin-top:-18px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--primary),var(--primary-strong));color:white;border:4px solid rgba(255,255,255,.97);box-shadow:0 9px 22px rgba(246,83,101,.24);font-size:24px}
 
-    const EMOJI_CATEGORIES = {
-      "smileys":{label:"표정",icon:"😀",items:["😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "🥲", "😊", "😇", "🙂", "🙃", "😉", "😌", "😍", "🥰", "😘", "😗", "😙", "😚", "😋", "😛", "😝", "😜", "🤪", "🤨", "🧐", "🤓", "😎", "🥸", "🤩", "🥳", "🙂‍↕️", "😏", "😒", "🙂‍↔️", "😞", "😔", "😟", "😕", "🙁", "☹️", "😣", "😖", "😫", "😩", "🥺", "😢", "😭", "😮‍💨", "😤", "😠", "😡", "🤬", "🤯", "😳", "🥵", "🥶", "😱", "😨", "😰", "😥", "😓", "🫣", "🤗", "🫡", "🤔", "🫢", "🤭", "🤫", "🤥", "😶", "😶‍🌫️", "😐", "😑", "😬", "🫨", "🫠", "🙄", "😯", "😦", "😧", "😮", "😲", "🥱", "😴", "🤤", "😪", "😵", "😵‍💫", "🤐", "🥴", "🤢", "🤮", "🤧", "😷", "🤒", "🤕", "🤑", "🤠", "😈", "👿", "👹", "👺", "🤡", "💩", "👻", "💀", "☠️", "👽", "👾", "🤖", "🎃", "😺", "😸", "😹", "😻", "😼", "😽", "🙀", "😿", "😾"]},
-      "people":{label:"사람",icon:"👋",items:["👋", "🤚", "🖐️", "✋", "🖖", "🫱", "🫲", "🫳", "🫴", "🫷", "🫸", "👌", "🤌", "🤏", "✌️", "🤞", "🫰", "🤟", "🤘", "🤙", "👈", "👉", "👆", "👇", "☝️", "🫵", "👍", "👎", "✊", "👊", "🤛", "🤜", "👏", "🙌", "🫶", "👐", "🤲", "🤝", "🙏", "✍️", "💅", "🤳", "💪", "🦾", "🦿", "🦵", "🦶", "👂", "🦻", "👃", "🧠", "🫀", "🫁", "🦷", "🦴", "👀", "👁️", "👅", "👄", "🫦", "💋", "🩸", "👶", "🧒", "👦", "👧", "🧑", "👱", "👨", "🧔", "👩", "🧓", "👴", "👵", "🙍", "🙎", "🙅", "🙆", "💁", "🙋", "🧏", "🙇", "🤦", "🤷", "👮", "👷", "💂", "🕵️", "👩‍⚕️", "👨‍⚕️", "👩‍🌾", "👨‍🌾", "👩‍🍳", "👨‍🍳", "👩‍🎓", "👨‍🎓", "👩‍🎤", "👨‍🎤", "👩‍🏫", "👨‍🏫", "👩‍🏭", "👨‍🏭", "👩‍💻", "👨‍💻", "👩‍💼", "👨‍💼", "👩‍🔧", "👨‍🔧", "👩‍🔬", "👨‍🔬", "👩‍🎨", "👨‍🎨", "👩‍🚒", "👨‍🚒", "👩‍✈️", "👨‍✈️", "👩‍🚀", "👨‍🚀", "👩‍⚖️", "👨‍⚖️", "👰", "🤵", "👸", "🤴", "🥷", "🦸", "🦹", "🧙", "🧚", "🧛", "🧜", "🧝", "🧞", "🧟", "💆", "💇", "🚶", "🧍", "🧎", "🏃", "💃", "🕺", "🕴️", "👯", "🧖", "🧗", "🤺", "🏇", "⛷️", "🏂", "🏌️", "🏄", "🚣", "🏊", "⛹️", "🏋️", "🚴", "🚵", "🤸", "🤼", "🤽", "🤾", "🤹", "🧘", "🛀", "🛌", "👭", "👫", "👬", "💏", "💑", "👪", "🗣️", "👤", "👥", "🫂"]},
-      "animals":{label:"동물",icon:"🐶",items:["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨", "🐯", "🦁", "🐮", "🐷", "🐽", "🐸", "🐵", "🙈", "🙉", "🙊", "🐒", "🐔", "🐧", "🐦", "🐤", "🐣", "🐥", "🦆", "🦅", "🦉", "🦇", "🐺", "🐗", "🐴", "🦄", "🐝", "🪱", "🐛", "🦋", "🐌", "🐞", "🐜", "🪰", "🪲", "🪳", "🦟", "🦗", "🕷️", "🕸️", "🦂", "🐢", "🐍", "🦎", "🦖", "🦕", "🐙", "🦑", "🪼", "🦐", "🦞", "🦀", "🐡", "🐠", "🐟", "🐬", "🐳", "🐋", "🦈", "🦭", "🐊", "🐅", "🐆", "🦓", "🫏", "🦍", "🦧", "🦣", "🐘", "🦛", "🦏", "🐪", "🐫", "🦒", "🦘", "🦬", "🐃", "🐂", "🐄", "🐎", "🐖", "🐏", "🐑", "🦙", "🐐", "🦌", "🫎", "🐕", "🐩", "🦮", "🐕‍🦺", "🐈", "🐈‍⬛", "🪶", "🪽", "🐓", "🦃", "🦤", "🦚", "🦜", "🦢", "🪿", "🦩", "🕊️", "🐇", "🦝", "🦨", "🦡", "🦫", "🦦", "🦥", "🐁", "🐀", "🐿️", "🦔", "🐾", "🐉", "🐲", "🌵", "🎄", "🌲", "🌳", "🌴", "🪹", "🪺", "🪵", "🌱", "🌿", "☘️", "🍀", "🎍", "🪴", "🎋", "🍃", "🍂", "🍁", "🪾", "🍄", "🐚", "🪸", "🪨", "🌾", "💐", "🌷", "🌹", "🥀", "🪻", "🌺", "🌸", "🌼", "🌻", "🌞", "🌝", "🌛", "🌜", "🌚", "🌕", "🌖", "🌗", "🌘", "🌑", "🌒", "🌓", "🌔", "🌙", "🌎", "🌍", "🌏", "🪐", "💫", "⭐", "🌟", "✨", "⚡", "☄️", "💥", "🔥", "🌪️", "🌈", "☀️", "🌤️", "⛅", "🌥️", "☁️", "🌦️", "🌧️", "⛈️", "🌩️", "🌨️", "❄️", "☃️", "⛄", "🌬️", "💨", "💧", "💦", "🫧", "☔", "☂️", "🌊"]},
-      "food":{label:"음식",icon:"🍏",items:["🍏", "🍎", "🍐", "🍊", "🍋", "🍋‍🟩", "🍌", "🍉", "🍇", "🍓", "🫐", "🍈", "🍒", "🍑", "🥭", "🍍", "🥥", "🥝", "🍅", "🍆", "🥑", "🫛", "🥦", "🥬", "🥒", "🌶️", "🫑", "🌽", "🥕", "🫒", "🧄", "🧅", "🥔", "🍠", "🫚", "🥐", "🥯", "🍞", "🥖", "🥨", "🧀", "🥚", "🍳", "🧈", "🥞", "🧇", "🥓", "🥩", "🍗", "🍖", "🦴", "🌭", "🍔", "🍟", "🍕", "🫓", "🥪", "🥙", "🧆", "🌮", "🌯", "🫔", "🥗", "🥘", "🫕", "🥫", "🍝", "🍜", "🍲", "🍛", "🍣", "🍱", "🥟", "🦪", "🍤", "🍙", "🍚", "🍘", "🍥", "🥠", "🥮", "🍢", "🍡", "🍧", "🍨", "🍦", "🥧", "🧁", "🍰", "🎂", "🍮", "🍭", "🍬", "🍫", "🍿", "🍩", "🍪", "🌰", "🥜", "🫘", "🍯", "🥛", "🍼", "🫖", "☕", "🍵", "🧃", "🥤", "🧋", "🍶", "🍺", "🍻", "🥂", "🍷", "🥃", "🍸", "🍹", "🧉", "🍾", "🧊", "🥄", "🍴", "🍽️", "🥣", "🥡", "🥢", "🧂"]},
-      "activities":{label:"활동",icon:"⚽",items:["⚽", "🏀", "🏈", "⚾", "🥎", "🎾", "🏐", "🏉", "🥏", "🎱", "🪀", "🏓", "🏸", "🏒", "🏑", "🥍", "🏏", "🪃", "🥅", "⛳", "🪁", "🏹", "🎣", "🤿", "🥊", "🥋", "🎽", "🛹", "🛼", "🛷", "⛸️", "🥌", "🎿", "⛷️", "🏂", "🪂", "🏋️", "🤼", "🤸", "⛹️", "🤺", "🤾", "🏌️", "🏇", "🧘", "🎯", "🪄", "🔮", "🧿", "🪬", "🎮", "🕹️", "🎰", "🎲", "🧩", "🧸", "🪅", "🪩", "🪆", "♠️", "♥️", "♦️", "♣️", "♟️", "🃏", "🀄", "🎴", "🎭", "🖼️", "🎨", "🧵", "🪡", "🧶", "🪢", "🎤", "🎧", "🎼", "🎹", "🥁", "🪘", "🪇", "🎷", "🎺", "🪗", "🎸", "🪕", "🎻", "🪈", "🎬", "🎟️", "🎫", "🎪", "🤹", "🎠", "🎡", "🎢", "🎯", "🏆", "🥇", "🥈", "🥉", "🏅", "🎖️", "🏵️", "🎗️"]},
-      "travel":{label:"이동",icon:"🚗",items:["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜", "🏍️", "🛵", "🛺", "🚲", "🛴", "🛹", "🛼", "🚨", "🚔", "🚍", "🚘", "🚖", "🛞", "🚡", "🚠", "🚟", "🚃", "🚋", "🚞", "🚝", "🚄", "🚅", "🚈", "🚂", "🚆", "🚇", "🚊", "🚉", "✈️", "🛫", "🛬", "🛩️", "💺", "🛰️", "🚀", "🛸", "🚁", "🛶", "⛵", "🚤", "🛥️", "🛳️", "⛴️", "🚢", "⚓", "🛟", "🪝", "⛽", "🚧", "🚦", "🚥", "🗺️", "🗿", "🗽", "🗼", "🏰", "🏯", "🏟️", "🎡", "🎢", "🎠", "⛲", "⛱️", "🏖️", "🏝️", "🏜️", "🌋", "⛰️", "🏔️", "🗻", "🏕️", "⛺", "🛖", "🏠", "🏡", "🏘️", "🏚️", "🏗️", "🏭", "🏢", "🏬", "🏣", "🏤", "🏥", "🏦", "🏨", "🏪", "🏫", "🏩", "💒", "🏛️", "⛪", "🕌", "🛕", "🕍", "⛩️", "🕋", "🌅", "🌄", "🌠", "🎇", "🎆", "🌇", "🌆", "🏙️", "🌃", "🌌", "🌉", "🌁"]},
-      "objects":{label:"물건",icon:"⌚",items:["⌚", "📱", "📲", "💻", "⌨️", "🖥️", "🖨️", "🖱️", "🖲️", "🕹️", "🗜️", "💽", "💾", "💿", "📀", "📼", "📷", "📸", "📹", "🎥", "📽️", "🎞️", "📞", "☎️", "📟", "📠", "📺", "📻", "🎙️", "🎚️", "🎛️", "🧭", "⏱️", "⏲️", "⏰", "🕰️", "⌛", "⏳", "📡", "🔋", "🪫", "🔌", "💡", "🔦", "🕯️", "🪔", "🧯", "🛢️", "💸", "💵", "💴", "💶", "💷", "🪙", "💰", "💳", "💎", "⚖️", "🪜", "🧰", "🪛", "🔧", "🔨", "⚒️", "🛠️", "⛏️", "🪚", "🔩", "⚙️", "🪤", "🧱", "⛓️", "⛓️‍💥", "🧲", "🔫", "💣", "🧨", "🪓", "🔪", "🗡️", "⚔️", "🛡️", "🚬", "⚰️", "🪦", "⚱️", "🏺", "🔭", "🔬", "🕳️", "🩹", "🩺", "🩻", "🩼", "💊", "💉", "🩸", "🧬", "🦠", "🧫", "🧪", "🌡️", "🧹", "🪠", "🧺", "🧻", "🚽", "🚿", "🛁", "🪥", "🪒", "🧴", "🧼", "🫧", "🧽", "🧯", "🛒", "🎁", "🎈", "🎏", "🎀", "🪄", "🪅", "🎊", "🎉", "🪩", "🎎", "🏮", "🎐", "🧧", "✉️", "📩", "📨", "📧", "💌", "📥", "📤", "📦", "🏷️", "🪧", "📪", "📫", "📬", "📭", "📮", "📯", "📜", "📃", "📄", "📑", "🧾", "📊", "📈", "📉", "🗒️", "🗓️", "📆", "📅", "🗑️", "📇", "🗃️", "🗳️", "🗄️", "📋", "📁", "📂", "🗂️", "🗞️", "📰", "📓", "📔", "📒", "📕", "📗", "📘", "📙", "📚", "📖", "🔖", "🧷", "🔗", "📎", "🖇️", "📐", "📏", "🧮", "📌", "📍", "✂️", "🖊️", "🖋️", "✒️", "🖌️", "🖍️", "📝", "✏️", "🔍", "🔎", "🔏", "🔐", "🔒", "🔓"]},
-      "symbols":{label:"기호",icon:"❤️",items:["❤️", "🩷", "🧡", "💛", "💚", "💙", "🩵", "💜", "🤎", "🖤", "🩶", "🤍", "💔", "❤️‍🔥", "❤️‍🩹", "❣️", "💕", "💞", "💓", "💗", "💖", "💘", "💝", "💟", "💌", "💋", "💯", "💢", "💥", "💫", "💦", "💨", "🕳️", "💬", "👁️‍🗨️", "🗨️", "🗯️", "💭", "💤", "✅", "❌", "❎", "➕", "➖", "➗", "✖️", "🟰", "♾️", "‼️", "⁉️", "❓", "❔", "❕", "❗", "〰️", "💱", "💲", "⚕️", "♻️", "⚜️", "🔱", "📛", "🔰", "⭕", "☑️", "✔️", "☝️", "⚠️", "🚸", "🔱", "⚡", "☢️", "☣️", "⬆️", "↗️", "➡️", "↘️", "⬇️", "↙️", "⬅️", "↖️", "↕️", "↔️", "↩️", "↪️", "⤴️", "⤵️", "🔃", "🔄", "🔙", "🔚", "🔛", "🔜", "🔝", "🛐", "⚛️", "🕉️", "✡️", "☸️", "☯️", "✝️", "☦️", "☪️", "☮️", "🕎", "🔯", "🪯", "♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓", "⛎", "▶️", "⏩", "⏭️", "⏯️", "◀️", "⏪", "⏮️", "🔼", "⏫", "🔽", "⏬", "⏸️", "⏹️", "⏺️", "⏏️", "🎦", "🔅", "🔆", "📶", "🛜", "📳", "📴", "♀️", "♂️", "⚧️", "✖️", "➕", "➖", "➗", "🟰", "♾️", "0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "🔢", "#️⃣", "*️⃣", "⏏️", "⏺️", "⏹️", "⏸️", "⏭️", "⏮️", "⏩", "⏪", "🔀", "🔁", "🔂", "▶️", "◀️", "🔼", "🔽"]},
-      "flags":{label:"깃발",icon:"🏁",items:["🏁", "🚩", "🎌", "🏴", "🏳️", "🏳️‍🌈", "🏳️‍⚧️", "🏴‍☠️", "🇰🇷", "🇺🇸", "🇯🇵", "🇨🇳", "🇹🇼", "🇭🇰", "🇸🇬", "🇹🇭", "🇻🇳", "🇵🇭", "🇮🇩", "🇲🇾", "🇮🇳", "🇦🇺", "🇳🇿", "🇨🇦", "🇲🇽", "🇧🇷", "🇦🇷", "🇨🇱", "🇵🇪", "🇬🇧", "🇫🇷", "🇩🇪", "🇮🇹", "🇪🇸", "🇵🇹", "🇳🇱", "🇧🇪", "🇨🇭", "🇦🇹", "🇸🇪", "🇳🇴", "🇩🇰", "🇫🇮", "🇮🇸", "🇮🇪", "🇵🇱", "🇨🇿", "🇭🇺", "🇬🇷", "🇹🇷", "🇺🇦", "🇷🇴", "🇧🇬", "🇭🇷", "🇷🇸", "🇸🇰", "🇸🇮", "🇱🇹", "🇱🇻", "🇪🇪", "🇷🇺", "🇿🇦", "🇪🇬", "🇲🇦", "🇳🇬", "🇰🇪", "🇸🇦", "🇦🇪", "🇮🇱", "🇮🇷", "🇵🇰", "🇧🇩", "🇳🇵", "🇱🇰", "🇲🇲", "🇰🇭", "🇱🇦", "🇲🇳", "🇰🇿", "🇺🇿", "🇬🇪", "🇦🇲", "🇦🇿", "🇶🇦", "🇰🇼", "🇧🇭", "🇴🇲", "🇯🇴", "🇱🇧", "🇮🇶", "🇦🇫", "🇺🇳"]},
-    };
-
-    const EMOJI_RECENT_KEY="wdm_recent_emojis_v1";
-
-    function recentEmojis(){
-      try{return JSON.parse(localStorage.getItem(EMOJI_RECENT_KEY)||"[]").filter(Boolean).slice(0,32)}catch{return []}
-    }
-
-    function rememberEmoji(emoji){
-      const items=[emoji,...recentEmojis().filter(item=>item!==emoji)].slice(0,32);
-      localStorage.setItem(EMOJI_RECENT_KEY,JSON.stringify(items));
-    }
-
-    function renderEmojiPicker(category=state.emojiCategory||"smileys"){
-      const categoryBar=$("emojiCategoryBar"),grid=$("emojiGrid");
-      if(!categoryBar||!grid) return;
-      const recent=recentEmojis();
-      const categories=recent.length
-        ? [["recent",{label:"최근",icon:"🕘",items:recent}],...Object.entries(EMOJI_CATEGORIES)]
-        : Object.entries(EMOJI_CATEGORIES);
-      if(!categories.some(([key])=>key===category)) category=categories[0][0];
-      state.emojiCategory=category;
-      categoryBar.innerHTML="";
-      categories.forEach(([key,data])=>{
-        const button=document.createElement("button");
-        button.type="button";button.className="emoji-category-button";
-        button.classList.toggle("is-active",key===category);
-        button.dataset.emojiCategory=key;button.textContent=data.icon;button.title=data.label;
-        categoryBar.appendChild(button);
-      });
-      const data=category==="recent"?{items:recent}:EMOJI_CATEGORIES[category];
-      grid.innerHTML="";
-      data.items.forEach(emoji=>{
-        const button=document.createElement("button");
-        button.type="button";button.className="emoji-grid-button";button.dataset.emoji=emoji;button.textContent=emoji;
-        grid.appendChild(button);
-      });
-      grid.scrollTop=0;
-    }
-
-    function openEmojiPicker(mode="message",messageId=""){
-      state.emojiMode=mode;
-      if(messageId) state.reactionTargetId=messageId;
-      renderEmojiPicker(state.emojiCategory);
-      $("chatToolbox").classList.add("is-open");
-      $("chatToolbox").setAttribute("aria-hidden","false");
-      if(mode==="message") focusMessageInput();
-    }
-
-    function closeEmojiPicker(){
-      $("chatToolbox")?.classList.remove("is-open");
-      $("chatToolbox")?.setAttribute("aria-hidden","true");
-      state.emojiMode="message";
-    }
-
-    function insertEmojiAtCursor(emoji){
-      const input=$("messageInput");
-      const start=Number.isFinite(input.selectionStart)?input.selectionStart:input.value.length;
-      const end=Number.isFinite(input.selectionEnd)?input.selectionEnd:start;
-      input.setRangeText(emoji,start,end,"end");
-      resizeMessageInput();
-      input.dispatchEvent(new Event("input",{bubbles:true}));
-      focusMessageInput();
-    }
-
-    async function setMessageReaction(messageId,emoji){
-      if(!messageId||!state.roomId||!state.mySlot) return;
-      const message=state.messages.find(item=>item.id===messageId);
-      const current=message?.reactions?.[state.mySlot]||"";
-      try{
-        await set(ref(db,`chat/${state.roomId}/${messageId}/reactions/${state.mySlot}`),current===emoji?null:emoji);
-      }catch(error){console.error(error);showToast("공감을 남기지 못했어요")}
-      closeMessageReactionPicker();
-    }
-
-    function handleEmojiSelection(emoji){
-      if(!emoji) return;
-      rememberEmoji(emoji);
-      if(state.emojiMode==="reaction"&&state.reactionTargetId){
-        setMessageReaction(state.reactionTargetId,emoji);
-        closeEmojiPicker();
-        return;
-      }
-      insertEmojiAtCursor(emoji);
-    }
-
-    function openMessageReactionPicker(messageId){
-      state.reactionTargetId=messageId;
-      const picker=$("messageReactionPicker");
-      picker.classList.add("is-open");picker.setAttribute("aria-hidden","false");
-    }
-
-    function closeMessageReactionPicker(){
-      const picker=$("messageReactionPicker");
-      picker?.classList.remove("is-open");picker?.setAttribute("aria-hidden","true");
-    }
-
-    function createMessageReactionStrip(message){
-      const entries=Object.entries(message.reactions||{}).filter(([,emoji])=>emoji);
-      if(!entries.length) return null;
-      const groups=new Map();
-      entries.forEach(([slot,emoji])=>{
-        const group=groups.get(emoji)||{count:0,mine:false};
-        group.count+=1;if(slot===state.mySlot) group.mine=true;groups.set(emoji,group);
-      });
-      const strip=document.createElement("div");strip.className="message-reactions";
-      groups.forEach((group,emoji)=>{
-        const button=document.createElement("button");button.type="button";button.className="message-reaction-badge";
-        if(group.mine) button.classList.add("is-mine");
-        button.textContent=group.count>1?`${emoji} ${group.count}`:emoji;
-        button.addEventListener("click",event=>{event.stopPropagation();openMessageReactionPicker(message.id)});
-        strip.appendChild(button);
-      });
-      return strip;
-    }
-
-    function refreshReadReceipts(){
-      const box=$("chatMessages");
-      if(!box) return;
-      box.querySelectorAll(".message-read").forEach(node=>node.remove());
-      const partnerReadIndex=readIndexFor(state.room?.[partnerSlot()]||{});
-      if(partnerReadIndex<0) return;
-      let lastReadMineIndex=-1;
-      for(let index=0;index<=partnerReadIndex&&index<state.messages.length;index++){
-        if(isMine(state.messages[index])) lastReadMineIndex=index;
-      }
-      if(lastReadMineIndex<0) return;
-      const message=state.messages[lastReadMineIndex];
-      const row=[...box.querySelectorAll(".message-row[data-message-id]")].find(item=>item.dataset.messageId===message.id);
-      const meta=row?.querySelector(".message-meta");
-      if(!meta) return;
-      const read=document.createElement("span");read.className="message-read";read.textContent="읽음";
-      meta.prepend(read);
-    }
-
     /* =========================================================
        CHAT
     ========================================================= */
@@ -2178,157 +2033,6 @@
       line-height:1.2!important;
     }
 
-
-    /* =========================================================
-       CHAT REACTIONS + FULL EMOJI PICKER
-    ========================================================= */
-    .message-react-trigger{
-      width:22px;height:22px;padding:0;border:0;border-radius:50%;background:transparent;
-      display:grid;place-items:center;color:#b4a2a6;font-size:15px;line-height:1;
-    }
-    .message-react-trigger:active{background:#f5e9e8;color:#df7890}
-    .message-reactions{display:flex;align-items:center;gap:4px;margin-top:4px;flex-wrap:wrap}
-    .message-row.me .message-reactions{justify-content:flex-end}
-    .message-reaction-badge{
-      min-width:29px;height:24px;padding:0 8px;border-radius:999px;border:1px solid #eaded9;
-      background:#fffdfb;display:grid;place-items:center;font-size:13px;line-height:1;box-shadow:0 2px 6px rgba(78,57,61,.06)
-    }
-    .message-reaction-badge.is-mine{background:#fff0f3;border-color:#f2b8c5}
-    .message-reaction-picker{
-      position:fixed;left:50%;bottom:calc(82px + env(safe-area-inset-bottom));z-index:850;
-      transform:translate(-50%,16px) scale(.96);display:flex;align-items:center;gap:3px;
-      padding:7px;border:1px solid rgba(238,226,222,.9);border-radius:22px;
-      background:rgba(255,253,251,.98);box-shadow:0 16px 40px rgba(62,42,47,.22);
-      opacity:0;visibility:hidden;pointer-events:none;transition:.16s ease;
-      max-width:calc(100vw - 20px)
-    }
-    .message-reaction-picker.is-open{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0) scale(1)}
-    .message-reaction-picker button{
-      width:39px;height:39px;padding:0;border-radius:50%;display:grid;place-items:center;
-      background:transparent;font-size:20px;line-height:1;transition:transform .12s,background .12s
-    }
-    .message-reaction-picker button:active{transform:scale(.84);background:#f8ecee}
-    .message-reaction-picker .more-reaction-button{font-size:22px;color:#8f7c81;background:#f5efed}
-
-    .chat-toolbox{
-      display:none!important;flex-direction:column!important;flex-wrap:nowrap!important;gap:0!important;
-      height:min(310px,38vh);min-height:220px;padding:0!important;overflow:hidden!important;
-      background:#fffdfb!important;border-radius:20px!important
-    }
-    .chat-toolbox.is-open{display:flex!important}
-    .emoji-picker-top{display:flex;align-items:center;gap:5px;padding:7px 7px 6px;border-bottom:1px solid #eee3df;flex:0 0 auto}
-    .emoji-category-bar{display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
-    .emoji-category-bar::-webkit-scrollbar{display:none}
-    .emoji-category-button,.emoji-picker-close{
-      width:34px;height:34px;flex:0 0 34px;padding:0;border-radius:11px;background:transparent;
-      display:grid;place-items:center;font-size:17px;line-height:1
-    }
-    .emoji-category-button.is-active{background:#f7e9ec}
-    .emoji-picker-close{font-size:20px;color:#9d8b90;background:#f5efed}
-    .emoji-grid{
-      display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:1px;padding:7px;
-      overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;flex:1;min-height:0
-    }
-    .emoji-grid-button{
-      aspect-ratio:1;width:100%;min-width:0;padding:0;border-radius:10px;background:transparent;
-      display:grid;place-items:center;font-size:23px;line-height:1;touch-action:manipulation
-    }
-    .emoji-grid-button:active{background:#f8ecee;transform:scale(.9)}
-    @media(max-width:360px){.emoji-grid{grid-template-columns:repeat(7,minmax(0,1fr))}.emoji-grid-button{font-size:21px}}
-
-
-    /* =========================================================
-       iOS CHAT LAYOUT + BOOT FALLBACK FIX
-    ========================================================= */
-    #chatMessages{
-      justify-content:flex-start!important;
-      align-content:flex-start!important;
-      gap:3px!important;
-    }
-    .message-row{
-      flex:0 0 auto!important;
-      min-height:0!important;
-      height:auto!important;
-      margin:0!important;
-      padding:1px 0!important;
-      align-items:flex-end!important;
-    }
-    .message-row.them{
-      justify-content:flex-start!important;
-    }
-    .message-row.me{
-      justify-content:flex-end!important;
-    }
-    .partner-message{
-      display:grid!important;
-      grid-template-columns:30px minmax(0,1fr)!important;
-      align-items:end!important;
-      column-gap:7px!important;
-      width:min(84%,360px)!important;
-      max-width:84%!important;
-      min-width:0!important;
-    }
-    .partner-message>.message-avatar{
-      grid-column:1!important;
-      align-self:end!important;
-    }
-    .partner-message>.message-stack{
-      grid-column:2!important;
-      min-width:0!important;
-      width:auto!important;
-      max-width:100%!important;
-    }
-    .message-row.me>.message-stack{
-      min-width:0!important;
-      width:auto!important;
-      max-width:min(78%,340px)!important;
-    }
-    .message-stack{
-      flex:0 1 auto!important;
-      min-width:0!important;
-      height:auto!important;
-    }
-    .message-bubble{
-      display:block!important;
-      width:fit-content!important;
-      min-width:42px!important;
-      max-width:100%!important;
-      height:auto!important;
-      white-space:pre-wrap!important;
-      word-break:keep-all!important;
-      overflow-wrap:anywhere!important;
-      line-break:strict!important;
-      writing-mode:horizontal-tb!important;
-      text-orientation:mixed!important;
-      font-size:14px!important;
-      line-height:1.48!important;
-      padding:10px 13px!important;
-    }
-    .message-sender,.message-meta,.message-reactions,.reply-quote{
-      writing-mode:horizontal-tb!important;
-      text-orientation:mixed!important;
-    }
-    .message-sender{white-space:nowrap!important}
-    .message-meta{white-space:nowrap!important}
-    .date-divider{
-      flex:0 0 auto!important;
-      min-height:0!important;
-      margin:10px auto!important;
-    }
-    @supports(-webkit-touch-callout:none){
-      #chatMessages{padding-bottom:18px!important}
-      .partner-message{width:84%!important}
-      .message-bubble{-webkit-hyphens:none!important;hyphens:none!important}
-    }
-
-    .boot-error-note{
-      position:fixed;z-index:10001;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));
-      transform:translateX(-50%);display:none;max-width:min(88vw,360px);padding:11px 14px;
-      border-radius:14px;background:rgba(53,43,46,.92);color:#fff;font-size:12px;text-align:center;
-      box-shadow:0 8px 30px rgba(0,0,0,.18)
-    }
-    .boot-error-note.is-visible{display:block}
-
 </style>
 </head>
 <body>
@@ -2546,12 +2250,15 @@
         <button id="cancelReplyButton" type="button" aria-label="답장 취소">×</button>
       </div>
 
-      <div id="chatToolbox" class="chat-toolbox" aria-hidden="true">
-        <div class="emoji-picker-top">
-          <div id="emojiCategoryBar" class="emoji-category-bar" aria-label="이모지 종류"></div>
-          <button id="closeEmojiPickerButton" class="emoji-picker-close" type="button" aria-label="이모지 닫기">×</button>
-        </div>
-        <div id="emojiGrid" class="emoji-grid" aria-label="이모지 목록"></div>
+      <div id="chatToolbox" class="chat-toolbox">
+        <button class="emoji-chip" data-emoji="❤️">❤️</button>
+        <button class="emoji-chip" data-emoji="😍">😍</button>
+        <button class="emoji-chip" data-emoji="🥺">🥺</button>
+        <button class="emoji-chip" data-emoji="😊">😊</button>
+        <button class="emoji-chip" data-emoji="🫶">🫶</button>
+        <button class="emoji-chip" data-emoji="💕">💕</button>
+        <button class="emoji-chip" data-emoji="🌙">🌙</button>
+        <button class="emoji-chip" data-emoji="✨">✨</button>
       </div>
 
       <div class="chat-input-bar">
@@ -2711,52 +2418,12 @@
     </div>
   </div>
 
-  <!-- MESSAGE REACTION PICKER -->
-  <div id="messageReactionPicker" class="message-reaction-picker" aria-hidden="true">
-    <button type="button" data-quick-reaction="❤️">❤️</button>
-    <button type="button" data-quick-reaction="👍">👍</button>
-    <button type="button" data-quick-reaction="😂">😂</button>
-    <button type="button" data-quick-reaction="🥰">🥰</button>
-    <button type="button" data-quick-reaction="😮">😮</button>
-    <button type="button" data-quick-reaction="😢">😢</button>
-    <button type="button" data-quick-reaction="🔥">🔥</button>
-    <button id="moreReactionButton" class="more-reaction-button" type="button" aria-label="다른 이모지">＋</button>
-  </div>
-
   <!-- IMAGE VIEWER / DELETE CONFIRM / TOAST -->
   <div id="imageViewer" class="image-viewer"><button id="closeImageViewerButton">✕</button><img id="imageViewerImage" alt="확대 이미지"></div>
   <div id="deleteDialog" class="confirm-dialog">
     <div class="confirm-box"><p>이 메시지를 삭제할까요?</p><div class="confirm-actions"><button id="cancelDeleteButton" class="cancel-button">취소</button><button id="confirmDeleteButton" class="danger-button">삭제</button></div></div>
   </div>
   <div id="toast" class="toast"></div>
-
-
-  <div id="bootErrorNote" class="boot-error-note">앱을 불러오지 못했어요. 인터넷 연결을 확인한 뒤 다시 열어주세요.</div>
-  <script>
-    (()=>{
-      window.__wdmBootFinished=false;
-      const revealFallback=(showMessage=false)=>{
-        const splash=document.getElementById('splash');
-        const active=document.querySelector('.screen.is-active');
-        if(!active) document.getElementById('loginScreen')?.classList.add('is-active');
-        splash?.classList.add('is-hidden');
-        if(showMessage) document.getElementById('bootErrorNote')?.classList.add('is-visible');
-      };
-      window.__wdmFinishBoot=()=>{
-        window.__wdmBootFinished=true;
-        document.getElementById('bootErrorNote')?.classList.remove('is-visible');
-      };
-      window.addEventListener('error',event=>{
-        if(!window.__wdmBootFinished) revealFallback(true);
-      });
-      window.addEventListener('unhandledrejection',event=>{
-        if(!window.__wdmBootFinished) revealFallback(true);
-      });
-      setTimeout(()=>{
-        if(!window.__wdmBootFinished) revealFallback(true);
-      },9000);
-    })();
-  </script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -2834,10 +2501,7 @@
       pushBusy:false,
       readWriteTimer:null,
       readWriteInFlight:false,
-      pendingReadTarget:null,
-      reactionTargetId:"",
-      emojiMode:"message",
-      emojiCategory:"smileys"
+      pendingReadTarget:null
     };
 
     const partnerSlot = () => state.mySlot === "user1" ? "user2" : "user1";
@@ -3141,7 +2805,7 @@
       syncVisualViewport();
     }
 
-    function hideSplash(){window.__wdmFinishBoot?.();setTimeout(()=>$("splash")?.classList.add("is-hidden"),180)}
+    function hideSplash(){setTimeout(()=>$("splash").classList.add("is-hidden"),180)}
 
     function openModal(id){$(id).classList.add("is-open")}
     function closeModal(id){$(id).classList.remove("is-open")}
@@ -3329,20 +2993,12 @@
       }
     }
 
-
-    function withTimeout(promise,ms,label="TIMEOUT") {
-      return Promise.race([
-        promise,
-        new Promise((_,reject)=>setTimeout(()=>reject(new Error(label)),ms))
-      ]);
-    }
-
     async function restoreSession(){
       const saved=loadSession();
       if(!saved?.roomId){switchScreen("loginScreen");hideSplash();return}
 
       try{
-        const found=await withTimeout(findRoomByCode(saved.roomId),8000,"SESSION_LOOKUP_TIMEOUT");
+        const found=await findRoomByCode(saved.roomId);
         if(!found) throw new Error("ROOM_MISSING");
         const actualRoomId=found.key;
         const raw=found.data;
@@ -3995,7 +3651,6 @@
       applyWallpaper(state.room.wallpaper,state.room.wallpaperUrl);
       renderUnreadBadge();
       renderStoryStrip();
-      refreshReadReceipts();
     }
 
 
@@ -4990,8 +4645,8 @@
       });
       $("galleryButton").addEventListener("click",()=>$("galleryInput").click());
       $("toolboxToggleButton").addEventListener("click",()=>{
-        if($("chatToolbox").classList.contains("is-open")) closeEmojiPicker();
-        else openEmojiPicker("message");
+        $("chatToolbox").classList.toggle("is-open");
+        focusMessageInput();
       });
       $("messageInput").addEventListener("focus",()=>{
         syncVisualViewport();
@@ -5079,11 +4734,8 @@
         if(closeTarget) closeModal(closeTarget);
 
 
-        const category=event.target.closest("[data-emoji-category]")?.dataset.emojiCategory;
-        if(category){renderEmojiPicker(category);return}
-
         const emoji=event.target.closest("[data-emoji]")?.dataset.emoji;
-        if(emoji){handleEmojiSelection(emoji);return}
+        if(emoji){$("messageInput").value+=emoji;resizeMessageInput();$("messageInput").focus()}
 
         const avatar=event.target.closest("[data-avatar]")?.dataset.avatar;
         if(avatar) saveAvatar(avatar);
@@ -5615,16 +5267,9 @@
         }
         stack.appendChild(content);
         bindSwipeToReply(content,row,message,mine);
-        const reactionStrip=createMessageReactionStrip(message);
-        if(reactionStrip) stack.appendChild(reactionStrip);
 
         const meta=document.createElement("div");
         meta.className="message-meta";
-        const reactButton=document.createElement("button");
-        reactButton.type="button";reactButton.className="message-react-trigger";reactButton.textContent="♡";
-        reactButton.setAttribute("aria-label","공감 남기기");
-        reactButton.addEventListener("click",event=>{{event.stopPropagation();openMessageReactionPicker(message.id)}});
-        meta.appendChild(reactButton);
         if(mine&&index===lastMyIndex&&partnerReadIndex>=index){
           const read=document.createElement("span");
           read.className="message-read";
@@ -5663,7 +5308,6 @@
       const last=state.messages.at(-1);
       $("chatPreviewText").textContent=last?.type==="image"?"사진":last?.text||"아직 메시지가 없어요";
       renderUnreadBadge();
-      refreshReadReceipts();
       if(nearBottom||state.upload.active) requestAnimationFrame(()=>box.scrollTop=box.scrollHeight);
     }
 
@@ -5738,18 +5382,6 @@
 
     function bindRefinedEnhancements(){
       state.replyingTo=null;
-      renderEmojiPicker();
-      $("closeEmojiPickerButton")?.addEventListener("click",closeEmojiPicker);
-      $("messageReactionPicker")?.addEventListener("click",event=>event.stopPropagation());
-      document.querySelectorAll("[data-quick-reaction]").forEach(button=>button.addEventListener("click",()=>setMessageReaction(state.reactionTargetId,button.dataset.quickReaction)));
-      $("moreReactionButton")?.addEventListener("click",()=>{
-        const target=state.reactionTargetId;
-        closeMessageReactionPicker();
-        openEmojiPicker("reaction",target);
-      });
-      document.addEventListener("click",event=>{
-        if(!event.target.closest("#messageReactionPicker")&&!event.target.closest(".message-react-trigger")&&!event.target.closest(".message-reaction-badge")) closeMessageReactionPicker();
-      });
       $("cancelReplyButton")?.addEventListener("click",clearReplyTarget);
       $("manualBatteryRange")?.addEventListener("input",event=>{
         $("manualBatteryValue").textContent=`${event.target.value}%`;
@@ -5778,24 +5410,11 @@
     }
 
 
-    async function bootApplication(){
-      try{
-        bindEvents();
-        bindRefinedEnhancements();
-        await withTimeout(Promise.resolve(restoreSession()),12000,"APP_BOOT_TIMEOUT");
-      }catch(error){
-        console.error("app boot failed",error);
-        try{clearSession()}catch{}
-        try{switchScreen("loginScreen")}catch{}
-        hideSplash();
-        $("bootErrorNote")?.classList.add("is-visible");
-      }
-    }
-
-    bootApplication();
+    bindEvents();
+    bindRefinedEnhancements();
+    restoreSession();
   </script>
 <!-- build: rejoin-fix-20260726 -->
-<!-- build: reactions-instant-read-full-emoji-20260726 -->
-<!-- build: ios-chat-layout-and-boot-recovery-20260726 -->
+<!-- build: pocket-diary-push-persistence-read-receipts-20260726 -->
 </body>
   </html>
