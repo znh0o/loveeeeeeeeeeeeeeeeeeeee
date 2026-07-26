@@ -2033,6 +2033,164 @@
       line-height:1.2!important;
     }
 
+
+    /* =========================================================
+       iOS CHAT FLOW / EMOJI / MESSAGE REACTION REPAIR
+       ========================================================= */
+    html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+
+    /* Safari의 세로 flex 스크롤 안에서 메시지 행이 비정상적으로 늘어나는 현상을 차단 */
+    #chatMessages{
+      display:block!important;
+      align-content:initial!important;
+      justify-content:initial!important;
+    }
+    #chatMessages>.message-row,
+    #chatMessages>.date-divider,
+    #chatMessages>.empty-state{
+      flex:none!important;
+      height:auto!important;
+      min-height:0!important;
+    }
+    .message-row{
+      width:100%!important;
+      height:auto!important;
+      min-height:0!important;
+      align-items:flex-end!important;
+      margin:0 0 4px!important;
+    }
+    .partner-message{
+      display:flex!important;
+      flex:0 1 auto!important;
+      width:auto!important;
+      height:auto!important;
+      min-height:0!important;
+      align-items:flex-end!important;
+    }
+    .message-stack{
+      flex:0 1 auto!important;
+      width:max-content!important;
+      min-width:0!important;
+      height:auto!important;
+      min-height:0!important;
+    }
+    .message-row.me .message-stack{max-width:76%!important}
+    .message-row.them .message-stack{max-width:calc(100vw - 82px)!important}
+    .message-bubble,
+    .image-message{
+      display:block!important;
+      width:max-content!important;
+      max-width:100%!important;
+      height:auto!important;
+      min-height:0!important;
+    }
+    .message-sender{
+      display:block!important;
+      height:auto!important;
+      min-height:0!important;
+      line-height:1.25!important;
+    }
+    .message-meta{
+      min-height:19px!important;
+      line-height:1!important;
+      flex-wrap:nowrap!important;
+    }
+    .date-divider{
+      width:max-content!important;
+      max-width:calc(100% - 30px)!important;
+      margin:10px auto 12px!important;
+    }
+
+    .message-input{
+      -webkit-user-select:text!important;
+      user-select:text!important;
+      touch-action:manipulation!important;
+      font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
+      font-size:16px!important;
+      unicode-bidi:plaintext;
+    }
+    .message-bubble,.message-sender,.message-meta{
+      font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+    }
+
+    /* 전체 이모지 선택기 */
+    .chat-toolbox{
+      display:none;
+      flex-direction:column!important;
+      flex-wrap:nowrap!important;
+      gap:7px!important;
+      max-height:min(42dvh,330px)!important;
+      overflow:hidden!important;
+      padding:8px!important;
+    }
+    .chat-toolbox.is-open{display:flex!important}
+    .emoji-panel-head{display:flex;align-items:center;gap:6px;min-width:0}
+    .emoji-category-tabs{
+      min-width:0;flex:1;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;padding:1px
+    }
+    .emoji-category-tabs::-webkit-scrollbar{display:none}
+    .emoji-category-button{
+      flex:0 0 34px;width:34px;height:32px;padding:0;border-radius:11px;
+      background:transparent;color:var(--ink-soft);font-size:17px;line-height:1;
+      font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif
+    }
+    .emoji-category-button.is-active{background:var(--coral-pale);color:var(--coral-deep)}
+    .emoji-panel-close{
+      flex:0 0 32px;width:32px;height:32px;border-radius:50%;background:transparent;
+      color:var(--ink-soft);font-size:21px;line-height:1
+    }
+    .emoji-grid{
+      min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+      display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:3px;padding:3px 1px 5px
+    }
+    .emoji-chip{
+      width:100%!important;height:39px!important;min-width:0!important;padding:0!important;
+      display:grid!important;place-items:center!important;border-radius:11px!important;
+      font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
+      font-size:22px!important;line-height:1!important;background:transparent!important
+    }
+    .emoji-chip:active{background:var(--coral-pale)!important;transform:scale(.88)}
+    .emoji-empty{grid-column:1/-1;padding:28px 10px;text-align:center;color:var(--ink-soft);font-size:11px}
+    @media(max-width:360px){.emoji-grid{grid-template-columns:repeat(7,minmax(0,1fr))}}
+
+    /* 메시지 공감 */
+    .message-react-button{
+      width:24px;height:19px;padding:0;border-radius:999px;background:transparent;
+      color:#b19e97;font-size:14px;line-height:1;
+      font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif
+    }
+    .message-react-button.has-reaction{color:var(--coral-deep)}
+    .message-reaction-summary{
+      display:flex;align-items:center;gap:3px;width:max-content;max-width:100%;
+      margin-top:3px;padding:3px 7px;border:1px solid var(--line);border-radius:999px;
+      background:var(--paper-2);color:var(--ink);font-size:11px;line-height:1.2;
+      box-shadow:0 2px 0 rgba(96,73,63,.04)
+    }
+    .message-row.me .message-reaction-summary{align-self:flex-end}
+    .message-row.them .message-reaction-summary{align-self:flex-start}
+    .message-reaction-summary span{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+    .message-reaction-summary small{font-size:9px;color:var(--ink-soft);font-weight:800}
+
+    .message-reaction-picker{
+      position:fixed;z-index:220;left:50%;bottom:calc(76px + env(safe-area-inset-bottom));
+      width:max-content;max-width:calc(100vw - 20px);transform:translate(-50%,16px) scale(.96);
+      display:flex;align-items:center;gap:4px;padding:7px;border:1px solid var(--line);
+      border-radius:999px;background:rgba(255,253,248,.98);box-shadow:0 12px 34px rgba(70,50,44,.18);
+      opacity:0;visibility:hidden;pointer-events:none;transition:opacity .14s ease,transform .14s ease,visibility .14s;
+      -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)
+    }
+    .message-reaction-picker.is-open{
+      opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0) scale(1)
+    }
+    .message-reaction-picker button{
+      width:38px;height:38px;padding:0;border-radius:50%;display:grid;place-items:center;
+      background:transparent;font-size:20px;line-height:1;
+      font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif
+    }
+    .message-reaction-picker button:active{background:var(--coral-pale);transform:scale(.86)}
+    .message-reaction-picker .reaction-clear-button{font-family:inherit;font-size:21px;color:var(--ink-soft)}
+
 </style>
 </head>
 <body>
@@ -2250,21 +2408,18 @@
         <button id="cancelReplyButton" type="button" aria-label="답장 취소">×</button>
       </div>
 
-      <div id="chatToolbox" class="chat-toolbox">
-        <button class="emoji-chip" data-emoji="❤️">❤️</button>
-        <button class="emoji-chip" data-emoji="😍">😍</button>
-        <button class="emoji-chip" data-emoji="🥺">🥺</button>
-        <button class="emoji-chip" data-emoji="😊">😊</button>
-        <button class="emoji-chip" data-emoji="🫶">🫶</button>
-        <button class="emoji-chip" data-emoji="💕">💕</button>
-        <button class="emoji-chip" data-emoji="🌙">🌙</button>
-        <button class="emoji-chip" data-emoji="✨">✨</button>
+      <div id="chatToolbox" class="chat-toolbox" aria-label="이모지 선택기">
+        <div class="emoji-panel-head">
+          <div id="emojiCategoryTabs" class="emoji-category-tabs" role="tablist" aria-label="이모지 카테고리"></div>
+          <button id="emojiPanelCloseButton" class="emoji-panel-close" type="button" aria-label="이모지 선택기 닫기">×</button>
+        </div>
+        <div id="emojiGrid" class="emoji-grid" role="listbox" aria-label="이모지 목록"></div>
       </div>
 
       <div class="chat-input-bar">
         <button id="toolboxToggleButton" class="input-action" aria-label="이모지">☺</button>
         <button id="galleryButton" class="input-action" aria-label="사진 첨부">＋</button>
-        <textarea id="messageInput" class="message-input" rows="1" placeholder="메시지" enterkeyhint="send" autocapitalize="sentences" autocomplete="off"></textarea>
+        <textarea id="messageInput" class="message-input" rows="1" placeholder="메시지" enterkeyhint="send" inputmode="text" autocapitalize="sentences" autocomplete="off" spellcheck="true" lang="ko" aria-label="메시지 입력"></textarea>
         <button id="sendMessageButton" class="send-button" aria-label="전송">↑</button>
       </div>
     </section>
@@ -2418,6 +2573,17 @@
     </div>
   </div>
 
+  <!-- MESSAGE REACTION PICKER -->
+  <div id="messageReactionPicker" class="message-reaction-picker" aria-hidden="true">
+    <button type="button" data-message-reaction="❤️" aria-label="하트 공감">❤️</button>
+    <button type="button" data-message-reaction="👍" aria-label="좋아요 공감">👍</button>
+    <button type="button" data-message-reaction="😂" aria-label="웃겨요 공감">😂</button>
+    <button type="button" data-message-reaction="😮" aria-label="놀라워요 공감">😮</button>
+    <button type="button" data-message-reaction="🥺" aria-label="감동 공감">🥺</button>
+    <button type="button" data-message-reaction="🔥" aria-label="최고 공감">🔥</button>
+    <button type="button" class="reaction-clear-button" data-message-reaction-clear aria-label="공감 취소">×</button>
+  </div>
+
   <!-- IMAGE VIEWER / DELETE CONFIRM / TOAST -->
   <div id="imageViewer" class="image-viewer"><button id="closeImageViewerButton">✕</button><img id="imageViewerImage" alt="확대 이미지"></div>
   <div id="deleteDialog" class="confirm-dialog">
@@ -2501,7 +2667,10 @@
       pushBusy:false,
       readWriteTimer:null,
       readWriteInFlight:false,
-      pendingReadTarget:null
+      pendingReadTarget:null,
+      partnerReadSignature:"",
+      reactionMessageId:"",
+      emojiCategory:"recent"
     };
 
     const partnerSlot = () => state.mySlot === "user1" ? "user2" : "user1";
@@ -3593,7 +3762,15 @@
         if(!snapshot.exists()) return;
         state.room=normalizeRoom(snapshot.val());
         state.partnerName=state.room[partnerSlot()]?.name||"";
+
+        const partnerRead=state.room?.[partnerSlot()]||{};
+        const nextReadSignature=`${partnerRead.lastReadMessageId||""}|${Number(partnerRead.lastReadMessageAt||partnerRead.lastReadAt||0)}`;
+        const readReceiptChanged=Boolean(state.partnerReadSignature&&state.partnerReadSignature!==nextReadSignature);
+        state.partnerReadSignature=nextReadSignature;
+
         renderRoom();
+        // 방 상태만 바뀌어도 읽음 표시는 즉시 다시 그린다.
+        if(readReceiptChanged&&state.messages.length) renderMessages();
       },error=>{console.error(error);showToast("방 정보를 불러오지 못했어요")});
 
       const messageQuery=query(messagesRef(),orderByChild("clientCreatedAt"),limitToLast(300));
@@ -3696,6 +3873,7 @@
 
     function closeChat(){
       state.chatOpen=false;
+      closeMessageReactionPicker();
       clearTimeout(state.readWriteTimer);
       state.pendingReadTarget=null;
       setTyping(false);
@@ -4645,7 +4823,9 @@
       });
       $("galleryButton").addEventListener("click",()=>$("galleryInput").click());
       $("toolboxToggleButton").addEventListener("click",()=>{
-        $("chatToolbox").classList.toggle("is-open");
+        const opening=!$("chatToolbox").classList.contains("is-open");
+        $("chatToolbox").classList.toggle("is-open",opening);
+        if(opening) renderEmojiCategory(state.emojiCategory||"recent");
         focusMessageInput();
       });
       $("messageInput").addEventListener("focus",()=>{
@@ -4735,7 +4915,7 @@
 
 
         const emoji=event.target.closest("[data-emoji]")?.dataset.emoji;
-        if(emoji){$("messageInput").value+=emoji;resizeMessageInput();$("messageInput").focus()}
+        if(emoji) insertEmojiAtCursor(emoji);
 
         const avatar=event.target.closest("[data-avatar]")?.dataset.avatar;
         if(avatar) saveAvatar(avatar);
@@ -5180,6 +5360,258 @@
       target.addEventListener("pointercancel",reset);
     }
 
+    /* =========================================================
+       EMOJI PICKER + MESSAGE REACTIONS
+       ========================================================= */
+    const EMOJI_RECENT_KEY="wdm_recent_emoji_v1";
+    const EMOJI_TONES=["🏻","🏼","🏽","🏾","🏿"];
+    const EMOJI_CATEGORY_META=[
+      ["recent","🕘","최근"],["faces","😀","표정"],["gestures","👋","손"],
+      ["people","🧑","사람"],["animals","🐻","동물"],["nature","🌿","자연"],
+      ["food","🍓","음식"],["activities","⚽","활동"],["travel","🚗","이동"],
+      ["objects","💡","물건"],["symbols","❤️","기호"],["flags","🏳️","깃발"]
+    ];
+
+    function emojiRegex(){
+      try{return new RegExp("\\p{Extended_Pictographic}","u")}catch{return null}
+    }
+
+    function emojiRange(ranges,{variation=true}={}){
+      const matcher=emojiRegex();
+      const values=[];
+      ranges.forEach(([start,end])=>{
+        for(let point=start;point<=end;point++){
+          const char=String.fromCodePoint(point);
+          if(matcher&&!matcher.test(char)) continue;
+          values.push(variation?`${char}\uFE0F`:char);
+        }
+      });
+      return values;
+    }
+
+    function uniqueEmoji(values){
+      return [...new Set(values.filter(Boolean))];
+    }
+
+    function tonedEmoji(bases){
+      const result=[...bases];
+      bases.forEach(base=>EMOJI_TONES.forEach(tone=>result.push(`${base}${tone}`)));
+      return result;
+    }
+
+    function countryFlag(code){
+      return [...code.toUpperCase()].map(letter=>String.fromCodePoint(127397+letter.charCodeAt(0))).join("");
+    }
+
+    function buildEmojiCatalog(){
+      const faces=uniqueEmoji([
+        ...emojiRange([[0x1F600,0x1F64F],[0x1F910,0x1F92F],[0x1F970,0x1F978],[0x1FAE0,0x1FAE9]],{variation:false}),
+        "☺️","☹️","☠️","👻","👽","🤖","💩"
+      ]);
+
+      const gestureBases=["👋","🤚","🖐️","✋","🖖","🫱","🫲","🫳","🫴","👌","🤌","🤏","✌️","🤞","🫰","🤟","🤘","🤙","👈","👉","👆","👇","☝️","🫵","👍","👎","✊","👊","🤛","🤜","👏","🙌","🫶","👐","🤲","🤝","🙏","✍️","💅","🤳","💪"];
+      const gestures=uniqueEmoji(tonedEmoji(gestureBases));
+
+      const people=uniqueEmoji([
+        ...emojiRange([[0x1F466,0x1F487],[0x1F645,0x1F64F],[0x1F9B0,0x1F9B3],[0x1F9CD,0x1F9FF],[0x1FAF0,0x1FAF8]],{variation:false}),
+        ...tonedEmoji(["👶","🧒","👦","👧","🧑","👱","👨","🧔","👩","🧓","👴","👵","🙍","🙎","🙅","🙆","💁","🙋","🧏","🙇","🤦","🤷"]),
+        "👨‍⚕️","👩‍⚕️","🧑‍⚕️","👨‍🎓","👩‍🎓","🧑‍🎓","👨‍🏫","👩‍🏫","🧑‍🏫","👨‍💻","👩‍💻","🧑‍💻",
+        "👨‍🍳","👩‍🍳","🧑‍🍳","👨‍🎨","👩‍🎨","🧑‍🎨","👨‍🚀","👩‍🚀","🧑‍🚀","👮","🕵️","💂","🥷",
+        "👷","🫅","🤴","👸","👳","👲","🧕","🤵","👰","🤰","🫃","🫄","🤱","👼","🎅","🤶","🧑‍🎄",
+        "🦸","🦹","🧙","🧚","🧛","🧜","🧝","🧞","🧟","💆","💇","🚶","🧍","🧎","🏃","💃","🕺","👯",
+        "👫","👬","👭","🧑‍🤝‍🧑","👩‍❤️‍👨","👨‍❤️‍👨","👩‍❤️‍👩","💏","👪","👨‍👩‍👧","👨‍👩‍👦","👩‍👩‍👧","👨‍👨‍👦"
+      ]);
+
+      const animals=uniqueEmoji([
+        ...emojiRange([[0x1F400,0x1F43E],[0x1F980,0x1F9AE]],{variation:false}),
+        "🐕‍🦺","🐈‍⬛","🐻‍❄️","🦤","🪿","🪽","🐦‍🔥"
+      ]);
+      const nature=uniqueEmoji([
+        ...emojiRange([[0x1F300,0x1F343]],{variation:false}),
+        ...emojiRange([[0x2600,0x26FF]]),
+        "🌱","🌿","☘️","🍀","🎍","🪴","🌵","🌴","🌳","🌲","🪵","🪨","🌸","🌼","🌻","🌹","🥀","🪻","🪷","🍄","🪺","🪹"
+      ]);
+      const food=uniqueEmoji([
+        ...emojiRange([[0x1F345,0x1F37F],[0x1F950,0x1F96F],[0x1F9C0,0x1F9CB]],{variation:false}),
+        "🫘","🫚","🫛","🫐","🫒","🫑","🫓","🫔","🫕","🫖","🧋","🧃","🧉","🧊"
+      ]);
+      const activities=uniqueEmoji([
+        ...emojiRange([[0x1F3A0,0x1F3FA],[0x1F93A,0x1F94C]],{variation:false}),
+        "⚽","⚾","🥎","🏀","🏐","🏈","🏉","🎾","🥏","🎳","🏏","🏑","🏒","🥍","🏓","🏸","🥊","🥋","🥅","⛳","⛸️","🎣","🤿","🎽","🎿","🛷","🥌","🛹","🛼","🪁","🪀","🪩"
+      ]);
+      const travel=uniqueEmoji([
+        ...emojiRange([[0x1F680,0x1F6FF]],{variation:false}),
+        "🛞","🛟","🛝","🛤️","🛣️","🏖️","🏕️","🏜️","🏝️","🏞️","🏟️","🏛️","🏗️","🗺️","🧭"
+      ]);
+      const objects=uniqueEmoji([
+        ...emojiRange([[0x1F4A0,0x1F5FF],[0x1F9E0,0x1F9FF],[0x1FA70,0x1FAFF]],{variation:false}),
+        "⌚","⌛","⏳","⏰","⏱️","⏲️","🕰️","☎️","⌨️","🖥️","🖨️","🖱️","🖲️","💽","💾","💿","📀","🎞️","📽️","📺","📷","📸","📹","📼","🔍","🔎","🕯️","💡","🔦","🏮","🪔","📔","📕","📖","📗","📘","📙","📚","📓","📒","📃","📜","📄","📰","🗞️","📑","🔖","🏷️","💰","🪙","💴","💵","💶","💷","💳","🧾","💎","⚖️","🧰","🔧","🔨","⚒️","🛠️","⛏️","🪓","🪚","🔩","⚙️","🗜️","⚗️","🔬","🔭","📡","💉","🩸","💊","🩹","🩺","🚪","🪑","🚽","🚿","🛁","🛏️","🛋️","🧸","🪆","🪞","🪟","🧺","🧻","🪣","🧼","🫧","🪥","🧽","🧯","🛒"
+      ]);
+      const symbols=uniqueEmoji([
+        ...emojiRange([[0x2600,0x27BF],[0x1F300,0x1F32F],[0x1F500,0x1F53D],[0x1F7E0,0x1F7EB]]),
+        "❤️","🩷","🧡","💛","💚","💙","🩵","💜","🤎","🖤","🩶","🤍","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💟",
+        "✅","❌","⭕","❗","❓","‼️","⁉️","💯","🔞","♻️","⚠️","🚸","🔱","⚜️","🔰","〽️","✳️","❇️","©️","®️","™️","#️⃣","*️⃣","0️⃣","1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"
+      ]);
+
+      const flagCodes=("AC AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CP CR CU CV CW CX CY CZ DE DG DJ DK DM DO DZ EA EC EE EG EH ER ES ET EU FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU IC ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TA TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM UN US UY UZ VA VC VE VG VI VN VU WF WS XK YE YT ZA ZM ZW").split(" ");
+      const flags=uniqueEmoji([
+        ...flagCodes.map(countryFlag),"🏳️","🏴","🏁","🚩","🏳️‍🌈","🏳️‍⚧️","🏴‍☠️",
+        "🇰🇷","🇯🇵","🇨🇳","🇺🇸","🇬🇧","🇫🇷","🇩🇪","🇮🇹","🇨🇦","🇦🇺"
+      ]);
+
+      return {faces,gestures,people,animals,nature,food,activities,travel,objects,symbols,flags};
+    }
+
+    const EMOJI_CATALOG=buildEmojiCatalog();
+
+    function recentEmoji(){
+      try{
+        const parsed=JSON.parse(localStorage.getItem(EMOJI_RECENT_KEY)||"[]");
+        return Array.isArray(parsed)?parsed.filter(Boolean).slice(0,48):[];
+      }catch{return []}
+    }
+
+    function rememberRecentEmoji(emoji){
+      const next=[emoji,...recentEmoji().filter(item=>item!==emoji)].slice(0,48);
+      localStorage.setItem(EMOJI_RECENT_KEY,JSON.stringify(next));
+    }
+
+    function renderEmojiCategory(categoryId=state.emojiCategory||"recent"){
+      state.emojiCategory=categoryId;
+      const grid=$("emojiGrid");
+      if(!grid) return;
+      const list=categoryId==="recent"?recentEmoji():(EMOJI_CATALOG[categoryId]||[]);
+      grid.innerHTML="";
+      if(!list.length){
+        grid.innerHTML='<div class="emoji-empty">사용한 이모지가 여기에 모여요</div>';
+      }else{
+        const fragment=document.createDocumentFragment();
+        list.forEach(emoji=>{
+          const button=document.createElement("button");
+          button.type="button";
+          button.className="emoji-chip";
+          button.dataset.emoji=emoji;
+          button.setAttribute("role","option");
+          button.setAttribute("aria-label",`${emoji} 이모지`);
+          button.textContent=emoji;
+          fragment.appendChild(button);
+        });
+        grid.appendChild(fragment);
+      }
+      document.querySelectorAll(".emoji-category-button").forEach(button=>{
+        const active=button.dataset.emojiCategory===categoryId;
+        button.classList.toggle("is-active",active);
+        button.setAttribute("aria-selected",String(active));
+      });
+      grid.scrollTop=0;
+    }
+
+    function initEmojiPicker(){
+      const tabs=$("emojiCategoryTabs");
+      if(!tabs) return;
+      tabs.innerHTML="";
+      EMOJI_CATEGORY_META.forEach(([id,icon,label])=>{
+        const button=document.createElement("button");
+        button.type="button";
+        button.className="emoji-category-button";
+        button.dataset.emojiCategory=id;
+        button.setAttribute("role","tab");
+        button.setAttribute("aria-label",label);
+        button.title=label;
+        button.textContent=icon;
+        button.addEventListener("click",event=>{
+          event.preventDefault();
+          renderEmojiCategory(id);
+        });
+        tabs.appendChild(button);
+      });
+      renderEmojiCategory(recentEmoji().length?"recent":"faces");
+    }
+
+    function insertEmojiAtCursor(emoji){
+      if(!emoji) return;
+      const input=$("messageInput");
+      if(!input) return;
+      const start=Number.isFinite(input.selectionStart)?input.selectionStart:input.value.length;
+      const end=Number.isFinite(input.selectionEnd)?input.selectionEnd:start;
+      try{input.focus({preventScroll:true})}catch{input.focus()}
+      if(typeof input.setRangeText==="function"){
+        input.setRangeText(emoji,start,end,"end");
+      }else{
+        input.value=input.value.slice(0,start)+emoji+input.value.slice(end);
+      }
+      rememberRecentEmoji(emoji);
+      if(state.emojiCategory==="recent") renderEmojiCategory("recent");
+      input.dispatchEvent(new Event("input",{bubbles:true,inputType:"insertText",data:emoji}));
+      resizeMessageInput();
+    }
+
+    function messageReactionEntries(message={}){
+      const source=message.reactions&&typeof message.reactions==="object"?message.reactions:{};
+      return Object.entries(source).filter(([,emoji])=>typeof emoji==="string"&&emoji);
+    }
+
+    function createMessageReactionSummary(message){
+      const entries=messageReactionEntries(message);
+      if(!entries.length) return null;
+      const counts=new Map();
+      entries.forEach(([,emoji])=>counts.set(emoji,(counts.get(emoji)||0)+1));
+      const summary=document.createElement("div");
+      summary.className="message-reaction-summary";
+      summary.setAttribute("aria-label",`공감 ${entries.length}개`);
+      counts.forEach((count,emoji)=>{
+        const item=document.createElement("span");
+        item.textContent=emoji;
+        summary.appendChild(item);
+        if(count>1){
+          const number=document.createElement("small");
+          number.textContent=String(count);
+          summary.appendChild(number);
+        }
+      });
+      return summary;
+    }
+
+    function closeMessageReactionPicker(){
+      state.reactionMessageId="";
+      const picker=$("messageReactionPicker");
+      picker?.classList.remove("is-open");
+      picker?.setAttribute("aria-hidden","true");
+    }
+
+    function openMessageReactionPicker(messageId){
+      if(!messageId) return;
+      state.reactionMessageId=messageId;
+      const picker=$("messageReactionPicker");
+      picker?.classList.add("is-open");
+      picker?.setAttribute("aria-hidden","false");
+    }
+
+    async function setMessageReaction(emoji=""){
+      const messageId=state.reactionMessageId;
+      if(!messageId||!state.roomId||!state.mySlot) return closeMessageReactionPicker();
+      const message=state.messages.find(item=>item.id===messageId);
+      if(!message) return closeMessageReactionPicker();
+
+      const previous={...(message.reactions||{})};
+      const current=previous[state.mySlot]||"";
+      const nextEmoji=current===emoji?"":emoji;
+      message.reactions={...previous};
+      if(nextEmoji) message.reactions[state.mySlot]=nextEmoji;
+      else delete message.reactions[state.mySlot];
+      closeMessageReactionPicker();
+      renderMessages();
+
+      try{
+        await update(storyItemRef(messageId),{[`reactions/${state.mySlot}`]:nextEmoji||null});
+      }catch(error){
+        console.error("message reaction update failed",error);
+        message.reactions=previous;
+        renderMessages();
+        showToast("공감을 저장하지 못했어요");
+      }
+    }
+
     renderMessages=function renderMessagesRefined(){
       const box=$("chatMessages");
       const nearBottom=box.scrollHeight-box.scrollTop-box.clientHeight<90;
@@ -5206,7 +5638,6 @@
           divider.className="date-divider";
           divider.textContent=dateLabel;
           box.appendChild(divider);
-          previousDate="";
           previousDate=dateLabel;
           previousSender="";
         }
@@ -5268,6 +5699,9 @@
         stack.appendChild(content);
         bindSwipeToReply(content,row,message,mine);
 
+        const reactionSummary=createMessageReactionSummary(message);
+        if(reactionSummary) stack.appendChild(reactionSummary);
+
         const meta=document.createElement("div");
         meta.className="message-meta";
         if(mine&&index===lastMyIndex&&partnerReadIndex>=index){
@@ -5277,8 +5711,22 @@
           meta.appendChild(read);
         }
         const time=document.createElement("span");
+        time.className="message-time";
         time.textContent=formatTime(messageMs);
         meta.appendChild(time);
+
+        const myReaction=message.reactions?.[state.mySlot]||"";
+        const reactButton=document.createElement("button");
+        reactButton.type="button";
+        reactButton.className=`message-react-button ${myReaction?"has-reaction":""}`;
+        reactButton.textContent=myReaction||"♡";
+        reactButton.setAttribute("aria-label",myReaction?`내 공감 ${myReaction} 변경`:"메시지에 공감하기");
+        reactButton.addEventListener("click",event=>{
+          event.preventDefault();
+          event.stopPropagation();
+          openMessageReactionPicker(message.id);
+        });
+        meta.appendChild(reactButton);
         stack.appendChild(meta);
 
         if(mine){
@@ -5382,6 +5830,39 @@
 
     function bindRefinedEnhancements(){
       state.replyingTo=null;
+      initEmojiPicker();
+
+      $("emojiPanelCloseButton")?.addEventListener("click",event=>{
+        event.preventDefault();
+        $("chatToolbox").classList.remove("is-open");
+      });
+
+      document.querySelectorAll("[data-message-reaction]").forEach(button=>{
+        button.addEventListener("click",event=>{
+          event.preventDefault();
+          event.stopPropagation();
+          setMessageReaction(button.dataset.messageReaction||"");
+        });
+      });
+      $("messageReactionPicker")?.querySelector("[data-message-reaction-clear]")?.addEventListener("click",event=>{
+        event.preventDefault();
+        event.stopPropagation();
+        setMessageReaction("");
+      });
+      document.addEventListener("pointerdown",event=>{
+        if(!$("messageReactionPicker")?.classList.contains("is-open")) return;
+        if(event.target.closest("#messageReactionPicker,.message-react-button")) return;
+        closeMessageReactionPicker();
+      },{passive:true});
+
+      const messageInput=$("messageInput");
+      messageInput?.addEventListener("compositionstart",()=>messageInput.dataset.composing="1");
+      messageInput?.addEventListener("compositionend",()=>{
+        delete messageInput.dataset.composing;
+        requestAnimationFrame(()=>{resizeMessageInput();handleTyping()});
+      });
+      messageInput?.addEventListener("beforeinput",()=>requestAnimationFrame(resizeMessageInput));
+
       $("cancelReplyButton")?.addEventListener("click",clearReplyTarget);
       $("manualBatteryRange")?.addEventListener("input",event=>{
         $("manualBatteryValue").textContent=`${event.target.value}%`;
@@ -5414,6 +5895,7 @@
     bindRefinedEnhancements();
     restoreSession();
   </script>
+<!-- build: ios-chat-read-reaction-emoji-fix-20260726 -->
 <!-- build: rejoin-fix-20260726 -->
 <!-- build: pocket-diary-push-persistence-read-receipts-20260726 -->
 </body>
