@@ -3415,7 +3415,10 @@
       try{
         const response=await fetch(PUSH_WORKER_URL,{
           method:"POST",
-          headers:{"Content-Type":"application/json"},
+          headers:{
+            "Content-Type":"application/json",
+            "Authorization":`Bearer ${await auth.currentUser.getIdToken()}`
+          },
           body:JSON.stringify({roomId:state.roomId,messageId})
         });
         const result=await response.json().catch(()=>({}));
@@ -5439,9 +5442,15 @@
       await wait(180);
       for(let attempt=0;attempt<3;attempt++){
         try{
+          const currentUser=auth.currentUser;
+          if(!currentUser) return;
+          const idToken=await currentUser.getIdToken();
           const response=await fetch(PUSH_WORKER_URL,{
             method:"POST",
-            headers:{"Content-Type":"application/json"},
+            headers:{
+              "Content-Type":"application/json",
+              "Authorization":`Bearer ${idToken}`
+            },
             body:JSON.stringify({roomId:state.roomId,messageId}),
             cache:"no-store",
             keepalive:true
