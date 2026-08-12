@@ -107,7 +107,7 @@
     @keyframes float{50%{transform:translateY(-7px)}}
     @keyframes pulse{0%,75%,100%{opacity:.22;transform:scale(.88)}40%{opacity:1;transform:scale(1)}}
 
-    #loginScreen{align-items:center;justify-content:center;padding:24px 20px;background:
+    #authScreen,#pairScreen{align-items:center;justify-content:center;padding:24px 20px;background:
       radial-gradient(circle at 12% 10%,rgba(154,215,204,.20),transparent 28%),
       radial-gradient(circle at 94% 18%,rgba(255,209,125,.20),transparent 24%),
       linear-gradient(160deg,#fffdfc,#ffeceb 58%,#fff7ef)}
@@ -522,7 +522,7 @@
       content:"♡";position:absolute;right:-12px;top:-12px;width:27px;height:27px;border-radius:50%;display:grid;place-items:center;
       background:#ffe7aa;color:#d68a64;font-size:14px;border:2px solid #fff;
     }
-    #loginScreen{
+    #authScreen,#pairScreen{
       background:
         radial-gradient(circle at 10% 12%,rgba(191,227,215,.32),transparent 24%),
         radial-gradient(circle at 92% 20%,rgba(255,231,170,.38),transparent 22%),
@@ -1768,7 +1768,7 @@
     html,body{height:100%;min-height:0;overflow:hidden}
     .app-frame{height:100dvh;min-height:0;overflow:hidden}
     .screen{height:100%;min-height:0}
-    #loginScreen{overflow-y:auto}
+    #authScreen,#pairScreen{overflow-y:auto}
     #homeScreen,#decoScreen{height:100%;min-height:0;overflow:hidden}
     .home-content,.deco-content{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 
@@ -2209,6 +2209,21 @@
   }
   .chat-history-loader button:disabled{opacity:.58}
 </style>
+
+  <style id="account-auth-styles">
+    .auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;background:rgba(20,20,20,.045);border-radius:14px;margin-bottom:18px}
+    .auth-tab{border:0;background:transparent;border-radius:10px;padding:10px 8px;font:inherit;font-weight:700;color:var(--muted);cursor:pointer}
+    .auth-tab.is-active{background:#fff;color:var(--text);box-shadow:0 3px 12px rgba(30,24,22,.08)}
+    .auth-help{margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.55;text-align:center}
+    .account-chip{display:flex;align-items:center;gap:11px;padding:12px 13px;margin-bottom:17px;background:rgba(255,255,255,.72);border:1px solid rgba(60,40,30,.06);border-radius:15px}
+    .account-chip-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--surface-strong,#fff);font-size:20px}
+    .account-chip-copy{min-width:0;flex:1}.account-chip-copy b,.account-chip-copy span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .account-chip-copy span{margin-top:2px;color:var(--muted);font-size:12px}
+    .tiny-button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:12px;font-weight:700;padding:8px;cursor:pointer}
+    .pair-heading{text-align:center;margin:4px 0 18px}.pair-heading h2{margin:0 0 7px;font-size:21px}.pair-heading p{margin:0;color:var(--muted);font-size:13px;line-height:1.55}
+    .code-expiry{display:block;margin-top:7px;color:var(--muted);font-size:11px;text-align:center}
+  </style>
+
 </head>
 <body>
   <div class="app-frame">
@@ -2226,36 +2241,76 @@
     <input id="backgroundInput" type="file" accept="image/*" hidden>
     <input id="storyImageInput" type="file" accept="image/*" hidden>
 
-    <!-- LOGIN -->
-    <section id="loginScreen" class="screen">
+    <!-- ACCOUNT AUTH -->
+    <section id="authScreen" class="screen">
       <div class="login-wrap">
         <div class="login-brand">
           <div class="login-brand-mark">♡</div>
           <h1>우리두리</h1>
-          <p>우리 둘만 들어오는 작은 방</p>
+          <p>어느 기기에서든 같은 우리 둘</p>
         </div>
 
         <div class="login-card">
-          <div class="form-group">
-            <label class="field-label" for="nameInput">내 이름</label>
-            <input id="nameInput" class="field" maxlength="12" autocomplete="name" placeholder="이름을 입력해요">
+          <div class="auth-tabs" role="tablist" aria-label="계정">
+            <button id="authLoginTab" class="auth-tab is-active" type="button">로그인</button>
+            <button id="authSignupTab" class="auth-tab" type="button">회원가입</button>
+          </div>
+          <div id="authNameGroup" class="form-group" hidden>
+            <label class="field-label" for="authNameInput">내 이름</label>
+            <input id="authNameInput" class="field" maxlength="12" autocomplete="name" placeholder="이름을 입력해요">
           </div>
           <div class="form-group">
-            <label class="field-label" for="roomCodeInput">커플 코드</label>
+            <label class="field-label" for="authUsernameInput">아이디</label>
+            <input id="authUsernameInput" class="field" type="text" maxlength="20" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="영문 소문자·숫자·_ 4~20자">
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="authPasswordInput">비밀번호</label>
+            <input id="authPasswordInput" class="field" type="password" minlength="6" autocomplete="current-password" placeholder="6자 이상">
+          </div>
+          <button id="authSubmitButton" class="primary-button" type="button">로그인</button>
+          <p id="authHelp" class="auth-help">계정으로 로그인하면 휴대폰·태블릿·PC에서 같은 대화를 이어볼 수 있어요.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- COUPLE PAIRING -->
+    <section id="pairScreen" class="screen">
+      <div class="login-wrap">
+        <div class="login-brand">
+          <div class="login-brand-mark">♡</div>
+          <h1>우리두리</h1>
+          <p>계정은 준비됐어요. 이제 둘을 연결해요.</p>
+        </div>
+
+        <div class="login-card">
+          <div class="account-chip">
+            <div class="account-chip-avatar">👤</div>
+            <div class="account-chip-copy"><b id="pairAccountName">내 계정</b><span id="pairAccountId"></span></div>
+            <button id="accountLogoutButton" class="tiny-button" type="button">로그아웃</button>
+          </div>
+
+          <div class="pair-heading">
+            <h2>커플 연결</h2>
+            <p>한 명이 연결 코드를 만들고, 다른 한 명이 자기 계정에서 그 코드를 입력하면 돼요.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="field-label" for="roomCodeInput">상대방 연결 코드</label>
             <input id="roomCodeInput" class="field" maxlength="6" autocomplete="off" autocapitalize="characters" placeholder="6자리 코드 입력" style="text-transform:uppercase;letter-spacing:.15em">
           </div>
-          <button id="joinRoomButton" class="primary-button">연결하기</button>
+          <button id="joinRoomButton" class="primary-button">코드로 연결하기</button>
           <div class="divider">또는</div>
-          <button id="createRoomButton" class="secondary-button">새 커플 코드 만들기</button>
+          <button id="createRoomButton" class="secondary-button">내 연결 코드 만들기</button>
 
           <div id="createdCodePanel" class="code-panel">
-            <small>커플 코드</small>
-            <div id="createdCodeValue" class="code-value" role="button" tabindex="0" aria-label="커플 코드 복사">------</div>
+            <small>내 연결 코드</small>
+            <div id="createdCodeValue" class="code-value" role="button" tabindex="0" aria-label="연결 코드 복사">------</div>
             <button id="copyCreatedCodeButton" type="button" class="code-copy">코드 복사</button>
+            <span class="code-expiry">상대방이 연결하면 이 코드는 자동으로 닫혀요.</span>
           </div>
           <div id="waitingLine" class="waiting-line">
             <div class="mini-spinner"></div>
-            <span>상대방 기다리는 중</span>
+            <span>상대방 계정 연결을 기다리는 중</span>
           </div>
         </div>
       </div>
@@ -2616,6 +2671,11 @@
       limitToLast, startAt, endBefore
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+    import {
+      getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+      signOut, updateProfile, setPersistence, browserLocalPersistence
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
     /* =========================================================
        CONFIG / STATE
     ========================================================= */
@@ -2631,6 +2691,7 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const auth = getAuth(app);
 
     const $ = id => document.getElementById(id);
     const SESSION_KEY = "wdm_session";
@@ -2646,6 +2707,10 @@
     const PUSH_PREF_KEY = "wdm_push_enabled_v3";
 
     const state = {
+      authUser:null,
+      userProfile:null,
+      inviteCode:"",
+      authMode:"login",
       roomId:"",
       mySlot:"",
       myName:"",
@@ -2789,7 +2854,7 @@
 
     function saveSession(){
       localStorage.setItem(SESSION_KEY,JSON.stringify({
-        roomId:state.roomId,mySlot:state.mySlot,myName:state.myName,clientId:state.clientId
+        uid:state.authUser?.uid||auth.currentUser?.uid||"",roomId:state.roomId,mySlot:state.mySlot,myName:state.myName,clientId:state.clientId
       }));
     }
 
@@ -2999,7 +3064,7 @@
     }
 
     function switchScreen(screenId){
-      ["loginScreen","homeScreen","chatScreen","decoScreen"].forEach(id=>$(id).classList.toggle("is-active",id===screenId));
+      ["authScreen","pairScreen","homeScreen","chatScreen","decoScreen"].forEach(id=>$(id)?.classList.toggle("is-active",id===screenId));
       document.body.classList.toggle("chat-mode",screenId==="chatScreen");
       syncVisualViewport();
     }
@@ -3191,7 +3256,7 @@
 
     async function restoreSession(){
       const saved=loadSession();
-      if(!saved?.roomId){switchScreen("loginScreen");hideSplash();return}
+      if(!saved?.roomId){switchScreen(state.authUser?"pairScreen":"authScreen");hideSplash();return}
 
       try{
         const found=await findRoomByCode(saved.roomId);
@@ -3227,7 +3292,7 @@
       }catch(error){
         console.warn(error);
         clearSession();
-        switchScreen("loginScreen");
+        switchScreen(state.authUser?"pairScreen":"authScreen");
         hideSplash();
       }
     }
@@ -3241,7 +3306,7 @@
       $("homeGreeting").textContent=`안녕, ${state.myName}`;
       const now=new Date();
       $("homeDate").textContent=`${now.getFullYear()}.${now.getMonth()+1}.${now.getDate()} ${"일월화수목금토"[now.getDay()]}요일`;
-      $("roomCodeChip").textContent=state.roomId;
+      $("roomCodeChip").textContent=state.room?.code||state.inviteCode||"연결됨";
       startRealtimeListeners();
       setPresence(true).catch(console.error);
       startHeartbeat();
@@ -3283,7 +3348,7 @@
       $("roomCodeInput").value="";
       $("createdCodePanel").classList.remove("is-visible");
       $("waitingLine").classList.remove("is-visible");
-      switchScreen("loginScreen");
+      switchScreen(state.authUser?"pairScreen":"authScreen");
       showToast("로그아웃했어요. 같은 코드로 다시 입장할 수 있어요");
     }
 
@@ -3529,12 +3594,22 @@
        PRESENCE / REALTIME LISTENERS
     ========================================================= */
     async function setPresence(online){
-      if(!state.roomId||!state.mySlot) return;
-      await update(roomRef(),{
-        [`${state.mySlot}/online`]:online,
-        [`${state.mySlot}/lastSeenAt`]:Date.now(),
-        [`${state.mySlot}/clientId`]:state.clientId
-      });
+      if(!state.roomId||!state.mySlot||!state.authUser?.uid) return;
+      const now=Date.now();
+      const device={
+        online:Boolean(online),lastSeenAt:now,deviceId:state.clientId,
+        userAgent:navigator.userAgent.slice(0,240)
+      };
+      const updates={
+        [`rooms/${state.roomId}/${state.mySlot}/devices/${state.clientId}`]:device,
+        [`users/${state.authUser.uid}/devices/${state.clientId}`]:device
+      };
+      if(online){
+        updates[`rooms/${state.roomId}/${state.mySlot}/online`]=true;
+        updates[`rooms/${state.roomId}/${state.mySlot}/lastSeenAt`]=now;
+        updates[`rooms/${state.roomId}/${state.mySlot}/lastDeviceId`]=state.clientId;
+      }
+      await update(ref(db),updates);
     }
 
     function startHeartbeat(){
@@ -3908,7 +3983,7 @@
       state.room=normalizeRoom({});
 
       const roomUnsubs=[];
-      const basicFields=["name","avatar","clientId","joined","joinedAt","online","lastSeenAt"];
+      const basicFields=["uid","name","avatar","clientId","lastDeviceId","joined","joinedAt","online","lastSeenAt"];
       const readFields=["lastReadAt","lastReadMessageId","lastReadMessageAt"];
       for(const slot of ["user1","user2"]){
         for(const field of basicFields){
@@ -4249,6 +4324,7 @@
         const now=Date.now();
         const created=await push(messagesRef(),{
           sender:state.myName,
+          senderUid:state.authUser?.uid||"",
           senderSlot:state.mySlot,
           senderName:state.myName,
           type:"text",text,imageData:"",
@@ -4279,6 +4355,7 @@
         const now=Date.now();
         const created=await push(messagesRef(),{
           sender:state.myName,
+          senderUid:state.authUser?.uid||"",
           senderSlot:state.mySlot,
           senderName:state.myName,
           type:"image",text:"",imageData,
@@ -4612,6 +4689,7 @@
       const base={
         type:"story",
         storyType,
+        ownerUid:state.authUser?.uid||"",
         ownerSlot:state.mySlot,
         ownerName:state.myName,
         senderSlot:state.mySlot,
@@ -4857,7 +4935,7 @@
       try{
         const now=Date.now();
         const created=await push(messagesRef(),{
-          sender:state.myName,senderSlot:state.mySlot,senderName:state.myName,type:"text",
+          sender:state.myName,senderUid:state.authUser?.uid||"",senderSlot:state.mySlot,senderName:state.myName,type:"text",
           text:`${emoji} ${story.ownerName}님의 스토리에 반응했어요`,imageData:"",
           timestamp:now,clientCreatedAt:now,createdAt:now
         });
@@ -4985,7 +5063,7 @@
       $("roomCodeInput").addEventListener("input",event=>{event.target.value=sanitizeRoomCode(event.target.value).slice(0,6)});
       $("copyCreatedCodeButton").addEventListener("click",()=>copyText($("createdCodeValue").textContent));
       $("createdCodeValue").addEventListener("click",()=>copyText($("createdCodeValue").textContent));
-      $("copyRoomCodeButton").addEventListener("click",()=>copyText(state.roomId));
+      $("copyRoomCodeButton").addEventListener("click",()=>copyText(state.room?.code||state.inviteCode||state.roomId));
       $("logoutButton").addEventListener("click",logout);
       $("chatPreview").addEventListener("click",openChat);
       $("chatBackButton").addEventListener("click",closeChat);
@@ -5451,7 +5529,7 @@
       $("homeGreeting").textContent=`안녕, ${state.myName}`;
       const now=new Date();
       $("homeDate").textContent=`${now.getFullYear()}.${now.getMonth()+1}.${now.getDate()} ${"일월화수목금토"[now.getDay()]}요일`;
-      $("roomCodeChip").textContent=state.roomId;
+      $("roomCodeChip").textContent=state.room?.code||state.inviteCode||"연결됨";
       startRealtimeListeners();
       setPresence(true).catch(console.error);
       startHeartbeat();
@@ -5969,6 +6047,7 @@
         const now=Date.now();
         const payload={
           sender:state.myName,
+          senderUid:state.authUser?.uid||"",
           senderSlot:state.mySlot,
           senderName:state.myName,
           type:"text",text,imageData:"",
@@ -6004,6 +6083,7 @@
         const now=Date.now();
         const payload={
           sender:state.myName,
+          senderUid:state.authUser?.uid||"",
           senderSlot:state.mySlot,
           senderName:state.myName,
           type:"image",text:"",imageData,
@@ -6085,13 +6165,562 @@
     }
 
 
+    /* =========================================================
+       ACCOUNT + MULTI-DEVICE PAIRING (2026-08)
+       - UI login = username + password
+       - Firebase Auth internally receives username@id.wooriduri.app
+       - Firebase Auth UID = person
+       - clientId = device only
+       - inviteCodes maps a 6-char one-time code to an opaque room id
+    ========================================================= */
+    const userProfileRef=uid=>ref(db,`users/${uid}`);
+    const inviteCodeRef=code=>ref(db,`inviteCodes/${code}`);
+    const makeRoomId=()=>`couple_${crypto.randomUUID?.()||`${Date.now()}_${Math.random().toString(36).slice(2)}`}`;
+
+    function authErrorMessage(error){
+      const code=String(error?.code||"").toLowerCase();
+      if(code.includes("invalid-credential")||code.includes("wrong-password")||code.includes("user-not-found")) return "아이디 또는 비밀번호를 확인해요";
+      if(code.includes("email-already-in-use")) return "이미 사용 중인 아이디예요";
+      if(code.includes("weak-password")) return "비밀번호는 6자 이상으로 정해요";
+      if(code.includes("invalid-email")) return "아이디 형식을 확인해요";
+      if(code.includes("too-many-requests")) return "로그인 시도가 너무 많아요. 잠시 뒤 다시 해요";
+      if(code.includes("network")) return "인터넷 연결을 확인해요";
+      if(code.includes("permission-denied")) return "Firebase Realtime Database 규칙에서 계정 저장이 차단됐어요";
+      return `계정 처리 중 문제가 생겼어요${error?.code?` (${error.code})`:""}`;
+    }
+
+    function setAuthMode(mode){
+      state.authMode=mode==="signup"?"signup":"login";
+      const signup=state.authMode==="signup";
+      $("authLoginTab")?.classList.toggle("is-active",!signup);
+      $("authSignupTab")?.classList.toggle("is-active",signup);
+      if($("authNameGroup")) $("authNameGroup").hidden=!signup;
+      if($("authSubmitButton")) $("authSubmitButton").textContent=signup?"회원가입":"로그인";
+      if($("authPasswordInput")) $("authPasswordInput").autocomplete=signup?"new-password":"current-password";
+    }
+
+    const USERNAME_DOMAIN="id.wooriduri.app";
+
+    function normalizeUsername(value){
+      return String(value||"").trim().toLowerCase();
+    }
+
+    function validUsername(value){
+      return /^[a-z0-9_]{4,20}$/.test(value);
+    }
+
+    function usernameToInternalEmail(value){
+      return `${normalizeUsername(value)}@${USERNAME_DOMAIN}`;
+    }
+
+    function usernameFromAuthUser(user){
+      const email=String(user?.email||"").toLowerCase();
+      const suffix=`@${USERNAME_DOMAIN}`;
+      return email.endsWith(suffix)?email.slice(0,-suffix.length):"";
+    }
+
+    async function ensureUserProfile(user,preferredName="",preferredUsername=""){
+      const snap=await get(userProfileRef(user.uid));
+      const existing=snap.exists()?snap.val()||{}:{};
+      const username=normalizeUsername(existing.username||preferredUsername||usernameFromAuthUser(user));
+      const name=String(existing.name||preferredName||user.displayName||username||"우리두리").trim().slice(0,12);
+      const patch={
+        uid:user.uid,
+        username,
+        name,
+        updatedAt:Date.now()
+      };
+      if(!existing.createdAt) patch.createdAt=Date.now();
+      await update(userProfileRef(user.uid),patch);
+      const next={...existing,...patch};
+      state.userProfile=next;
+      state.myName=name;
+      return next;
+    }
+
+    function renderPairAccount(){
+      const user=state.authUser;
+      const profile=state.userProfile||{};
+      if($("pairAccountName")) $("pairAccountName").textContent=profile.name||user?.displayName||"내 계정";
+      if($("pairAccountId")) $("pairAccountId").textContent=profile.username?`@${profile.username}`:"";
+    }
+
+    async function generateUniqueInviteCode(){
+      for(let attempt=0;attempt<20;attempt++){
+        const code=generateRoomCode();
+        const [inviteSnap,legacySnap]=await Promise.all([
+          get(inviteCodeRef(code)),
+          get(ref(db,`rooms/${code}`))
+        ]);
+        if(!inviteSnap.exists()&&!legacySnap.exists()) return code;
+      }
+      throw new Error("INVITE_CODE_GENERATION_FAILED");
+    }
+
+    function isLegacyRoomId(value){
+      const raw=String(value||"").trim().toUpperCase();
+      return /^[A-Z0-9]{6}$/.test(raw);
+    }
+
+    function comparableName(value){
+      return String(value||"").trim().replace(/\s+/g,"").toLowerCase();
+    }
+
+    async function claimLegacyRoom(code){
+      const uid=state.authUser?.uid;
+      if(!uid) throw new Error("AUTH_REQUIRED");
+
+      await removeOldPendingRoom();
+
+      const targetRef=ref(db,`rooms/${code}`);
+      const before=await get(targetRef);
+      if(!before.exists()) throw new Error("INVITE_NOT_FOUND");
+
+      const beforeRoom=before.val()||{};
+      const myName=state.userProfile?.name||state.myName||"나";
+      const myComparable=comparableName(myName);
+
+      const alreadySlot=beforeRoom.user1?.uid===uid?"user1":beforeRoom.user2?.uid===uid?"user2":"";
+      let preferredSlot=alreadySlot;
+
+      if(!preferredSlot){
+        const nameMatches=["user1","user2"].filter(slot=>{
+          const person=beforeRoom[slot];
+          return person && !person.uid && comparableName(person.name)===myComparable;
+        });
+        if(nameMatches.length===1) preferredSlot=nameMatches[0];
+      }
+
+      // 예전 방에서 상대가 아직 들어오지 않은 상태라면, 코드만 받은 상대방이 user2를 차지할 수 있다.
+      if(!preferredSlot&&!beforeRoom.user2) preferredSlot="user2";
+
+      // 한쪽 계정만 먼저 마이그레이션된 방은 남은 슬롯을 자동으로 연결한다.
+      if(!preferredSlot){
+        const unclaimed=["user1","user2"].filter(slot=>beforeRoom[slot]&&!beforeRoom[slot].uid);
+        if(unclaimed.length===1) preferredSlot=unclaimed[0];
+      }
+
+      if(!preferredSlot){
+        const bothClaimed=Boolean(beforeRoom.user1?.uid&&beforeRoom.user2?.uid);
+        throw new Error(bothClaimed?"ROOM_FULL":"LEGACY_NAME_MISMATCH");
+      }
+
+      const now=Date.now();
+      const result=await runTransaction(targetRef,current=>{
+        if(!current) return;
+        if(current.user1?.uid===uid||current.user2?.uid===uid) return current;
+
+        let slot=preferredSlot;
+        const target=current[slot];
+        if(target?.uid&&target.uid!==uid){
+          const other=slot==="user1"?"user2":"user1";
+          if(current[other]&&!current[other].uid) slot=other;
+          else if(other==="user2"&&!current.user2) slot="user2";
+          else return;
+        }
+
+        const existing=current[slot]||{};
+        current.code=current.code||code;
+        current[slot]={
+          ...existing,
+          uid,
+          name:existing.name||myName,
+          avatar:existing.avatar||(slot==="user1"?"🐰":"🐻"),
+          clientId:state.clientId,
+          lastDeviceId:state.clientId,
+          joined:existing.joined||now,
+          joinedAt:existing.joinedAt||existing.joined||now,
+          lastReadAt:existing.lastReadAt||0,
+          lastSeenAt:now,
+          online:true,
+          devices:{
+            ...(existing.devices||{}),
+            [state.clientId]:{
+              online:true,lastSeenAt:now,deviceId:state.clientId,
+              userAgent:navigator.userAgent.slice(0,240)
+            }
+          }
+        };
+        current.typing=current.typing||{};
+        current.typing[slot]=current.typing[slot]||{active:false,at:0};
+        return current;
+      },{applyLocally:false});
+
+      if(!result.snapshot.exists()) throw new Error("ROOM_NOT_FOUND");
+      const room=result.snapshot.val()||{};
+      const slot=room.user1?.uid===uid?"user1":room.user2?.uid===uid?"user2":"";
+      if(!slot) throw new Error("ROOM_FULL");
+
+      await update(userProfileRef(uid),{
+        coupleRoomId:code,
+        coupleSlot:slot,
+        inviteCode:slot==="user1"&&!room.user2?.uid?code:null,
+        updatedAt:now
+      });
+
+      state.userProfile={
+        ...(state.userProfile||{}),
+        coupleRoomId:code,
+        coupleSlot:slot,
+        inviteCode:slot==="user1"&&!room.user2?.uid?code:null
+      };
+      state.roomId=code;
+      state.mySlot=slot;
+      state.myName=room[slot]?.name||myName;
+      state.partnerName=room[slot==="user1"?"user2":"user1"]?.name||"";
+      state.room=normalizeRoom(room);
+      state.inviteCode=code;
+
+      if(slot==="user1"&&!room.user2?.uid){
+        renderPairAccount();
+        switchScreen("pairScreen");
+        hideSplash();
+        $("createdCodeValue").textContent=code;
+        $("createdCodePanel").classList.add("is-visible");
+        $("waitingLine").classList.add("is-visible");
+        subscribeWaitingRoom();
+        showToast("기존 커플 코드를 계정에 연결했어요");
+        return true;
+      }
+
+      await enterApp();
+      showToast("기존 커플방을 계정에 연결했어요");
+      return true;
+    }
+
+    async function removeOldPendingRoom(){
+      const uid=state.authUser?.uid;
+      const profile=state.userProfile||{};
+      if(!uid||!profile.coupleRoomId) return;
+      try{
+        const roomSnap=await get(ref(db,`rooms/${profile.coupleRoomId}`));
+        const room=roomSnap.val()||{};
+        if(room.user1?.uid===uid&&!room.user2){
+          if(room.code) await remove(inviteCodeRef(room.code)).catch(()=>{});
+          await remove(ref(db,`rooms/${profile.coupleRoomId}`)).catch(()=>{});
+          await update(userProfileRef(uid),{coupleRoomId:null,coupleSlot:null,inviteCode:null});
+          state.userProfile={...profile,coupleRoomId:null,coupleSlot:null,inviteCode:null};
+        }
+      }catch(error){console.warn("pending room cleanup failed",error)}
+    }
+
+    createRoom=async function createAccountInvite(){
+      if(!state.authUser?.uid) return switchScreen("authScreen");
+      const button=$("createRoomButton");
+      if(button) button.disabled=true;
+      try{
+        await removeOldPendingRoom();
+        const code=await generateUniqueInviteCode();
+        const roomId=makeRoomId();
+        const now=Date.now();
+        const uid=state.authUser.uid;
+        const name=state.userProfile?.name||state.myName||"나";
+        const initialRoom={
+          code,createdAt:now,createdByUid:uid,
+          user1:{uid,name,avatar:"🐰",clientId:state.clientId,lastDeviceId:state.clientId,joined:now,joinedAt:now,lastReadAt:0,lastSeenAt:now,online:true},
+          decoInfo:{coupleName:"",anniversary:"",wallpaper:"default",wallpaperUrl:"",dailyNote:"",dailyNoteBy:"",dailyNoteAt:0,stickers:[]},
+          typing:{user1:{active:false,at:0},user2:{active:false,at:0}}
+        };
+        const invite={roomId,ownerUid:uid,createdAt:now,expiresAt:now+86_400_000};
+        await update(ref(db),{
+          [`rooms/${roomId}`]:initialRoom,
+          [`inviteCodes/${code}`]:invite,
+          [`users/${uid}/coupleRoomId`]:roomId,
+          [`users/${uid}/coupleSlot`]:"user1",
+          [`users/${uid}/inviteCode`]:code,
+          [`users/${uid}/updatedAt`]:now
+        });
+        state.roomId=roomId;
+        state.mySlot="user1";
+        state.myName=name;
+        state.partnerName="";
+        state.inviteCode=code;
+        state.room=normalizeRoom(initialRoom);
+        state.userProfile={...(state.userProfile||{}),coupleRoomId:roomId,coupleSlot:"user1",inviteCode:code};
+        $("createdCodeValue").textContent=code;
+        $("createdCodePanel").classList.add("is-visible");
+        $("waitingLine").classList.add("is-visible");
+        subscribeWaitingRoom();
+        showToast("연결 코드를 만들었어요");
+      }catch(error){
+        console.error("invite create failed",error);
+        showToast("연결 코드를 만들지 못했어요");
+      }finally{if(button) button.disabled=false}
+    };
+
+    subscribeWaitingRoom=function subscribeAccountWaitingRoom(){
+      state.roomUnsubscribe?.();
+      if(!state.roomId) return;
+      state.roomUnsubscribe=onValue(ref(db,`rooms/${state.roomId}/user2`),async snapshot=>{
+        if(!snapshot.exists()) return;
+        const partner=snapshot.val()||{};
+        if(!partner.uid) return;
+        state.partnerName=partner.name||"상대방";
+        if(state.inviteCode) await remove(inviteCodeRef(state.inviteCode)).catch(()=>{});
+        if(state.authUser?.uid) await update(userProfileRef(state.authUser.uid),{inviteCode:null,updatedAt:Date.now()}).catch(()=>{});
+        state.inviteCode="";
+        state.userProfile={...(state.userProfile||{}),inviteCode:null};
+        await enterApp();
+      },error=>{console.error(error);showToast("연결 상태를 확인하지 못했어요")});
+    };
+
+    joinRoom=async function joinAccountInvite(){
+      if(!state.authUser?.uid) return switchScreen("authScreen");
+      const inputCode=$("roomCodeInput").value;
+      const code=sanitizeRoomCode(inputCode);
+      if(code.length!==6) return showToast("6자리 코드를 입력해요");
+      const button=$("joinRoomButton");
+      if(button) button.disabled=true;
+      try{
+        // 1) 새 계정 버전의 일회용 초대 코드부터 확인한다.
+        const inviteSnap=await get(inviteCodeRef(code));
+        if(inviteSnap.exists()){
+          const invite=inviteSnap.val()||{};
+          if(Number(invite.expiresAt||0)&&Date.now()>Number(invite.expiresAt)) throw new Error("INVITE_EXPIRED");
+          const roomId=String(invite.roomId||"");
+          if(!roomId) throw new Error("INVITE_BROKEN");
+          const uid=state.authUser.uid;
+          if(invite.ownerUid===uid){
+            await restoreAccountRoom(roomId);
+            return;
+          }
+
+          // 내가 먼저 만들어 둔 빈 방이 있다면 정리하고 상대 초대 코드로 이동한다.
+          await removeOldPendingRoom();
+
+          const user2Ref=ref(db,`rooms/${roomId}/user2`);
+          const now=Date.now();
+          const name=state.userProfile?.name||state.myName||"상대방";
+          const result=await runTransaction(user2Ref,current=>{
+            if(current?.uid===uid) return current;
+            if(current) return;
+            return {
+              uid,name,avatar:"🐻",clientId:state.clientId,lastDeviceId:state.clientId,
+              joined:now,joinedAt:now,lastReadAt:0,lastSeenAt:now,online:true,
+              devices:{
+                [state.clientId]:{
+                  online:true,lastSeenAt:now,deviceId:state.clientId,
+                  userAgent:navigator.userAgent.slice(0,240)
+                }
+              }
+            };
+          },{applyLocally:false});
+          const claimed=result.snapshot.val()||{};
+          if(claimed.uid!==uid) throw new Error("ROOM_FULL");
+
+          await update(userProfileRef(uid),{coupleRoomId:roomId,coupleSlot:"user2",inviteCode:null,updatedAt:now});
+          state.userProfile={...(state.userProfile||{}),coupleRoomId:roomId,coupleSlot:"user2",inviteCode:null};
+          state.roomId=roomId;
+          state.mySlot="user2";
+          state.myName=name;
+          state.inviteCode="";
+          await remove(inviteCodeRef(code)).catch(()=>{});
+
+          const roomSnap=await get(ref(db,`rooms/${roomId}`));
+          if(!roomSnap.exists()) throw new Error("ROOM_NOT_FOUND");
+          const room=roomSnap.val()||{};
+          state.room=normalizeRoom(room);
+          state.partnerName=room.user1?.name||"상대방";
+          await enterApp();
+          showToast("두 계정이 연결됐어요");
+          return;
+        }
+
+        // 2) 새 inviteCodes에 없으면 예전 버전의 rooms/{6자리코드}를 그대로 찾는다.
+        await claimLegacyRoom(code);
+      }catch(error){
+        console.error("invite/legacy join failed",error);
+        if(error.message==="INVITE_NOT_FOUND"||error.message==="ROOM_NOT_FOUND") showToast("존재하지 않는 연결 코드예요");
+        else if(error.message==="INVITE_EXPIRED") showToast("만료된 연결 코드예요. 새 코드를 받아요");
+        else if(error.message==="ROOM_FULL") showToast("이미 두 계정이 연결된 코드예요");
+        else if(error.message==="LEGACY_NAME_MISMATCH") showToast("기존 방의 이름과 계정 이름이 달라요. 기존에 쓰던 이름으로 계정을 만들어 연결해요");
+        else if(String(error?.code||"").toLowerCase().includes("permission")) showToast("Firebase 규칙 때문에 코드를 읽지 못했어요");
+        else showToast("계정을 연결하지 못했어요");
+      }finally{if(button) button.disabled=false}
+    };
+
+    async function restoreAccountRoom(roomId){
+      const uid=state.authUser?.uid;
+      if(!uid||!roomId) return false;
+      const snap=await get(ref(db,`rooms/${roomId}`));
+      if(!snap.exists()) return false;
+      const room=snap.val()||{};
+      let slot=room.user1?.uid===uid?"user1":room.user2?.uid===uid?"user2":"";
+      if(!slot) return false;
+      state.roomId=roomId;
+      state.mySlot=slot;
+      state.myName=room[slot]?.name||state.userProfile?.name||"";
+      state.partnerName=room[slot==="user1"?"user2":"user1"]?.name||"";
+      state.room=normalizeRoom(room);
+      state.inviteCode=room.code||state.userProfile?.inviteCode||"";
+      await update(userProfileRef(uid),{coupleRoomId:roomId,coupleSlot:slot,updatedAt:Date.now()});
+      state.userProfile={...(state.userProfile||{}),coupleRoomId:roomId,coupleSlot:slot};
+
+      if(slot==="user1"&&!room.user2?.uid){
+        let code=state.inviteCode;
+
+        // 예전 앱의 방은 방 ID 자체가 6자리 커플 코드다. 이 값은 바꾸지 않고 계속 사용할 수 있게 한다.
+        if(isLegacyRoomId(roomId)){
+          code=sanitizeRoomCode(roomId);
+          const now=Date.now();
+          await update(ref(db),{
+            [`rooms/${roomId}/code`]:code,
+            [`users/${uid}/inviteCode`]:code,
+            [`users/${uid}/updatedAt`]:now
+          }).catch(()=>{});
+          state.inviteCode=code;
+          state.room.code=code;
+          state.userProfile.inviteCode=code;
+        }else{
+          let usable=false;
+          if(code){
+            const inviteSnap=await get(inviteCodeRef(code)).catch(()=>null);
+            const invite=inviteSnap?.exists()?inviteSnap.val()||{}:{};
+            usable=Boolean(invite.roomId===roomId&&(!invite.expiresAt||Date.now()<invite.expiresAt));
+          }
+          if(!usable){
+            code=await generateUniqueInviteCode();
+            const now=Date.now();
+            await update(ref(db),{
+              [`rooms/${roomId}/code`]:code,
+              [`inviteCodes/${code}`]:{roomId,ownerUid:uid,createdAt:now,expiresAt:now+86_400_000},
+              [`users/${uid}/inviteCode`]:code
+            });
+            state.inviteCode=code;
+            state.room.code=code;
+            state.userProfile.inviteCode=code;
+          }
+        }
+        renderPairAccount();
+        switchScreen("pairScreen");
+        hideSplash();
+        $("createdCodeValue").textContent=state.inviteCode;
+        $("createdCodePanel").classList.add("is-visible");
+        $("waitingLine").classList.add("is-visible");
+        subscribeWaitingRoom();
+        return true;
+      }
+
+      if(state.userProfile?.inviteCode){
+        await update(userProfileRef(uid),{inviteCode:null}).catch(()=>{});
+        state.userProfile.inviteCode=null;
+      }
+      await enterApp();
+      return true;
+    }
+
+    async function handleAccountSession(user){
+      state.authUser=user||null;
+      if(!user){
+        state.userProfile=null;
+        state.roomId="";state.mySlot="";state.myName="";state.partnerName="";state.inviteCode="";state.room=null;
+        clearSession();
+        switchScreen("authScreen");
+        hideSplash();
+        return;
+      }
+      try{
+        const profile=await ensureUserProfile(user);
+        renderPairAccount();
+        if(profile.coupleRoomId){
+          const restored=await restoreAccountRoom(profile.coupleRoomId);
+          if(restored) return;
+          await update(userProfileRef(user.uid),{coupleRoomId:null,coupleSlot:null,inviteCode:null,updatedAt:Date.now()});
+          state.userProfile={...profile,coupleRoomId:null,coupleSlot:null,inviteCode:null};
+        }
+        switchScreen("pairScreen");
+        hideSplash();
+      }catch(error){
+        console.error("account restore failed",error);
+        switchScreen("pairScreen");
+        hideSplash();
+        showToast("계정 정보를 불러오지 못했어요");
+      }
+    }
+
+    async function submitAuth(){
+      const username=normalizeUsername($("authUsernameInput").value);
+      const internalEmail=usernameToInternalEmail(username);
+      const password=$("authPasswordInput").value;
+      const signup=state.authMode==="signup";
+      const name=$("authNameInput").value.trim();
+      if(!username) return showToast("아이디를 입력해요");
+      if(!validUsername(username)) return showToast("아이디는 영문 소문자·숫자·_ 4~20자로 정해요");
+      if(password.length<6) return showToast("비밀번호를 6자 이상 입력해요");
+      if(signup&&!name) return showToast("이름을 입력해요");
+      const button=$("authSubmitButton");
+      button.disabled=true;
+      button.textContent=signup?"계정 만드는 중…":"로그인 중…";
+      try{
+        await setPersistence(auth,browserLocalPersistence);
+        if(signup){
+          const credential=await createUserWithEmailAndPassword(auth,internalEmail,password);
+          await updateProfile(credential.user,{displayName:name});
+          await ensureUserProfile(credential.user,name,username);
+          renderPairAccount();
+          showToast("계정을 만들었어요");
+        }else{
+          await signInWithEmailAndPassword(auth,internalEmail,password);
+        }
+      }catch(error){
+        console.error("auth failed",error);
+        showToast(authErrorMessage(error));
+      }finally{
+        button.disabled=false;
+        button.textContent=state.authMode==="signup"?"회원가입":"로그인";
+      }
+    }
+
+    logout=async function accountLogout(){
+      if(!confirm("이 기기에서 로그아웃할까요?")) return;
+      try{await Promise.race([setPresence(false),wait(800)])}catch{}
+      await Promise.race([detachPushFromCurrentRoom(),wait(800)]).catch(()=>{});
+      stopLocationSharing(false);
+      clearInterval(state.heartbeatTimer);state.heartbeatTimer=null;
+      state.roomUnsubscribe?.();state.roomUnsubscribe=null;
+      state.unsubscribers.forEach(unsub=>unsub?.());state.unsubscribers=[];
+      clearSession();
+      await signOut(auth);
+    };
+
+    restoreSession=async function restoreAccountSession(){
+      if(auth.currentUser) await handleAccountSession(auth.currentUser);
+    };
+
+    // Refined enterApp runs after the original declaration, so wrap it here.
+    const enterAppBeforeAccount=enterApp;
+    enterApp=async function enterAccountApp(){
+      if(!state.authUser?.uid) return switchScreen("authScreen");
+      await enterAppBeforeAccount();
+      if(state.room){
+        $("roomCodeChip").textContent=state.room.code||"연결됨";
+      }
+      setPresence(true).catch(()=>{});
+    };
+
+    function bootAccountAuth(){
+      setAuthMode("login");
+      $("authLoginTab")?.addEventListener("click",()=>setAuthMode("login"));
+      $("authSignupTab")?.addEventListener("click",()=>setAuthMode("signup"));
+      $("authSubmitButton")?.addEventListener("click",submitAuth);
+      $("authPasswordInput")?.addEventListener("keydown",event=>{if(event.key==="Enter") submitAuth()});
+      $("authUsernameInput")?.addEventListener("input",event=>{event.target.value=normalizeUsername(event.target.value).replace(/[^a-z0-9_]/g,"").slice(0,20)});
+      $("authUsernameInput")?.addEventListener("keydown",event=>{if(event.key==="Enter") submitAuth()});
+      $("accountLogoutButton")?.addEventListener("click",logout);
+      onAuthStateChanged(auth,user=>handleAccountSession(user).catch(console.error));
+    }
+
+
     bindEvents();
     bindRefinedEnhancements();
-    restoreSession();
+    bootAccountAuth();
   </script>
 <!-- build: ios-chat-read-reaction-emoji-fix-20260726 -->
 <!-- build: rejoin-fix-20260726 -->
 <!-- build: pocket-diary-push-persistence-read-receipts-20260726 -->
 <!-- build: firebase-bandwidth-optimized-20260727 -->
+<!-- build: account-auth-multidevice-pairing-20260812 -->
+<!-- build: username-login-github-pages-20260812 -->
+<!-- build: legacy-room-code-compat-20260812 -->
 </body>
   </html>
