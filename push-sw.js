@@ -87,7 +87,10 @@ self.addEventListener("push", event => {
           client.visibilityState === "visible"
       );
 
-    if(visible){
+    // WebKit/iOS requires each push to display a notification. Never silently discard
+    // an iOS push just because an app window is still reported as visible after locking.
+    const isAppleWebKit = /iPhone|iPad|iPod/i.test(self.navigator?.userAgent || "");
+    if(visible && visible.focused === true && !isAppleWebKit && !payload.forceShow){
       visible.postMessage({
         type:"WOORIDURI_PUSH",
         ...payload
@@ -112,7 +115,7 @@ self.addEventListener("push", event => {
 
       data:{
         url:
-          payload.url || APP_URL,
+          payload.url || `${APP_URL}?open=chat&room=${encodeURIComponent(payload.roomId || "main")}`,
 
         roomId:
           payload.roomId || ""
