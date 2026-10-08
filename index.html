@@ -1599,7 +1599,7 @@
     .bottom-nav .nav-item{flex:1 1 0!important;min-width:0!important;border-radius:17px!important}
     .nav-item.is-active{color:#db7892!important}
     .avatar.has-photo{background:linear-gradient(145deg,#ffe8ef,#fdf6f8)!important;overflow:hidden!important}
-    .avatar.has-photo>img,.message-avatar>img{width:var(--avatar-photo-width,66%)!important;height:var(--avatar-photo-height,66%)!important;object-fit:contain!important;object-position:center!important;display:block!important}
+    .avatar.has-photo>img,.message-avatar>img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;display:block!important}
     .avatar-stack>.avatar{position:relative}
     .avatar-stack>.avatar.partner{margin-left:-7px!important}
     .avatar-stack>.avatar.has-photo{box-shadow:0 0 0 2px #fff,0 3px 11px rgba(153,86,108,.12)!important}
@@ -2361,12 +2361,6 @@
       element.innerHTML="";
       if(value?.startsWith?.("data:image")){
         const image=new Image();
-        image.onload=()=>{
-          const diagonal=Math.hypot(image.naturalWidth,image.naturalHeight);
-          if(!diagonal) return;
-          image.style.setProperty("--avatar-photo-width",`${94*image.naturalWidth/diagonal}%`);
-          image.style.setProperty("--avatar-photo-height",`${94*image.naturalHeight/diagonal}%`);
-        };
         image.src=value;
         image.alt="프로필";
         element.appendChild(image);
@@ -4121,17 +4115,11 @@
             const w=photo.naturalWidth||photo.width;
             const h=photo.naturalHeight||photo.height;
             if(!w||!h) return reject(new Error("EMPTY_PHOTO"));
-            // 흐린 원본을 배경으로 채우고, 전체 사진을 원형 안쪽에 여백을 두어 배치.
-            const cover=Math.max(size/w,size/h);
-            ctx.save();
-            ctx.filter="blur(22px) brightness(1.1)";
-            ctx.drawImage(photo,(size-w*cover)/2,(size-h*cover)/2,w*cover,h*cover);
-            ctx.restore();
-            ctx.fillStyle="rgba(255,243,247,.38)";
+            // Fill the circular frame with a center crop, without padding or blur.
+            ctx.fillStyle="#fff5f7";
             ctx.fillRect(0,0,size,size);
-            const available=size*.94;
-            const fit=Math.min(available/w,available/h);
-            ctx.drawImage(photo,(size-w*fit)/2,(size-h*fit)/2,w*fit,h*fit);
+            const cover=Math.max(size/w,size/h);
+            ctx.drawImage(photo,(size-w*cover)/2,(size-h*cover)/2,w*cover,h*cover);
             let result="";
             for(const quality of [.85,.75,.65,.55,.45,.35]){
               result=canvas.toDataURL("image/jpeg",quality);
