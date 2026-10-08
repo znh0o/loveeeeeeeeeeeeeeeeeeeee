@@ -2227,6 +2227,49 @@
       padding:9px 14px;border-radius:14px;font-size:12px;font-weight:700;cursor:pointer}
     .wd-diagnostic-result{white-space:pre-line;line-height:1.7;font-size:11px;color:#806b70;margin-top:7px}
     @media(prefers-reduced-motion:reduce){.message-row.animate-in{animation:none!important}}
+  
+    /* =========================================================
+       OUR TWO — CLEAN, LOVELY & CALM UI (2026-10-08)
+       ========================================================= */
+    :root{--wd-rose:#e77e98;--wd-rose-soft:#fff0f4;--wd-ink:#53444e;--wd-muted:#987f8c}
+    .home-content,.deco-content{padding-left:17px!important;padding-right:17px!important}
+    .app-header,.simple-header{background:rgba(255,250,250,.97)!important}
+    .header-copy h2{font-family:inherit!important;font-weight:800!important;letter-spacing:-.045em}
+    .quick-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;margin:13px 0 18px!important}
+    .quick-action{min-height:91px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:7px!important;padding:11px 4px!important;border:1px solid #f4e2e9!important;border-radius:23px!important;background:linear-gradient(155deg,#fffefe,#fff2f6)!important;box-shadow:0 5px 18px rgba(207,118,147,.07)!important}
+    .quick-action:nth-child(2){background:linear-gradient(155deg,#fffefa,#fff8e9)!important}
+    .quick-action:nth-child(3){background:linear-gradient(155deg,#fcfffd,#f0f8f5)!important}
+    .quick-action .quick-icon{width:39px!important;height:39px!important;background:#fff!important;border-radius:15px!important;display:grid!important;place-items:center!important;box-shadow:0 2px 8px rgba(211,144,161,.1)!important}
+    .quick-action small{font-size:11px!important;font-weight:750!important;color:#7e6873!important}
+    .dday-card{background:linear-gradient(140deg,#fff1f5 0%,#fff8f4 75%,#fff5e8 100%)!important;border:1px solid #f8dce6!important;border-radius:27px!important;box-shadow:0 7px 22px rgba(213,116,151,.08)!important}
+    .dday-card::before{display:none!important}
+    .dday-card::after{content:"♡"!important;background:transparent!important;opacity:.65;right:20px!important;bottom:9px!important;color:#ec9fb7!important}
+    .dday-value strong{font-family:inherit!important;font-weight:850!important;color:#de7893!important}
+    .card{border-radius:23px!important;border:1px solid #f1e5e9!important;box-shadow:0 4px 18px rgba(110,65,82,.055)!important}
+    .content-card{background:#fffdfd!important}
+    .daily-note{font-family:inherit!important;font-size:13px!important}
+    .chat-preview{background:#fff7f9!important;border:1px solid #f7e4ea!important;border-radius:18px!important;padding:11px!important}
+    .bottom-nav{display:flex!important;justify-content:space-around!important;background:rgba(255,251,253,.97)!important;border:1px solid #f0dfe7!important;box-shadow:0 10px 34px rgba(136,85,109,.12)!important}
+    .bottom-nav .nav-item{flex:1 1 0!important;min-width:0!important;border-radius:17px!important}
+    .nav-item.is-active{color:#db7892!important}
+    .avatar.has-photo{background:linear-gradient(145deg,#ffe8ef,#fdf6f8)!important;overflow:hidden!important}
+    .avatar.has-photo>img,.message-avatar>img{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;display:block!important}
+    .avatar-stack>.avatar{position:relative}
+    .avatar-stack>.avatar.partner{margin-left:-7px!important}
+    .avatar-stack>.avatar.has-photo{box-shadow:0 0 0 2px #fff,0 3px 11px rgba(153,86,108,.12)!important}
+    .couple-avatars .avatar{overflow:hidden!important;flex-shrink:0!important}
+    .wd-date-label{display:block;margin:4px 1px 9px;font-size:12px;font-weight:750;color:var(--wd-muted)}
+    .wd-date-edit-row{display:flex;gap:9px;align-items:center}
+    .wd-date-edit-row .date-field{flex:1;min-width:0;margin:0!important;height:46px!important;border-radius:15px!important;background:#fffafa!important}
+    .wd-date-save{height:46px;min-width:84px;padding:0 13px;border-radius:15px;background:#ec94a9;color:white;font-weight:800;font-size:12px;box-shadow:0 4px 12px rgba(221,115,149,.16)}
+    .wd-date-save:disabled{opacity:.55}
+    .wd-shared-date-info{margin-top:10px;color:#b38a99;font-size:11px;line-height:1.6}
+    .device-status-card{border-radius:17px!important;padding:8px 0!important}
+    .manual-battery{border-radius:18px!important;background:#fff9f7!important}
+    .story-creator,.story-viewer,#storyStrip{display:none!important}
+    @media(max-width:350px){.quick-grid{gap:6px!important}.wd-date-save{min-width:73px;padding:0 8px}}
+    @media(prefers-reduced-motion:reduce){.quick-action,.nav-item,.card{transition:none!important;animation:none!important}}
+
   </style>
 </head>
 <body>
@@ -2243,7 +2286,6 @@
     <input id="galleryInput" type="file" accept="image/*" hidden>
     <input id="avatarInput" type="file" accept="image/*" hidden>
     <input id="backgroundInput" type="file" accept="image/*" hidden>
-    <input id="storyImageInput" type="file" accept="image/*" hidden>
 
     <!-- LOGIN -->
     <section id="loginScreen" class="screen">
@@ -2309,13 +2351,9 @@
       </header>
 
       <main class="home-content">
-        <div class="section-label">스토리</div>
-        <div id="storyStrip" class="story-strip"></div>
-
         <div class="quick-grid">
           <button class="quick-action" data-action="open-chat"><span class="quick-icon">✉</span><small>채팅</small></button>
           <button class="quick-action" data-action="open-note"><span class="quick-icon">✎</span><small>한마디</small></button>
-          <button class="quick-action" data-action="open-story-photo"><span class="quick-icon">▣</span><small>스토리</small></button>
           <button class="quick-action" data-action="open-deco"><span class="quick-icon">✦</span><small>꾸미기</small></button>
         </div>
 
@@ -2409,7 +2447,6 @@
       <nav class="bottom-nav glass">
         <button class="nav-item is-active" data-tab="home"><b>⌂</b><span>홈</span></button>
         <button class="nav-item" data-action="open-chat"><b>✉</b><span>채팅</span></button>
-        <button class="nav-item" data-action="open-story-text"><div class="nav-create">＋</div><span>스토리</span></button>
         <button class="nav-item" data-tab="deco"><b>✦</b><span>꾸미기</span></button>
       </nav>
     </section>
@@ -2478,8 +2515,13 @@
 
         <article class="card content-card">
           <div class="card-head"><div class="card-title">기념일</div></div>
-          <input id="anniversaryInput" class="date-field" type="date">
+          <label class="wd-date-label" for="anniversaryInput">우리의 시작일</label>
+          <div class="wd-date-edit-row">
+            <input id="anniversaryInput" class="date-field" type="date">
+            <button id="anniversarySaveButton" class="wd-date-save" type="button">저장 ♡</button>
+          </div>
           <div id="anniversaryNext" class="helper-text" aria-live="polite"></div>
+          <div class="wd-shared-date-info" id="anniversarySyncStatus">두 사람에게 같은 날짜가 표시돼요 ♡</div>
         </article>
 
         <article class="card content-card">
@@ -2516,7 +2558,6 @@
       <nav class="bottom-nav glass">
         <button class="nav-item" data-tab="home"><b>⌂</b><span>홈</span></button>
         <button class="nav-item" data-action="open-chat"><b>✉</b><span>채팅</span></button>
-        <button class="nav-item" data-action="open-story-text"><div class="nav-create">＋</div><span>스토리</span></button>
         <button class="nav-item is-active" data-tab="deco"><b>✦</b><span>꾸미기</span></button>
       </nav>
     </section>
@@ -2565,74 +2606,6 @@
     </div>
   </div>
 
-  <!-- STORY CREATOR -->
-  <div id="storyCreator" class="story-creator" role="dialog" aria-modal="true" aria-label="스토리 만들기">
-    <div class="story-topbar">
-      <button id="closeStoryCreatorButton" class="story-close-button" aria-label="닫기">✕</button>
-      <div class="story-topbar-copy"><b>새 스토리</b></div>
-      <button id="publishStoryButton" class="story-top-publish" type="button">공유</button>
-    </div>
-
-    <div class="story-body">
-      <div class="story-tabs" aria-label="스토리 형식">
-        <button class="story-tab is-active" data-story-mode="text">텍스트</button>
-        <button class="story-tab" data-story-mode="photo">사진</button>
-      </div>
-
-      <div id="storyPreview" class="story-preview">
-        <div id="storyPreviewText" class="story-preview-text">오늘 뭐 했어?</div>
-        <img id="storyPreviewImage" hidden alt="스토리 사진 미리보기">
-        <button id="storyPhotoPicker" class="story-photo-picker" hidden type="button">
-          <span>＋</span><b>사진 고르기</b><small></small>
-        </button>
-        <div id="storyPreviewCaption" class="story-preview-caption" hidden></div>
-        <div id="storyLoading" class="story-loading" hidden>
-          <div class="story-loading-spinner"></div><b id="storyLoadingText">사진을 준비하고 있어요</b>
-        </div>
-      </div>
-
-      <div class="story-editor">
-        <textarea id="storyTextInput" maxlength="120" placeholder="한마디 적기"></textarea>
-        <input id="storyCaptionInput" maxlength="100" placeholder="사진에 한마디" hidden>
-        <span id="storyColorLabel" class="story-color-label">배경 고르기</span>
-        <div id="gradientList" class="gradient-list">
-          <button class="gradient-dot is-selected" aria-label="복숭아색" data-gradient="linear-gradient(145deg,#ff8e9d,#ffc0a8)" style="background:linear-gradient(145deg,#ff8e9d,#ffc0a8)"></button>
-          <button class="gradient-dot" aria-label="라벤더색" data-gradient="linear-gradient(145deg,#a99bf3,#d7b8f3)" style="background:linear-gradient(145deg,#a99bf3,#d7b8f3)"></button>
-          <button class="gradient-dot" aria-label="하늘색" data-gradient="linear-gradient(145deg,#79c8e8,#a9e2d2)" style="background:linear-gradient(145deg,#79c8e8,#a9e2d2)"></button>
-          <button class="gradient-dot" aria-label="노을색" data-gradient="linear-gradient(145deg,#ffad79,#f27f91)" style="background:linear-gradient(145deg,#ffad79,#f27f91)"></button>
-          <button class="gradient-dot" aria-label="밤색" data-gradient="linear-gradient(145deg,#5d5b9e,#8c79b9)" style="background:linear-gradient(145deg,#5d5b9e,#8c79b9)"></button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- STORY VIEWER -->
-  <div id="storyViewer" class="story-viewer">
-    <div class="story-shell">
-      <div id="storyStage" class="story-stage"></div>
-      <div class="story-overlay"></div>
-      <div id="storyProgress" class="story-progress"></div>
-      <div class="viewer-head">
-        <div id="viewerAvatar" class="avatar">🐰</div>
-        <div class="viewer-copy"><b id="viewerName"></b><span id="viewerTime"></span></div>
-        <button id="deleteStoryButton" hidden>삭제</button>
-        <button id="closeStoryViewerButton">✕</button>
-      </div>
-      <button class="story-nav-zone prev" data-story-nav="prev" aria-label="이전 스토리"></button>
-      <button class="story-nav-zone next" data-story-nav="next" aria-label="다음 스토리"></button>
-      <div class="viewer-bottom">
-        <div id="storyViewerCount" class="story-viewer-count" hidden></div>
-        <div id="viewerCaption" class="viewer-caption"></div>
-        <div class="reaction-row">
-          <button class="reply-button" id="replyStoryButton">답장 보내기…</button>
-          <button data-story-reaction="❤️">❤️</button>
-          <button data-story-reaction="😍">😍</button>
-          <button data-story-reaction="🔥">🔥</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- MESSAGE REACTION PICKER -->
   <div id="messageReactionPicker" class="message-reaction-picker" aria-hidden="true">
     <button type="button" data-message-reaction="❤️" aria-label="하트 공감">❤️</button>
@@ -2657,7 +2630,7 @@
     import {
       getDatabase, ref, set, get, push, onValue, onChildAdded, onChildChanged, onChildRemoved,
       update, remove, goOnline, runTransaction, query, orderByChild, orderByKey,
-      limitToLast, startAt, endBefore
+      limitToLast, startAt, endBefore, onDisconnect, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
     import {
       getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut,
@@ -3068,8 +3041,10 @@
         image.src=value;
         image.alt="프로필";
         element.appendChild(image);
+        element.classList.add("has-photo");
       }else{
         element.textContent=value||fallback;
+        element.classList.remove("has-photo");
       }
     }
 
@@ -3729,20 +3704,125 @@
     /* =========================================================
        PRESENCE / REALTIME LISTENERS
     ========================================================= */
-    async function setPresence(online){
+    const livePageId=`${state.clientId}_${crypto.randomUUID?.()||Math.random().toString(36).slice(2)}`;
+    let livePresenceRef=null;
+    let livePresenceUnsub=null;
+    let livePartnerUnsub=null;
+    let liveBatteryUnsub=null;
+    let liveServerOffsetUnsub=null;
+    let liveConnected=false;
+    let livePresenceVersion=0;
+    let livePulseCount=0;
+    state.livePartnerLoaded=false;
+    state.livePartnerDevices={};
+    state.partnerBatteryRecords={};
+    state.liveServerOffset=0;
+
+    function nowOnFirebase(){return Date.now()+(state.liveServerOffset||0)}
+    function currentPartnerPresence(){
+      if(!state.livePartnerLoaded) return null;
+      const devices=Object.values(state.livePartnerDevices||{});
+      const recent=devices.filter(item=>item&&typeof item==="object"&&
+        Number(item.updatedAt)>0&&nowOnFirebase()-Number(item.updatedAt)<85000&&
+        nowOnFirebase()-Number(item.updatedAt)>-60000);
+      const active=recent.some(item=>item.visible===true);
+      const lastSeenAt=Math.max(0,...devices.map(item=>Number(item?.updatedAt)||0));
+      return {active,lastSeenAt};
+    }
+
+    async function setPresence(visible){
+      if(!livePresenceRef||!state.roomId||!state.mySlot||!liveConnected) return;
+      await Promise.all([
+        set(livePresenceRef,{
+          visible:Boolean(visible),
+          updatedAt:serverTimestamp(),
+          clientType:isIosDevice()?"ios":/android/i.test(navigator.userAgent)?"android":"desktop"
+        }),
+        // 장치가 갑자기 끊겨도 상대방에게 최근 접속 시간을 표시할 수 있도록 보존
+        update(roomRef(),{[`${state.mySlot}/lastSeenAt`]:serverTimestamp()})
+      ]);
+    }
+
+    function stopLivePresenceSubscriptions(){
+      livePresenceVersion++;
+      liveConnected=false;
+      livePresenceUnsub?.();livePartnerUnsub?.();liveBatteryUnsub?.();liveServerOffsetUnsub?.();
+      livePresenceUnsub=livePartnerUnsub=liveBatteryUnsub=liveServerOffsetUnsub=null;
+      state.livePartnerLoaded=false;
+      state.livePartnerDevices={};
+      state.partnerBatteryRecords={};
+    }
+
+    async function stopLivePresence(){
+      const oldRef=livePresenceRef;
+      stopLivePresenceSubscriptions();
+      livePresenceRef=null;
+      if(oldRef){
+        try{await onDisconnect(oldRef).cancel()}catch{}
+        try{await remove(oldRef)}catch{}
+      }
+    }
+
+    function startLivePresence(){
+      stopLivePresenceSubscriptions();
       if(!state.roomId||!state.mySlot) return;
-      await update(roomRef(),{
-        [`${state.mySlot}/online`]:online,
-        [`${state.mySlot}/lastSeenAt`]:Date.now(),
-        [`${state.mySlot}/clientId`]:state.clientId
+      const roomId=state.roomId;
+      const slot=state.mySlot;
+      const version=livePresenceVersion;
+      livePresenceRef=ref(db,`rooms/${roomId}/presence/${slot}/${livePageId}`);
+      livePartnerUnsub=onValue(ref(db,`rooms/${roomId}/presence/${partnerSlot()}`),snapshot=>{
+        if(version!==livePresenceVersion||state.roomId!==roomId) return;
+        state.livePartnerLoaded=true;
+        state.livePartnerDevices=snapshot.val()||{};
+        scheduleRoomRender();
+      },error=>console.warn("presence subscribe failed",error));
+      liveBatteryUnsub=onValue(ref(db,`rooms/${roomId}/deviceBattery/${partnerSlot()}`),snapshot=>{
+        if(version!==livePresenceVersion||state.roomId!==roomId) return;
+        state.partnerBatteryRecords=snapshot.val()||{};
+        scheduleRoomRender();
+      },error=>console.warn("battery subscribe failed",error));
+      liveServerOffsetUnsub=onValue(ref(db,".info/serverTimeOffset"),snapshot=>{
+        state.liveServerOffset=Number(snapshot.val())||0;
       });
+      livePresenceUnsub=onValue(ref(db,".info/connected"),async snapshot=>{
+        if(version!==livePresenceVersion||state.roomId!==roomId) return;
+        liveConnected=snapshot.val()===true;
+        if(!liveConnected) return;
+        try{
+          await onDisconnect(livePresenceRef).remove();
+          if(version===livePresenceVersion) await setPresence(document.visibilityState==="visible");
+        }catch(error){console.warn("live presence setup failed",error);}
+      },error=>console.warn("presence connection failed",error));
     }
 
     function startHeartbeat(){
       clearInterval(state.heartbeatTimer);
+      livePulseCount=0;
       state.heartbeatTimer=setInterval(()=>{
-        if(document.visibilityState==="visible") setPresence(true).catch(()=>{});
-      },45_000);
+        scheduleRoomRender(); // 접속 상태의 시간 표시도 갱신
+        if(document.visibilityState!=="visible") return;
+        setPresence(true).catch(()=>{});
+        if(++livePulseCount%3===0&&state.batteryManager) publishBattery().catch(()=>{});
+      },20000);
+    }
+
+    async function writeDeviceBattery(value){
+      if(!state.roomId||!state.mySlot) return;
+      await set(ref(db,`rooms/${state.roomId}/deviceBattery/${state.mySlot}/${state.clientId}`),{
+        ...value,
+        deviceType:isIosDevice()?"iPhone":/android/i.test(navigator.userAgent)?"Android":"PC",
+        updatedAt:serverTimestamp()
+      });
+    }
+
+    function latestPartnerBattery(fallback={}){
+      const rows=Object.values(state.partnerBatteryRecords||{}).filter(item=>item&&
+        Number.isFinite(Number(item.level))&&Number.isFinite(Number(item.updatedAt)));
+      // 하나의 계정이 PC와 휴대폰을 동시에 사용해도 서로의 배터리를 덮어쓰지 않음.
+      rows.sort((a,b)=>(Number(b.updatedAt)||0)-(Number(a.updatedAt)||0));
+      const recentAuto=rows.find(item=>!item.manual&&item.supported!==false&&
+        nowOnFirebase()-(Number(item.updatedAt)||0)<180000);
+      return recentAuto||rows[0]||fallback;
     }
 
     function locationPreferenceKey(){return `wdm_location_${state.roomId}_${state.mySlot}`}
@@ -3757,13 +3837,10 @@
       if(!state.batteryManager||!state.roomId||!state.mySlot) return;
       const battery=state.batteryManager;
       try{
-        await update(roomRef(),{
-          [`${state.mySlot}/battery`]:{
-            supported:true,
-            level:Math.round((battery.level||0)*100),
-            charging:Boolean(battery.charging),
-            updatedAt:Date.now()
-          }
+        await writeDeviceBattery({
+          supported:true,manual:false,
+          level:Math.round(Number(battery.level)*100),
+          charging:Boolean(battery.charging)
         });
       }catch(error){console.warn("battery sync failed",error)}
     }
@@ -4052,22 +4129,6 @@
       scheduleMessagesRender(true);
     }
 
-    function upsertStorySnapshot(snapshot){
-      const value=snapshot.val();
-      if(!value||value.type!=="story") return;
-      const next={id:snapshot.key,...value,type:value.storyType||"text"};
-      const index=state.stories.findIndex(item=>item.id===next.id);
-      if(next.expiresAt&&next.expiresAt<=Date.now()){
-        if(index>=0) state.stories.splice(index,1);
-      }else if(index>=0){
-        state.stories[index]=next;
-      }else{
-        state.stories.push(next);
-      }
-      state.stories.sort((a,b)=>(a.createdAtMs||0)-(b.createdAtMs||0));
-      renderStoryStrip();
-    }
-
     async function loadOlderMessages(){
       if(state.loadingOlderMessages||!state.hasMoreMessages||!state.messages.length) return;
       const box=$("chatMessages");
@@ -4144,7 +4205,8 @@
 
       const decoDefaults={
         coupleName:"",anniversary:"",wallpaper:"default",wallpaperUrl:"",
-        dailyNote:"",dailyNoteBy:"",dailyNoteAt:0
+        dailyNote:"",dailyNoteBy:"",dailyNoteAt:0,
+        anniversaryUpdatedAt:0,anniversaryUpdatedBy:""
       };
       for(const [field,fallback] of Object.entries(decoDefaults)){
         roomUnsubs.push(listenRoomPath(`decoInfo/${field}`,(value,exists)=>{
@@ -4161,32 +4223,19 @@
       });
       const unsubMessageChanged=onChildChanged(messageQuery,upsertMessageSnapshot,error=>console.error(error));
 
-      // 일반 메시지는 createdAtMs가 없으므로 최근 24시간의 스토리만 매칭된다.
-      const storyQuery=query(
-        storiesRef(),
-        orderByChild("createdAtMs"),
-        startAt(Date.now()-86_400_000),
-        limitToLast(STORY_QUERY_LIMIT)
-      );
-      const unsubStoryAdded=onChildAdded(storyQuery,upsertStorySnapshot,error=>console.error(error));
-      const unsubStoryChanged=onChildChanged(storyQuery,upsertStorySnapshot,error=>console.error(error));
-      const unsubStoryRemoved=onChildRemoved(storyQuery,snapshot=>{
-        state.stories=state.stories.filter(item=>item.id!==snapshot.key);
-        renderStoryStrip();
-      },error=>console.error(error));
-
-      state.unsubscribers.push(
-        ...roomUnsubs,
-        unsubMessageAdded,unsubMessageChanged,
-        unsubStoryAdded,unsubStoryChanged,unsubStoryRemoved
-      );
+      // 스토리는 더 이상 실시간 구독하지 않습니다. 기존 데이터는 보존합니다.
+      state.unsubscribers.push(...roomUnsubs,unsubMessageAdded,unsubMessageChanged);
     }
 
     function renderRoom(){
       const me=state.room?.[state.mySlot]||{};
       const partner=state.room?.[partnerSlot()]||{};
       const paired=isPaired();
-      const partnerIsOnline=paired&&partner.online&&Date.now()-(partner.lastSeenAt||0)<110_000;
+      const currentPresence=currentPartnerPresence();
+      const partnerIsOnline=paired&&(currentPresence
+        ? currentPresence.active
+        : partner.online&&Date.now()-(partner.lastSeenAt||0)<85000);
+      const partnerLastSeen=currentPresence?.lastSeenAt||partner.lastSeenAt||0;
 
       renderAvatar($("homeMyAvatar"),me.avatar,"🐰");
       renderAvatar($("decoMyAvatar"),me.avatar,"🐰");
@@ -4195,23 +4244,29 @@
       renderAvatar($("chatHeaderAvatar"),partner.avatar,"🐻");
       renderAvatar($("chatPreviewAvatar"),partner.avatar,"🐻");
 
-      $("partnerStatusText").textContent=!paired?"상대방 대기 중":partnerIsOnline?`${state.partnerName} 온라인`:state.partnerName;
+      $("partnerStatusText").textContent=!paired?"상대방 대기 중":partnerIsOnline?`${state.partnerName} · 접속 중`:`${state.partnerName} · 오프라인`;
       $("presenceDot").classList.toggle("online",partnerIsOnline);
       $("chatPartnerName").textContent=paired?state.partnerName:"상대방";
       $("chatPreviewName").textContent=paired?state.partnerName:"상대방";
       $("chatPartnerStatus").textContent=!paired
         ?"연결 대기"
-        :partnerIsOnline?"지금 접속 중":`마지막 접속 ${timeAgo(partner.lastSeenAt)}`;
+        :partnerIsOnline?"지금 접속 중":partnerLastSeen?`최근 접속 ${timeAgo(partnerLastSeen)}`:"현재 접속하지 않음";
 
       $("coupleName").textContent=state.room.coupleName||"우리 둘";
       $("dailyNote").textContent=state.room.dailyNote||"한마디 없음";
       $("dailyNoteMeta").textContent=state.room.dailyNoteAt?`${state.room.dailyNoteBy||""} · ${timeAgo(state.room.dailyNoteAt)}`:"";
       updateDday(state.room.anniversary);
+      const syncInfo=$("anniversarySyncStatus");
+      if(syncInfo){
+        const setBy=state.room?.decoInfo?.anniversaryUpdatedBy;
+        syncInfo.textContent=state.room.anniversary
+          ? `공유된 기념일 · ${setBy===state.mySlot?"내가 설정":setBy?"상대방이 설정":"두 사람에게 동기화됨"} ♡`
+          : "한 명이 날짜를 설정하면 두 사람에게 똑같이 표시돼요 ♡";
+      }
       renderDeviceStatus();
       renderTyping(partner);
       applyWallpaper(state.room.wallpaper,state.room.wallpaperUrl);
       renderUnreadBadge();
-      renderStoryStrip();
     }
 
 
@@ -4686,16 +4741,30 @@
 
     async function saveAnniversary(){
       const value=$("anniversaryInput").value;
-      if(value && (calendarDayCount(value)===null || calendarDayCount(value)<1)) return showToast("오늘 또는 이전 날짜를 선택해 주세요");
+      const days=value?calendarDayCount(value):null;
+      if(value && (days===null || days<1)){
+        return showToast("오늘 또는 이전 날짜를 선택해 주세요");
+      }
+      const button=$("anniversarySaveButton");
+      button.disabled=true;
       try{
-        await update(roomRef(),{"decoInfo/anniversary":value});
+        // 공용 경로 하나에만 저장: 두 계정의 realtime listener가 동시에 받습니다.
+        const previous=state.room?.anniversary||"";
+        await update(roomRef(),{
+          "decoInfo/anniversary":value||"",
+          "decoInfo/anniversaryUpdatedAt":serverTimestamp(),
+          "decoInfo/anniversaryUpdatedBy":state.mySlot||""
+        });
         if(state.room){
-          state.room.anniversary=value;
-          state.room.decoInfo={...(state.room.decoInfo||{}),anniversary:value};
+          state.room.anniversary=value||"";
+          state.room.decoInfo={...(state.room.decoInfo||{}),anniversary:value||""};
         }
-        updateDday(value);
-        showToast(value?"기념일을 저장했어요":"기념일을 지웠어요");
-      }catch(error){console.error(error);showToast("기념일을 저장하지 못했어요")}
+        updateDday(value||"");
+        showToast(previous===value?"두 사람의 기념일이 동기화되어 있어요":value?"기념일을 둘 다에게 저장했어요 ♡":"기념일을 지웠어요");
+      }catch(error){
+        console.error("shared anniversary save failed",error);
+        showToast("기념일을 저장하지 못했어요. 인터넷 연결을 확인해요");
+      }finally{button.disabled=false;}
     }
 
     async function saveAvatar(value){
@@ -4703,11 +4772,51 @@
       catch(error){console.error(error);showToast("아바타를 저장하지 못했어요")}
     }
 
+    function prepareLovelyAvatar(file){
+      return new Promise((resolve,reject)=>{
+        if(!file.type.startsWith("image/")) return reject(new Error("NOT_IMAGE"));
+        const reader=new FileReader();
+        reader.onerror=()=>reject(new Error("FILE_READ_FAILED"));
+        reader.onload=()=>{
+          const photo=new Image();
+          photo.onerror=()=>reject(new Error("PHOTO_OPEN_FAILED"));
+          photo.onload=()=>{
+            const size=320;
+            const canvas=document.createElement("canvas");
+            canvas.width=canvas.height=size;
+            const ctx=canvas.getContext("2d",{alpha:false});
+            const w=photo.naturalWidth||photo.width;
+            const h=photo.naturalHeight||photo.height;
+            if(!w||!h) return reject(new Error("EMPTY_PHOTO"));
+            // 흐린 원본을 배경으로 채우고, 전체 사진을 원형 안쪽에 여백을 두어 배치.
+            const cover=Math.max(size/w,size/h);
+            ctx.save();
+            ctx.filter="blur(22px) brightness(1.1)";
+            ctx.drawImage(photo,(size-w*cover)/2,(size-h*cover)/2,w*cover,h*cover);
+            ctx.restore();
+            ctx.fillStyle="rgba(255,243,247,.38)";
+            ctx.fillRect(0,0,size,size);
+            const available=size*.74;
+            const fit=Math.min(available/w,available/h);
+            ctx.drawImage(photo,(size-w*fit)/2,(size-h*fit)/2,w*fit,h*fit);
+            let result="";
+            for(const quality of [.85,.75,.65,.55,.45,.35]){
+              result=canvas.toDataURL("image/jpeg",quality);
+              if(Math.ceil((result.length-result.indexOf(",")-1)*.75)<=120_000) break;
+            }
+            resolve(result);
+          };
+          photo.src=reader.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
     async function handleAvatarFile(file){
       if(!file) return;
       try{
         showToast("프로필 사진을 압축하고 있어요");
-        const data=await compressImage(file,{maxWidth:320,quality:.72,maxBytes:120_000});
+        const data=await prepareLovelyAvatar(file);
         await saveAvatar(data);
       }catch(error){console.error(error);showToast("프로필 사진을 적용하지 못했어요")}
     }
@@ -4742,467 +4851,6 @@
         chat.style.background="";
         $("wallpaperPreview").classList.remove("is-visible");
       }
-    }
-
-    /* =========================================================
-       STORIES
-    ========================================================= */
-    function setStoryBusy(active,label="처리하고 있어요"){
-      state.storyBusy=active;
-      $("storyLoading").hidden=!active;
-      $("storyLoadingText").textContent=label;
-      $("publishStoryButton").disabled=active;
-      $("closeStoryCreatorButton").disabled=active;
-    }
-
-    function openStoryCreator(mode="text"){
-      state.storyMode=mode;
-      state.storyImageData="";
-      state.storyGradient="linear-gradient(145deg,#ff8e9d,#ffc0a8)";
-      $("storyTextInput").value="";
-      $("storyCaptionInput").value="";
-      $("storyPreviewImage").src="";
-      $("storyPreviewImage").hidden=true;
-      $("storyPreviewCaption").hidden=true;
-      $("storyPreviewText").textContent="오늘 뭐 했어?";
-      document.querySelectorAll("[data-gradient]").forEach((item,index)=>item.classList.toggle("is-selected",index===0));
-      setStoryBusy(false);
-      setStoryMode(mode);
-      $("storyCreator").classList.add("is-open");
-      document.body.style.overflow="hidden";
-    }
-
-    function closeStoryCreator(){
-      if(state.storyBusy) return;
-      $("storyCreator").classList.remove("is-open");
-      document.body.style.overflow="";
-    }
-
-    function setStoryMode(mode){
-      state.storyMode=mode;
-      const isText=mode==="text";
-      document.querySelectorAll("[data-story-mode]").forEach(button=>button.classList.toggle("is-active",button.dataset.storyMode===mode));
-      $("storyTextInput").hidden=!isText;
-      $("storyCaptionInput").hidden=isText;
-      $("gradientList").hidden=!isText;
-      $("storyColorLabel").hidden=!isText;
-      $("storyPreviewText").hidden=!isText;
-      $("storyPreviewImage").hidden=isText||!state.storyImageData;
-      $("storyPhotoPicker").hidden=isText||Boolean(state.storyImageData);
-      $("storyPreview").style.background=isText?state.storyGradient:"linear-gradient(145deg,#fff0f2,#ffe3df)";
-      updateStoryPreview();
-    }
-
-    function updateStoryPreview(){
-      if(state.storyMode==="text"){
-        $("storyPreview").style.background=state.storyGradient;
-        const value=$("storyTextInput").value.trim();
-        $("storyPreviewText").textContent=value||"오늘 뭐 했어?";
-        $("storyPreviewText").style.whiteSpace="pre-line";
-        $("storyPreviewCaption").hidden=true;
-      }else{
-        const caption=$("storyCaptionInput").value.trim();
-        $("storyPreviewCaption").textContent=caption;
-        $("storyPreviewCaption").hidden=!caption;
-        $("storyPhotoPicker").hidden=Boolean(state.storyImageData);
-        $("storyPreviewImage").hidden=!state.storyImageData;
-      }
-    }
-
-    async function handleStoryImage(file){
-      if(!file) return;
-      if(!file.type?.startsWith("image/")) return showToast("사진 파일을 선택해요");
-      setStoryMode("photo");
-      setStoryBusy(true,"사진을 예쁘게 줄이고 있어요");
-      try{
-        state.storyImageData=await compressImage(file,{maxWidth:720,quality:.72,maxBytes:MAX_IMAGE_BYTES});
-        $("storyPreviewImage").src=state.storyImageData;
-        $("storyPreviewImage").hidden=false;
-        $("storyPhotoPicker").hidden=true;
-        updateStoryPreview();
-      }catch(error){
-        console.error("story image error",error);
-        state.storyImageData="";
-        $("storyPreviewImage").src="";
-        $("storyPreviewImage").hidden=true;
-        $("storyPhotoPicker").hidden=false;
-        showToast(error?.message==="IMAGE_TOO_LARGE"?"사진 용량을 줄이지 못했어요. 다른 사진을 골라요":"사진을 준비하지 못했어요");
-      }finally{
-        setStoryBusy(false);
-      }
-    }
-
-    async function publishStory(){
-      if(state.storyBusy) return;
-      if(!state.roomId||!state.mySlot||!state.myName) return showToast("먼저 커플방에 들어가요");
-
-      const now=Date.now();
-      const storyType=state.storyMode;
-      const base={
-        type:"story",
-        storyType,
-        ownerSlot:state.mySlot,
-        ownerName:state.myName,
-        senderSlot:state.mySlot,
-        senderName:state.myName,
-        sender:state.myName,
-        createdAt:now,
-        createdAtMs:now,
-        clientCreatedAt:now,
-        timestamp:now,
-        expiresAt:now+86_400_000,
-        viewers:{}
-      };
-
-      let payload;
-      if(storyType==="text"){
-        const text=$("storyTextInput").value.trim();
-        if(!text) return showToast("스토리에 남길 말을 입력해요");
-        payload={...base,text,gradient:state.storyGradient,imageData:"",caption:""};
-      }else{
-        if(!state.storyImageData) return showToast("먼저 사진을 골라요");
-        payload={...base,text:"",gradient:"",imageData:state.storyImageData,caption:$("storyCaptionInput").value.trim()};
-      }
-
-      setStoryBusy(true,"스토리를 올리고 있어요");
-      try{
-        const created=await push(storiesRef(),payload);
-        const verify=await get(created);
-        if(!verify.exists()) throw new Error("STORY_VERIFY_FAILED");
-        requestBackgroundPush(created.key);
-        setStoryBusy(false);
-        closeStoryCreator();
-        showToast("스토리를 올렸어요");
-      }catch(error){
-        console.error("story publish error",error);
-        const code=String(error?.code||"").toLowerCase();
-        showToast(code.includes("permission")?"스토리 저장 권한이 없어요":"스토리를 올리지 못했어요. 인터넷을 확인해요");
-      }finally{
-        setStoryBusy(false);
-      }
-    }
-
-    function renderStoryStrip(){
-      const strip=$("storyStrip");
-      if(!state.room){strip.innerHTML="";return}
-      strip.innerHTML="";
-      const mine=state.stories.filter(story=>story.ownerSlot===state.mySlot);
-      const theirs=state.stories.filter(story=>story.ownerSlot===partnerSlot());
-      strip.appendChild(createStoryButton({
-        avatar:state.room[state.mySlot]?.avatar||"🐰",
-        label:mine.length?`내 스토리${mine.length>1?` · ${mine.length}`:""}`:"내 스토리",
-        seen:false,
-        mine:true,
-        hasStory:mine.length>0,
-        onClick:()=>mine.length?openStoryGroup(state.mySlot):openStoryCreator("photo")
-      }));
-
-      if(theirs.length){
-        const seen=theirs.every(story=>story.viewers?.[state.mySlot]);
-        strip.appendChild(createStoryButton({
-          avatar:state.room[partnerSlot()]?.avatar||"🐻",
-          label:state.partnerName||"상대방",
-          seen,mine:false,hasStory:true,onClick:()=>openStoryGroup(partnerSlot())
-        }));
-      }else{
-        const empty=document.createElement("div");
-        empty.className="story-empty";
-        empty.textContent=isPaired()?`${state.partnerName}의 새 스토리가 없어요`:"상대방이 연결되면 스토리가 보여요";
-        strip.appendChild(empty);
-      }
-    }
-
-    function createStoryButton({avatar,label,seen,mine,hasStory=true,onClick}){
-      const button=document.createElement("button");
-      button.className="story-button";
-      button.addEventListener("click",onClick);
-      const ring=document.createElement("div");
-      ring.className=`story-ring ${seen?"is-seen":""} ${mine?"is-mine":""} ${hasStory?"has-story":"no-story"}`;
-      const avatarElement=document.createElement("div");
-      avatarElement.className="avatar";
-      renderAvatar(avatarElement,avatar,mine?"🐰":"🐻");
-      ring.appendChild(avatarElement);
-      if(mine){const add=document.createElement("div");add.className="story-add";add.textContent="+";ring.appendChild(add)}
-      const name=document.createElement("div");
-      name.className="story-name";
-      name.textContent=label;
-      button.append(ring,name);
-      return button;
-    }
-
-    function openStoryGroup(slot){
-      const firstIndex=state.stories.findIndex(story=>story.ownerSlot===slot);
-      if(firstIndex<0) return;
-      state.activeStoryIndex=firstIndex;
-      $("storyViewer").classList.add("is-open");
-      showStory(firstIndex);
-    }
-
-    function stopStoryPlayback(){
-      clearTimeout(state.storyTimer);
-      state.storyTimer=null;
-      if(state.storyAnimation){
-        try{state.storyAnimation.cancel()}catch{}
-      }
-      state.storyAnimation=null;
-      state.storyPaused=false;
-      state.storyRemaining=0;
-      $("storyViewer")?.querySelector(".story-shell")?.classList.remove("is-paused");
-    }
-
-    function startStoryPlayback(fill,duration=STORY_DURATION){
-      clearTimeout(state.storyTimer);
-      state.storyRemaining=duration;
-      state.storyStartedAt=performance.now();
-      state.storyPaused=false;
-      $("storyViewer")?.querySelector(".story-shell")?.classList.remove("is-paused");
-      state.storyAnimation=fill?.animate(
-        [{width:"0%"},{width:"100%"}],
-        {duration,fill:"forwards",easing:"linear"}
-      )||null;
-      state.storyTimer=setTimeout(nextStory,duration);
-    }
-
-    function pauseStoryPlayback(){
-      if(state.storyPaused||!$("storyViewer").classList.contains("is-open")) return;
-      state.storyPaused=true;
-      const elapsed=Math.max(0,performance.now()-state.storyStartedAt);
-      state.storyRemaining=Math.max(80,state.storyRemaining-elapsed);
-      clearTimeout(state.storyTimer);
-      state.storyTimer=null;
-      try{state.storyAnimation?.pause()}catch{}
-      $("storyViewer").querySelector(".story-shell")?.classList.add("is-paused");
-    }
-
-    function resumeStoryPlayback(){
-      if(!state.storyPaused||!$("storyViewer").classList.contains("is-open")) return;
-      state.storyPaused=false;
-      state.storyStartedAt=performance.now();
-      try{state.storyAnimation?.play()}catch{}
-      clearTimeout(state.storyTimer);
-      state.storyTimer=setTimeout(nextStory,state.storyRemaining||STORY_DURATION);
-      $("storyViewer").querySelector(".story-shell")?.classList.remove("is-paused");
-    }
-
-    function showStory(index){
-      stopStoryPlayback();
-      if(index<0||index>=state.stories.length) return closeStoryViewer();
-      state.activeStoryIndex=index;
-      const story=state.stories[index];
-      const stage=$("storyStage");
-      stage.innerHTML="";
-      stage.style.backgroundImage="";
-      stage.classList.remove("story-enter");
-      void stage.offsetWidth;
-      stage.classList.add("story-enter");
-
-      if(story.type==="photo"){
-        const image=new Image();
-        image.src=story.imageData;
-        image.alt="스토리 사진";
-        image.decoding="async";
-        stage.style.backgroundImage=`linear-gradient(rgba(0,0,0,.30),rgba(0,0,0,.30)),url("${story.imageData}")`;
-        stage.style.backgroundSize="cover";
-        stage.style.backgroundPosition="center";
-        stage.appendChild(image);
-      }else{
-        const storyText=document.createElement("div");
-        storyText.className="text-story";
-        storyText.style.background=story.gradient||state.storyGradient;
-        storyText.textContent=story.text||"";
-        stage.appendChild(storyText);
-      }
-
-      renderAvatar($("viewerAvatar"),state.room?.[story.ownerSlot]?.avatar,story.ownerSlot===state.mySlot?"🐰":"🐻");
-      $("viewerName").textContent=story.ownerName||"";
-      $("viewerTime").textContent=timeAgo(story.createdAtMs);
-      $("viewerCaption").textContent=story.type==="photo"?story.caption||"":"";
-      $("viewerCaption").hidden=!$("viewerCaption").textContent;
-      const isMine=story.ownerSlot===state.mySlot;
-      $("deleteStoryButton").hidden=!isMine;
-      $("replyStoryButton").hidden=isMine;
-      const reactionRow=$("storyViewer").querySelector(".reaction-row");
-      reactionRow.hidden=isMine;
-      const viewerCount=$("storyViewerCount");
-      viewerCount.hidden=!isMine;
-      viewerCount.textContent=`조회 ${Object.keys(story.viewers||{}).length}`;
-      document.querySelectorAll("[data-story-reaction]").forEach(button=>{
-        button.hidden=isMine;
-      });
-
-      const ownerStories=state.stories.filter(item=>item.ownerSlot===story.ownerSlot);
-      const ownerPosition=ownerStories.findIndex(item=>item.id===story.id);
-      const progress=$("storyProgress");
-      progress.innerHTML="";
-      let activeFill=null;
-      ownerStories.forEach((_,position)=>{
-        const track=document.createElement("div");
-        track.className="progress-track";
-        const fill=document.createElement("div");
-        fill.className="progress-fill";
-        fill.style.width=position<ownerPosition?"100%":"0%";
-        if(position===ownerPosition) activeFill=fill;
-        track.appendChild(fill);
-        progress.appendChild(track);
-      });
-
-      if(story.ownerSlot!==state.mySlot&&!story.viewers?.[state.mySlot]){
-        update(storyItemRef(story.id),{[`viewers/${state.mySlot}`]:Date.now()}).catch(console.error);
-      }
-      startStoryPlayback(activeFill,STORY_DURATION);
-    }
-
-    function nextStory(){navigateStory(1)}
-    function previousStory(){navigateStory(-1)}
-
-    function navigateStory(direction){
-      const current=state.stories[state.activeStoryIndex];
-      if(!current) return closeStoryViewer();
-      const ownerStories=state.stories.filter(item=>item.ownerSlot===current.ownerSlot);
-      const ownerPosition=ownerStories.findIndex(item=>item.id===current.id);
-      const nextOwnerPosition=ownerPosition+direction;
-      if(nextOwnerPosition>=0&&nextOwnerPosition<ownerStories.length){
-        const target=ownerStories[nextOwnerPosition];
-        return showStory(state.stories.findIndex(item=>item.id===target.id));
-      }
-
-      const owners=[...new Set(state.stories.map(item=>item.ownerSlot))];
-      const ownerIndex=owners.indexOf(current.ownerSlot)+direction;
-      if(ownerIndex<0||ownerIndex>=owners.length) return closeStoryViewer();
-      const nextOwner=owners[ownerIndex];
-      const group=state.stories.filter(item=>item.ownerSlot===nextOwner);
-      const target=direction>0?group[0]:group.at(-1);
-      showStory(state.stories.findIndex(item=>item.id===target.id));
-    }
-
-    function closeStoryViewer(){
-      stopStoryPlayback();
-      $("storyViewer").classList.remove("is-open");
-    }
-
-    async function reactToStory(emoji){
-      const story=state.stories[state.activeStoryIndex];
-      if(!story||story.ownerSlot===state.mySlot) return;
-      try{
-        const now=Date.now();
-        const created=await push(messagesRef(),{
-          sender:state.myName,senderSlot:state.mySlot,senderName:state.myName,type:"text",
-          text:`${emoji} ${story.ownerName}님의 스토리에 반응했어요`,imageData:"",
-          timestamp:now,clientCreatedAt:now,createdAt:now
-        });
-        requestBackgroundPush(created.key);
-        showToast("반응을 보냈어요");
-      }catch(error){console.error(error);showToast("반응을 보내지 못했어요")}
-    }
-
-    function replyToStory(){
-      const story=state.stories[state.activeStoryIndex];
-      if(!story) return;
-      closeStoryViewer();
-      openChat();
-      $("messageInput").value=`${story.ownerName}님의 스토리 답장: `;
-      resizeMessageInput();
-      $("messageInput").focus();
-    }
-
-    async function deleteCurrentStory(){
-      const story=state.stories[state.activeStoryIndex];
-      if(!story||story.ownerSlot!==state.mySlot) return;
-      if(!confirm("이 스토리를 삭제할까요?")) return;
-      try{await remove(storyItemRef(story.id));closeStoryViewer()}
-      catch(error){console.error(error);showToast("스토리를 삭제하지 못했어요")}
-    }
-
-
-    function bindStoryViewerGestures(){
-      const shell=$("storyViewer")?.querySelector(".story-shell");
-      if(!shell||shell.dataset.gesturesBound==="true") return;
-      shell.dataset.gesturesBound="true";
-
-      let active=false;
-      let startX=0;
-      let startY=0;
-      let pointerId=null;
-      let startedOnNav=null;
-
-      const finishGesture=(event,cancelled=false)=>{
-        if(!active) return;
-        active=false;
-        const dx=(event?.clientX??startX)-startX;
-        const dy=(event?.clientY??startY)-startY;
-        try{
-          if(pointerId!==null&&shell.hasPointerCapture(pointerId)) shell.releasePointerCapture(pointerId);
-        }catch{}
-        pointerId=null;
-
-        if(cancelled){
-          resumeStoryPlayback();
-          return;
-        }
-
-        const horizontal=Math.abs(dx)>58&&Math.abs(dx)>Math.abs(dy)*1.15;
-        const dismiss=dy>78&&Math.abs(dy)>Math.abs(dx)*1.12;
-
-        if(horizontal){
-          state.storyGestureHandled=true;
-          setTimeout(()=>{state.storyGestureHandled=false},420);
-          navigateStory(dx<0?1:-1);
-          return;
-        }
-        if(dismiss){
-          state.storyGestureHandled=true;
-          setTimeout(()=>{state.storyGestureHandled=false},420);
-          closeStoryViewer();
-          return;
-        }
-        if(startedOnNav){
-          state.storyGestureHandled=true;
-          setTimeout(()=>{state.storyGestureHandled=false},420);
-          startedOnNav==="next"?nextStory():previousStory();
-          return;
-        }
-        resumeStoryPlayback();
-      };
-
-      shell.addEventListener("pointerdown",event=>{
-        if(!$("storyViewer").classList.contains("is-open")) return;
-        if(event.target.closest(".viewer-head button,.viewer-bottom button")) return;
-        active=true;
-        startX=event.clientX;
-        startY=event.clientY;
-        pointerId=event.pointerId;
-        startedOnNav=event.target.closest("[data-story-nav]")?.dataset.storyNav||null;
-        try{shell.setPointerCapture(pointerId)}catch{}
-        pauseStoryPlayback();
-      });
-
-      shell.addEventListener("pointermove",event=>{
-        if(!active) return;
-        const dy=event.clientY-startY;
-        if(dy>0){
-          const scale=Math.max(.94,1-dy/1800);
-          const opacity=Math.max(.72,1-dy/520);
-          shell.style.transform=`translateY(${Math.min(dy*.32,36)}px) scale(${scale})`;
-          shell.style.opacity=String(opacity);
-        }
-      });
-
-      shell.addEventListener("pointerup",event=>{
-        shell.style.transform="";
-        shell.style.opacity="";
-        finishGesture(event,false);
-      });
-      shell.addEventListener("pointercancel",event=>{
-        shell.style.transform="";
-        shell.style.opacity="";
-        finishGesture(event,true);
-      });
-      shell.addEventListener("contextmenu",event=>event.preventDefault());
-
-      document.addEventListener("visibilitychange",()=>{
-        if(!$("storyViewer").classList.contains("is-open")) return;
-        document.hidden?pauseStoryPlayback():resumeStoryPlayback();
-      });
     }
 
     /* =========================================================
@@ -5433,6 +5081,7 @@
     logout=async function fixedAccountLogout(){
       if(!confirm("이 기기에서 로그아웃할까요?")) return;
       try{await Promise.race([setPresence(false),wait(700)])}catch{}
+      await Promise.race([stopLivePresence(),wait(900)]).catch(()=>{});
       await Promise.race([detachPushFromCurrentRoom(),wait(700)]).catch(()=>{});
       stopLocationSharing(false);
       clearInterval(state.heartbeatTimer);state.heartbeatTimer=null;
@@ -5518,13 +5167,6 @@
       $("backgroundInput").addEventListener("change",event=>{
         const file=event.target.files[0];event.target.value="";handleBackgroundFile(file);
       });
-      $("storyImageInput").addEventListener("change",event=>{
-        const file=event.target.files[0];event.target.value="";handleStoryImage(file);
-      });
-      $("storyPhotoPicker").addEventListener("click",()=>$("storyImageInput").click());
-      $("storyPreviewImage").addEventListener("click",()=>{
-        if(state.storyMode==="photo"&&!state.storyBusy) $("storyImageInput").click();
-      });
 
       $("searchToggleButton").addEventListener("click",toggleSearch);
       $("searchCloseButton").addEventListener("click",closeSearch);
@@ -5537,26 +5179,7 @@
       $("enablePushButton").addEventListener("click",togglePushNotifications);
       $("openPartnerMapButton").addEventListener("click",openPartnerMap);
       $("anniversaryInput").addEventListener("change",saveAnniversary);
-
-      $("closeStoryCreatorButton").addEventListener("click",closeStoryCreator);
-      $("publishStoryButton").addEventListener("click",publishStory);
-      $("storyTextInput").addEventListener("input",updateStoryPreview);
-      $("storyCaptionInput").addEventListener("input",updateStoryPreview);
-      $("closeStoryViewerButton").addEventListener("click",closeStoryViewer);
-      bindStoryViewerGestures();
-      $("replyStoryButton").addEventListener("click",replyToStory);
-      $("deleteStoryButton").addEventListener("click",deleteCurrentStory);
-      document.querySelectorAll("[data-story-nav]").forEach(button=>button.addEventListener("click",()=>{
-        if(state.storyGestureHandled){state.storyGestureHandled=false;return}
-        button.dataset.storyNav==="next"?nextStory():previousStory();
-      }));
-      document.querySelectorAll("[data-story-reaction]").forEach(button=>button.addEventListener("click",()=>reactToStory(button.dataset.storyReaction)));
-      document.querySelectorAll("[data-story-mode]").forEach(button=>button.addEventListener("click",()=>setStoryMode(button.dataset.storyMode)));
-      document.querySelectorAll("[data-gradient]").forEach(button=>button.addEventListener("click",()=>{
-        state.storyGradient=button.dataset.gradient;
-        document.querySelectorAll("[data-gradient]").forEach(item=>item.classList.toggle("is-selected",item===button));
-        updateStoryPreview();
-      }));
+      $("anniversarySaveButton").addEventListener("click",saveAnniversary);
 
       $("closeImageViewerButton").addEventListener("click",()=>$("imageViewer").classList.remove("is-open"));
       $("imageViewer").addEventListener("click",event=>{if(event.target===$("imageViewer")) $("imageViewer").classList.remove("is-open")});
@@ -5568,8 +5191,6 @@
         if(action==="open-chat") openChat();
         if(action==="open-note") openNoteModal();
         if(action==="open-couple") openCoupleModal();
-        if(action==="open-story-text") openStoryCreator("text");
-        if(action==="open-story-photo") openStoryCreator("photo");
         if(action==="open-deco") switchScreen("decoScreen");
         if(action==="pick-avatar") $("avatarInput").click();
         if(action==="pick-background") $("backgroundInput").click();
@@ -5635,12 +5256,15 @@
     function renderManualBatteryPanel(){
       const panel=$("manualBatteryPanel");
       if(!panel) return;
-      const unsupported=typeof navigator.getBattery!=="function";
+      const unsupported=state.manualBatteryFallback||typeof navigator.getBattery!=="function";
       panel.hidden=!unsupported;
       if(!unsupported) return;
+      const key=manualBatteryStorageKey();
+      if(panel.dataset.initialized===key) return; // 드래그 중 UI가 다시 초기화되지 않도록
+      panel.dataset.initialized=key;
       const saved=loadManualBattery()||{level:50,charging:false};
-      $("manualBatteryRange").value=String(saved.level||50);
-      $("manualBatteryValue").textContent=`${saved.level||50}%`;
+      $("manualBatteryRange").value=String(saved.level??50);
+      $("manualBatteryValue").textContent=`${saved.level??50}%`;
       $("manualChargingButton").classList.toggle("is-on",Boolean(saved.charging));
       $("manualChargingButton").setAttribute("aria-pressed",String(Boolean(saved.charging)));
     }
@@ -5651,21 +5275,19 @@
       const charging=$("manualChargingButton").classList.contains("is-on");
       const value={supported:true,manual:true,level,charging,updatedAt:Date.now()};
       saveManualBatteryLocal(value);
-      await update(roomRef(),{[`${state.mySlot}/battery`]:value});
-      if(showFeedback) showToast("배터리 저장");
+      await writeDeviceBattery(value);
+      if(showFeedback) showToast("상대방 화면에 배터리를 공유했어요");
     }
 
     startBatterySync=async function startBatterySyncRefined(){
       if(!state.roomId||!state.mySlot) return;
+      state.manualBatteryFallback=typeof navigator.getBattery!=="function";
       renderManualBatteryPanel();
-
-      if(typeof navigator.getBattery!=="function"){
+      if(state.manualBatteryFallback){
         const saved=loadManualBattery();
-        if(saved) await update(roomRef(),{[`${state.mySlot}/battery`]:{...saved,supported:true,manual:true,updatedAt:Date.now()}}).catch(()=>{});
-        else await update(roomRef(),{[`${state.mySlot}/battery`]:{supported:false,manual:true,updatedAt:Date.now()}}).catch(()=>{});
+        if(saved) await writeDeviceBattery({...saved,supported:true,manual:true}).catch(console.warn);
         return;
       }
-
       try{
         state.batteryHandlers.forEach(({target,type,handler})=>target.removeEventListener(type,handler));
         state.batteryHandlers=[];
@@ -5678,16 +5300,19 @@
         }
         await publishBattery();
       }catch(error){
-        console.warn("battery API unavailable",error);
+        console.warn("battery API unavailable; manual mode",error);
+        state.manualBatteryFallback=true;
         renderManualBatteryPanel();
+        const saved=loadManualBattery();
+        if(saved) await writeDeviceBattery({...saved,supported:true,manual:true}).catch(console.warn);
       }
-    }
+    };
 
     renderDeviceStatus=function renderDeviceStatusRefined(){
       const me=state.room?.[state.mySlot]||{};
       const partner=state.room?.[partnerSlot()]||{};
       const paired=isPaired();
-      const battery=partner.battery||{};
+      const battery=latestPartnerBattery(partner.battery||{});
 
       if(!paired){
         $("partnerBatteryIcon").textContent="🔋";
@@ -5698,12 +5323,14 @@
         const level=Math.max(0,Math.min(100,battery.level));
         $("partnerBatteryIcon").textContent=batteryEmoji(level,battery.charging);
         $("partnerBatteryLevel").textContent=`${level}%${battery.charging?" · 충전":""}`;
-        $("partnerBatteryMeta").textContent=`${battery.manual?"수동 · ":""}${timeAgo(battery.updatedAt)}`;
+        const updated=Number(battery.updatedAt)||0;
+        const stale=updated&&nowOnFirebase()-updated>180000;
+        $("partnerBatteryMeta").textContent=`${battery.deviceType||"기기"} · ${battery.manual?"직접 입력":"자동 갱신"} · ${updated?timeAgo(updated):"시간 정보 없음"}${stale?" · 최근 기록":""}`;
         $("partnerBatteryFill").style.width=`${level}%`;
       }else{
         $("partnerBatteryIcon").textContent="📱";
-        $("partnerBatteryLevel").textContent=battery.manual?"수동 입력 필요":"정보 없음";
-        $("partnerBatteryMeta").textContent="—";
+        $("partnerBatteryLevel").textContent="배터리 정보 없음";
+        $("partnerBatteryMeta").textContent="아이폰은 자동 배터리 공유가 제한돼요. 직접 입력할 수 있어요.";
         $("partnerBatteryFill").style.width="0%";
       }
 
@@ -5951,7 +5578,7 @@
       $("homeDate").textContent=`${now.getFullYear()}.${now.getMonth()+1}.${now.getDate()} ${"일월화수목금토"[now.getDay()]}요일`;
       $("roomCodeChip").textContent=state.myName||`사용자 ${state.mySlot==="user1"?"1":"2"}`;
       startRealtimeListeners();
-      setPresence(true).catch(console.error);
+      startLivePresence();
       startHeartbeat();
       await startBatterySync();
       await syncExistingPushSubscription(true);
