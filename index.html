@@ -13,9 +13,9 @@
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
 
   <title>우리두리</title>
-  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22%EC%9A%B0%EB%A6%AC%EB%91%90%EB%A6%AC%22%2C%22short_name%22%3A%22%EC%9A%B0%EB%A6%AC%EB%91%90%EB%A6%AC%22%2C%22description%22%3A%22%EB%91%98%EB%A7%8C%EC%9D%98%20%EC%BB%A4%ED%94%8C%20%EB%A9%94%EC%8B%A0%EC%A0%80%22%2C%22lang%22%3A%22ko-KR%22%2C%22start_url%22%3A%22.%2F%22%2C%22scope%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%23FFF8F2%22%2C%22theme_color%22%3A%22%23FFF8F2%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAC6klEQVR42u3dTU5jMRCFUWKxZdRrQOyWETNYAGpAjx%2F73jrfuKWI8kk9pxXB7fXl%2BU662jICASSABJAAkgASQAJIAEkACSABJIAkgASQABJAEkACSAAJIAEkASSABJAAkgASQAJIAEkACSABJIAkgASQAFJ6920%2F0L%2Bnz%2F%2FN40Pnq%2B%2FoFv9rfr9yZr93ontfHaCdJ%2Feds9z76gAdR%2BfrB7n31QE6ms7HB7n31QGKofP%2BIPe%2BOkCpek7oeENnA5pMJ4TRoscTvBEQPSEDWYbFUBcgeqKGswyIoRZA9AQOahkKQ%2FmA6Ikd2jIIhuo%2Bxiun5T1kCcUCoid%2FjB5hCgVk%2FVQM0wZSIiDrp2WkNpDiAFk%2FRYO1gQSQBgHy%2FOoarw0kgASQABJAbtDu0TaQABJAAkgCSAAJIAEkASSABJAAulbX3xk5tL8dsg0kgASQABJA7tFu0DaQABJAnmIzBmsDKRGQJdQyUhtIoYAsoYph2kDKBWQJ5Y9xTf7h6fEI0914QJZQ8uiWQdBT8QhjKHNcy1DoKbpEM5Q2omVA9NR9jGcoZyzLsOhpBMRQyChury%2FPp49v8u92Pf5dtAzRD96%2BgQauopz3TBSgCYzS1m0goFZGmU%2FqWEA1ksJvePmAEjEVfSzo%2BkJZxMF0fais%2B0ai%2F34EqNlQne%2FS70SfeU6N29GX6ukB6PwD672ZLW96AXS2oWrHA%2B5Ae8%2BvfQvOuETvOsUBz1CfwugByHEC1GZojNdhj7C%2FOddJ227eHei3T3fYs9Ilmh6AHDNADYZGuhz8CPvZ85661WbfgX7q1Ac%2FE12i6QHI8QOUami8P4C%2B4cD2Aui6BnoAum6CHoAE0KYlZP0AdN0HPQBdN0QPQNcN0QOQANq0hKwfgK4bouf%2Fdf2KO9lAAkgASQAJIAEkgCSABJAAEkASQAJIAAkgASQBJIAEkACSABJAAkgASQAJIAEkgCSABJAAEkASQAJIAAkgASQBJIAEkACSPu8NnY%2FNqX1%2BgfkAAAAASUVORK5CYII%3D%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
-  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAC1UlEQVR42u3dwU4qQRCGUen4ysZnML6tK3e60R2IEGbmr6rzrW9CpvtQ3ajhnr4+P56kcy1LIDgEh+AQHIJDcAgOwSE4BIcEh+AQHIJDcAgOwSE4BIfgkOAQHIJDcAgOwSE4BIfgEBwSHIJDcAgO7dFzh4d4fb/yD95emrzovp1KfmHc1Y3ZYtsOeVE4dtqe+zbskBeF40gW/9mtQ14UjhQWl3brkBeFI5HF4aUSWWR42FI4RskIfuSwY2Ugi+AjZpFhhMTjICNvKZbl4CMYBxmpy7IsAR+lPsrKncPYCF+iRQYfYTjIqLBc7hyKwmFsFFk0k0M5OIyNOktncigEh7FRagFNDsGhaBzOlGrLaHIIDsEhONQJh9towcU0OQSH4BAcgkNwCA7BITgEh+DYuvpf5xvUXotpcggOwSE41AyHO2m1ZTQ5BIfScThZSi2gyaEcHIZHnaUzORSFw/Aosmgmh9JwGB4VlmtNe2AyihwrfGQvkTuHYnEYHsGLsywBGdnHCh+RC7IsBxkVLqR8hC1C5P9lP/NrgPLeG8syeeRSOKb5SH3YyGNlzhGT/R6Ix9GVSIXRWARHJyJ1TsxSOEorKXiLqomjEJTKN+v6v5VNXv3in7la/Mo+cw/qfxr39xxktMcRtRldfoK3vFk141hJ8NHIaLs7x7F702t6uZCSMQrHIZvU8cazvIk171jZ00dTi63vHPvsWd8p1f1CuvXOtT6/fFohYzIOl1M49vYxwNyYY+WxezljGk26czxqR8ecUy6kZMDhcgrHtj6G2Rp5rNy3x/OmztQ7x607PfI8ciElAw5bDsfjfQw2NP5Y+XvvZ08Xd47LAsafO3BccOBGAofguHF4GBtwnPdBxm/1v7xFJofgEByCQ3AIDsEhwSE4BIfgEByCQ3AIDsEhOASHBIfgEByCQ3AIDsEhOASH4JDgEByCQ3AIDsEhOASH4BAc0k/fKO+9s3lgrD8AAAAASUVORK5CYII=">
-  <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAC6klEQVR42u3dTU5jMRCFUWKxZdRrQOyWETNYAGpAjx/73jrfuKWI8kk9pxXB7fXl+U662jICASSABJAAkgASQAJIAEkACSABJIAkgASQABJAEkACSAAJIAEkASSABJAAkgASQAJIAEkACSABJIAkgASQAFJ6920/0L+nz//N40Pnq+/oFv9rfr9yZr93ontfHaCdJ/eds9z76gAdR+frB7n31QE6ms7HB7n31QGKofP+IPe+OkCpek7oeENnA5pMJ4TRoscTvBEQPSEDWYbFUBcgeqKGswyIoRZA9AQOahkKQ/mA6Ikd2jIIhuo+xiun5T1kCcUCoid/jB5hCgVk/VQM0wZSIiDrp2WkNpDiAFk/RYO1gQSQBgHy/Ooarw0kgASQABJAbtDu0TaQABJAAkgCSAAJIAEkASSABJAAulbX3xk5tL8dsg0kgASQABJA7tFu0DaQABJAnmIzBmsDKRGQJdQyUhtIoYAsoYph2kDKBWQJ5Y9xTf7h6fEI0914QJZQ8uiWQdBT8QhjKHNcy1DoKbpEM5Q2omVA9NR9jGcoZyzLsOhpBMRQyChury/Pp49v8u92Pf5dtAzRD96+gQauopz3TBSgCYzS1m0goFZGmU/qWEA1ksJvePmAEjEVfSzo+kJZxMF0fais+0ai/34EqNlQne/S70SfeU6N29GX6ukB6PwD672ZLW96AXS2oWrHA+5Ae8+vfQvOuETvOsUBz1CfwugByHEC1GZojNdhj7C/OddJ227eHei3T3fYs9Ilmh6AHDNADYZGuhz8CPvZ85661WbfgX7q1Ac/E12i6QHI8QOUami8P4C+4cD2Aui6BnoAum6CHoAE0KYlZP0AdN0HPQBdN0QPQNcN0QOQANq0hKwfgK4bouf/df2KO9lAAkgASQAJIAEkgCSABJAAEkASQAJIAAkgASQBJIAEkACSABJAAkgASQAJIAEkgCSABJAAEkASQAJIAAkgASQBJIAEkACSPu8NnY/NqX1+gfkAAAAASUVORK5CYII=">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
@@ -2219,6 +2219,14 @@
     .account-settings-grid{display:grid;gap:16px}
     .account-settings-grid .helper-text{margin-top:6px}
 
+    /* Additive reliability styles: inherit existing diary/pastel design. */
+    .wd-connection-banner{position:fixed;z-index:9996;left:50%;top:max(8px,env(safe-area-inset-top));transform:translateX(-50%);
+      max-width:calc(100% - 36px);min-width:220px;text-align:center;border-radius:999px;padding:9px 14px;
+      background:#44383a;color:#fff;box-shadow:0 5px 18px rgba(35,21,25,.23);font-size:12px;font-weight:650;pointer-events:none}
+    .wd-diagnostic-button{margin-top:12px;background:#fff7f4;border:1px solid #f1d7d4;color:#875458;
+      padding:9px 14px;border-radius:14px;font-size:12px;font-weight:700;cursor:pointer}
+    .wd-diagnostic-result{white-space:pre-line;line-height:1.7;font-size:11px;color:#806b70;margin-top:7px}
+    @media(prefers-reduced-motion:reduce){.message-row.animate-in{animation:none!important}}
   </style>
 </head>
 <body>
@@ -2374,6 +2382,8 @@
               <span></span>
             </button>
           </div>
+          <button id="pushDiagnosticButton" class="wd-diagnostic-button" type="button">알림 상태 진단</button>
+          <div id="pushDiagnosticOutput" class="wd-diagnostic-result" role="status" aria-live="polite"></div>
         </article>
 
         <article class="card content-card">
@@ -2469,7 +2479,7 @@
         <article class="card content-card">
           <div class="card-head"><div class="card-title">기념일</div></div>
           <input id="anniversaryInput" class="date-field" type="date">
-          <div class="helper-text"></div>
+          <div id="anniversaryNext" class="helper-text" aria-live="polite"></div>
         </article>
 
         <article class="card content-card">
@@ -2640,6 +2650,7 @@
     <div class="confirm-box"><p>이 메시지를 삭제할까요?</p><div class="confirm-actions"><button id="cancelDeleteButton" class="cancel-button">취소</button><button id="confirmDeleteButton" class="danger-button">삭제</button></div></div>
   </div>
   <div id="toast" class="toast"></div>
+  <div id="connectionStatus" class="wd-connection-banner" role="status" aria-live="polite" hidden></div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -2652,6 +2663,8 @@
       getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut,
       setPersistence, browserLocalPersistence, updatePassword, updateProfile
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    import {calendarDayCount,nextDayMilestone,parseOutbox,upsertOutbox,removeOutbox,isTransientSendFailure} from "./app-core.js";
 
     /* =========================================================
        CONFIG / STATE
@@ -4209,22 +4222,30 @@
     }
 
     function updateDday(value){
-      if(!value){
+      const days=value?calendarDayCount(value):null;
+      const dateInput=$("anniversaryInput");
+      if(days===null){
         $("ddayValue").textContent="0";
-        $("ddaySub").textContent="기념일 없음";
-        $("coupleSince").textContent="기념일 없음";
-        $("anniversaryInput").value="";
+        $("ddaySub").textContent=value?"저장된 날짜를 확인해 주세요":"기념일 없음";
+        $("coupleSince").textContent=value?"기념일 날짜 오류":"기념일 없음";
+        $("anniversaryNext").textContent="";
+        if(document.activeElement!==dateInput) dateInput.value=value||"";
         return;
       }
-      const [year,month,day]=value.split("-").map(Number);
-      const first=new Date(year,month-1,day);
-      const now=new Date();
-      const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-      const diff=Math.floor((today-first)/86_400_000)+1;
-      $("ddayValue").textContent=String(diff);
+      if(days<1){
+        $("ddayValue").textContent="0";
+        $("ddaySub").textContent="시작일이 미래예요";
+        $("coupleSince").textContent="기념일 날짜를 확인해 주세요";
+        $("anniversaryNext").textContent="";
+        if(document.activeElement!==dateInput) dateInput.value=value;
+        return;
+      }
+      $("ddayValue").textContent=String(days);
       $("ddaySub").textContent=`${value.replaceAll("-",".")}부터 함께`;
-      $("coupleSince").textContent=`${value.replaceAll("-",".")} · ${diff}일째`;
-      $("anniversaryInput").value=value;
+      $("coupleSince").textContent=`${value.replaceAll("-",".")} · ${days}일째`;
+      if(document.activeElement!==dateInput) dateInput.value=value;
+      const upcoming=nextDayMilestone(days);
+      $("anniversaryNext").textContent=upcoming?`다음 ${upcoming}일까지 ${upcoming-days}일 남았어요`:"함께한 날들을 기록하고 있어요";
     }
 
     /* =========================================================
@@ -4665,9 +4686,16 @@
 
     async function saveAnniversary(){
       const value=$("anniversaryInput").value;
-      if(!value) return;
-      try{await update(roomRef(),{"decoInfo/anniversary":value})}
-      catch(error){console.error(error);showToast("기념일을 저장하지 못했어요")}
+      if(value && (calendarDayCount(value)===null || calendarDayCount(value)<1)) return showToast("오늘 또는 이전 날짜를 선택해 주세요");
+      try{
+        await update(roomRef(),{"decoInfo/anniversary":value});
+        if(state.room){
+          state.room.anniversary=value;
+          state.room.decoInfo={...(state.room.decoInfo||{}),anniversary:value};
+        }
+        updateDday(value);
+        showToast(value?"기념일을 저장했어요":"기념일을 지웠어요");
+      }catch(error){console.error(error);showToast("기념일을 저장하지 못했어요")}
     }
 
     async function saveAvatar(value){
@@ -6583,8 +6611,222 @@
     }
 
 
+    /* =========================================================
+       WOORIDURI 2.0 — LOCAL OUTBOX, AUTHENTICATED PUSH, DIAGNOSTICS
+       Appends to existing code; Firebase paths and two-account flow unchanged.
+    ========================================================= */
+    const OUTBOX_PREFIX="wdm_outbox_v2";
+    const DRAFT_PREFIX="wdm_draft_v2";
+    let outboxFlushing=false;
+    let lastPushResult=null;
+    const outboxKey=()=>`${OUTBOX_PREFIX}:${state.roomId}:${state.mySlot}`;
+    const draftKey=()=>`${DRAFT_PREFIX}:${state.roomId}:${state.mySlot}`;
+    function readOutbox(){
+      if(!state.roomId||!state.mySlot) return [];
+      try{return parseOutbox(localStorage.getItem(outboxKey()))}catch{return []}
+    }
+    function writeOutbox(rows){
+      try{localStorage.setItem(outboxKey(),JSON.stringify(rows));return true}
+      catch(error){console.warn("outbox could not be saved",error);showToast("기기 저장 공간을 확인해요");return false}
+    }
+    function showConnectionState(connected){
+      const panel=$("connectionStatus");
+      if(!panel) return;
+      if(!state.roomId || !state.mySlot){panel.hidden=true;return;}
+      const pending=readOutbox().length;
+      if(!connected || !navigator.onLine){
+        panel.textContent=`연결 대기 중${pending?` · 미전송 ${pending}개 보관`:""}`;
+        panel.hidden=false;
+      }else if(pending){
+        panel.textContent=`전송 확인 중 · ${pending}개`;
+        panel.hidden=false;
+      }else panel.hidden=true;
+    }
+    function renderOutbox(){
+      if(!state.roomId||!state.mySlot) return;
+      const rows=readOutbox();
+      for(const row of rows){
+        if(row.payload.senderSlot!==state.mySlot) continue;
+        if(!state.messages.some(message=>message.id===row.id)) state.messages.push({id:row.id,...row.payload});
+        state.pendingMessageIds.add(row.id);
+      }
+      if(rows.length){
+        state.messages.sort((a,b)=>messageTimestamp(a)-messageTimestamp(b)||String(a.id).localeCompare(String(b.id)));
+        renderMessages();
+      }
+      showConnectionState(navigator.onLine);
+    }
+    async function flushOutbox(){
+      if(outboxFlushing||!state.roomId||!state.mySlot||!auth.currentUser||!navigator.onLine) return;
+      const key=outboxKey();
+      outboxFlushing=true;
+      try{
+        for(const row of readOutbox()){
+          if(outboxKey()!==key || !auth.currentUser || row.payload.senderSlot!==state.mySlot) break;
+          try{
+            const msgRef=messageItemRef(row.id);
+            // Reusing the same Firebase Push ID prevents duplicate messages after lost acknowledgements.
+            const existing=await get(msgRef);
+            if(!existing.exists()){
+              await set(msgRef,row.payload);
+              // Push is best effort, message stays stored even when push fails.
+              requestBackgroundPush(row.id);
+            }
+            writeOutbox(removeOutbox(readOutbox(),row.id));
+            state.pendingMessageIds.delete(row.id);
+            renderMessages();
+          }catch(error){
+            console.warn("outbox retry pending",error?.code||error);
+            if(!isTransientSendFailure(error)){
+              showToast("메시지 전송 권한을 확인해 주세요");
+            }
+            break;
+          }
+        }
+      }finally{
+        outboxFlushing=false;
+        showConnectionState(navigator.onLine);
+      }
+    }
+    // Preserve text through reload/crashes, then send with an immutable message ID.
+    sendMessage=async function sendMessageReliable(){
+      const input=$("messageInput");
+      const text=input.value.trim();
+      if(!text){focusMessageInput();return;}
+      if(!isPaired()){showToast("연결 대기");return;}
+      if(text.length>6000){showToast("메시지는 6000자 이하로 보내주세요");return;}
+      if(readOutbox().length>=40){showToast("미전송 메시지가 많아요. 인터넷을 확인해 주세요");return;}
+      const created=push(messagesRef());
+      const now=Date.now();
+      const payload={sender:state.myName,senderSlot:state.mySlot,senderName:state.myName,
+        type:"text",text,imageData:"",timestamp:now,clientCreatedAt:now,createdAt:now};
+      const replyTo=replyPayload();
+      if(replyTo) payload.replyTo=replyTo;
+      if(!writeOutbox(upsertOutbox(readOutbox(),{id:created.key,payload}))) return;
+      input.value="";
+      try{localStorage.removeItem(draftKey())}catch{}
+      resizeMessageInput();
+      setTyping(false);
+      clearReplyTarget();
+      focusMessageInput();
+      if(!state.messages.some(message=>message.id===created.key)) state.messages.push({id:created.key,...payload});
+      state.pendingMessageIds.add(created.key);
+      state.messages.sort((a,b)=>messageTimestamp(a)-messageTimestamp(b)||String(a.id).localeCompare(String(b.id)));
+      renderMessages();
+      requestAnimationFrame(()=>{$("chatMessages").scrollTop=$("chatMessages").scrollHeight});
+      flushOutbox().catch(console.warn);
+    };
+    // In both endpoints the Worker verifies Firebase ID tokens and reads the stored data itself.
+    async function workerCall(path,body){
+      const user=auth.currentUser;
+      if(!user) throw new Error("NOT_LOGGED_IN");
+      const idToken=await user.getIdToken();
+      const response=await fetch(`${PUSH_WORKER_BASE}${path}`,{
+        method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${idToken}`},
+        body:JSON.stringify({roomId:"main",...body}),cache:"no-store"
+      });
+      const result=await response.json().catch(()=>({ok:false,error:"INVALID_WORKER_RESPONSE"}));
+      if(response.status===401){
+        // Refresh expired Firebase token on the next operation rather than leaking it to logs.
+        user.getIdToken(true).catch(()=>{});
+      }
+      return {response,result};
+    }
+    requestBackgroundPush=async function requestBackgroundPushVerified(messageId){
+      if(!messageId||!state.roomId||!state.mySlot) return;
+      for(let attempt=0;attempt<3;attempt++){
+        try{
+          const {response,result}=await workerCall("/notify",{messageId,senderSlot:state.mySlot});
+          lastPushResult={at:Date.now(),httpStatus:response.status,reason:result.reason||result.error||"",
+            sent:result.sent||0,failed:result.failed||0,results:result.results||[]};
+          if(Array.isArray(result.staleKeys)&&result.staleKeys.length){
+            await Promise.all(result.staleKeys.map(key=>
+              remove(ref(db,`rooms/${state.roomId}/${partnerSlot()}/pushSubscriptions/${key}`)).catch(()=>{})
+            ));
+          }
+          if(result.ok) return;
+          if(response.status<500){console.warn("push was not delivered",lastPushResult);return;}
+        }catch(error){console.warn("push request failed",error?.message||error);}
+        if(attempt<2) await wait(450*(attempt+1));
+      }
+    };
+    clearNotificationsOnMyOtherDevices=async function clearReadNotificationsVerified(){
+      if(!state.roomId||!state.mySlot||!pushSupported()) return;
+      if(Date.now()-state.lastRemoteClearAt<1200) return;
+      state.lastRemoteClearAt=Date.now();
+      try{
+        // The Worker deliberately excludes iOS: Safari forbids silent push messages.
+        const {result}=await workerCall("/clear",{clientId:state.clientId});
+        if(Array.isArray(result.staleKeys)){
+          await Promise.all(result.staleKeys.map(key=>
+            remove(ref(db,`rooms/${state.roomId}/${state.mySlot}/pushSubscriptions/${key}`)).catch(()=>{})
+          ));
+        }
+      }catch(error){console.warn("remote notification clear failed",error?.message||error);}
+    };
+    async function diagnosePush(){
+      const output=$("pushDiagnosticOutput");
+      if(!output) return;
+      output.textContent="알림 상태 확인 중…";
+      try{
+        const {response,result}=await workerCall("/diagnose",{});
+        if(!response.ok) throw new Error(result.error||`HTTP ${response.status}`);
+        const platform=isIosDevice()?"아이폰":"현재 기기";
+        const permission="Notification" in window?Notification.permission:"unsupported";
+        const standalone=isStandalonePwa();
+        const devices=(result.myDevices||[]).map(d=>`${d.platform}(${d.pushProvider})`).join(", ")||"없음";
+        const latest=lastPushResult?`최근 전송: ${lastPushResult.sent}대 성공 / ${lastPushResult.failed}대 실패${lastPushResult.reason?` (${lastPushResult.reason})`:""}`:"최근 전송 결과는 이 기기에 없음";
+        output.textContent=`${platform}: ${standalone?"설치형 앱":"브라우저"} · 알림 권한 ${permission}\n`+
+          `내 구독 ${result.subscriberCount}대 (${devices}) / 상대 구독 ${result.partnerSubscriberCount}대\n${latest}`;
+      }catch(error){
+        output.textContent=`진단 실패: ${error.message||error}. Cloudflare Worker부터 배포했는지 확인해 주세요.`;
+      }
+    }
+    function bindReliableEnhancements(){
+      const input=$("messageInput");
+      input?.addEventListener("input",()=>{
+        if(!state.roomId||!state.mySlot) return;
+        try{localStorage.setItem(draftKey(),input.value.slice(0,6000))}catch{}
+      });
+      $("pushDiagnosticButton")?.addEventListener("click",diagnosePush);
+      let connected=false;
+      onValue(ref(db,".info/connected"),snapshot=>{
+        connected=snapshot.val()===true;
+        showConnectionState(connected);
+        if(connected) flushOutbox().catch(console.warn);
+      },error=>console.warn("connectivity state failed",error));
+      window.addEventListener("online",()=>{showConnectionState(connected);flushOutbox().catch(console.warn)});
+      window.addEventListener("offline",()=>showConnectionState(false));
+      window.addEventListener("pageshow",()=>{
+        if(state.roomId){renderOutbox();flushOutbox().catch(console.warn);updateDday(state.room?.anniversary)}
+      });
+      document.addEventListener("visibilitychange",()=>{
+        if(!document.hidden&&state.roomId){renderOutbox();flushOutbox().catch(console.warn);updateDday(state.room?.anniversary)}
+      });
+      // Refresh D+ after local midnight without a server write.
+      function refreshAtMidnight(){
+        const now=new Date();
+        const next=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,1);
+        setTimeout(()=>{
+          if(state.roomId) updateDday(state.room?.anniversary);
+          refreshAtMidnight();
+        },next-now);
+      }
+      refreshAtMidnight();
+    }
+    const enterAppBeforeReliability=enterApp;
+    enterApp=async function enterAppReliable(){
+      await enterAppBeforeReliability();
+      const draft=$("messageInput");
+      if(draft&&!draft.value){try{draft.value=localStorage.getItem(draftKey())||""}catch{}}
+      resizeMessageInput();
+      renderOutbox();
+      flushOutbox().catch(console.warn);
+    };
+
     bindEvents();
     bindRefinedEnhancements();
+    bindReliableEnhancements();
     bootFixedAuth();
   </script>
 <!-- build: ios-chat-read-reaction-emoji-fix-20260726 -->
