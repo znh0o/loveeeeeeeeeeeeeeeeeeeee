@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.11.2">
+  <meta name="wooriduri-version" content="2026.10.11.3">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -1638,7 +1638,14 @@
     .app-update-actions button{padding:11px 14px;border-radius:14px;font-size:12px;flex:1}
     .app-update-card .app-icon-help{font-size:11px;color:var(--text-tertiary)}
     #accountModal .modal-sheet{max-height:calc(100dvh - 32px);overflow-y:auto}
+    #appUpdateModal{align-items:center;padding:24px;z-index:350;backdrop-filter:none;-webkit-backdrop-filter:none}
+    #appUpdateModal .update-popup{width:100%;max-width:340px;background:#fff;border-radius:20px;padding:24px;box-shadow:0 12px 45px #34333620}
+    .update-popup h2{font-size:18px;line-height:1.5;margin:0 0 14px;letter-spacing:-.03em}
+    .update-popup ul{padding-left:18px;margin:0 0 22px;color:#756d72;font-size:13px;line-height:1.8}
+    .update-popup .modal-actions{display:flex;gap:8px}
+    .update-popup button{flex:1;padding:12px;border-radius:12px;font-size:13px}
   </style>
+<script id="appReleaseNotes" type="application/json">{"version":"2026.10.11.3","changes":["홈과 채팅 화면을 더 깔끔하게 정리했어요.","기념일이 두 사람에게 함께 적용되도록 수정했어요.","프로필 사진을 원에 꽉 차게 잘라 표시해요.","설정에서 앱 업데이트를 확인할 수 있어요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -1930,6 +1937,13 @@
   </div>
 
   <!-- MODALS -->
+  <div id="appUpdateModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="updatePopupTitle">
+    <div class="update-popup">
+      <h2 id="updatePopupTitle"></h2>
+      <ul id="updatePopupChanges"></ul>
+      <div class="modal-actions"><button id="dismissAppUpdateButton" type="button" class="cancel-button">나중에</button><button id="popupApplyAppUpdateButton" type="button" class="confirm-button">업데이트</button></div>
+    </div>
+  </div>
   <div id="noteModal" class="modal-backdrop">
     <div class="modal-sheet">
       <div class="sheet-handle"></div>
@@ -5684,6 +5698,7 @@
       renderMessages();
       requestAnimationFrame(()=>{$("chatMessages").scrollTop=$("chatMessages").scrollHeight});
       flushOutbox().catch(console.warn);
+      setTimeout(()=>checkAppUpdate({automatic:true}),1800);
     };
     // In both endpoints the Worker verifies Firebase ID tokens and reads the stored data itself.
     async function workerCall(path,body){
@@ -5783,7 +5798,7 @@
     const APP_VERSION=document.querySelector('meta[name="wooriduri-version"]').content;
     let pendingAppVersion="";
     let checkingAppUpdate=false;
-    async function checkAppUpdate(){
+    async function checkAppUpdate(options={}){
       if(checkingAppUpdate) return;
       checkingAppUpdate=true;
       const button=$("checkAppUpdateButton"),apply=$("applyAppUpdateButton"),status=$("appUpdateStatus");
@@ -5796,8 +5811,9 @@
         const page=new DOMParser().parseFromString(await response.text(),"text/html");
         const version=page.querySelector('meta[name="wooriduri-version"]')?.content;
         if(!version||!/^\d{4}\.\d{2}\.\d{2}\.\d+$/.test(version)) throw new Error("UPDATE_VERSION_MISSING");
-        if(version===APP_VERSION){status.textContent="최신 버전이에요.";return;}
+        if(version.localeCompare(APP_VERSION,undefined,{numeric:true})<=0){status.textContent="최신 버전이에요.";return;}
         pendingAppVersion=version;apply.hidden=false;status.textContent=`새 버전 ${version}을 사용할 수 있어요.`;
+        showAppUpdatePopup(page,version,options.automatic===true);
       }catch(error){status.textContent=navigator.onLine?"업데이트를 확인하지 못했어요. 잠시 후 다시 눌러 주세요.":"인터넷 연결 후 다시 확인해 주세요.";}
       finally{clearTimeout(timer);checkingAppUpdate=false;button.disabled=false;}
     }
@@ -5819,7 +5835,31 @@
       const url=new URL(location.href);url.searchParams.delete("_updateCheck");url.searchParams.set("_appVersion",pendingAppVersion);
       location.replace(url.href);
     }
+    let updatePopupReturnFocus=null;
+    function dismissAppUpdatePopup(){
+      try{localStorage.setItem("wooriduri_update_dismissed",pendingAppVersion)}catch{}
+      $("appUpdateModal").classList.remove("is-open");updatePopupReturnFocus?.focus();
+    }
+    function showAppUpdatePopup(page,version,automatic){
+      if(automatic){
+        try{if(localStorage.getItem("wooriduri_update_dismissed")===version)return}catch{}
+        if(document.querySelector(".modal-backdrop.is-open")||state.upload?.active)return;
+      }
+      let changes=[];
+      try{const notes=JSON.parse(page.querySelector("#appReleaseNotes")?.textContent||"{}");if(notes.version===version&&Array.isArray(notes.changes))changes=notes.changes.filter(item=>typeof item==="string").slice(0,6)}catch{}
+      if(!changes.length)changes=["새 버전에서 개선된 기능을 사용할 수 있어요."];
+      $("updatePopupTitle").textContent=`v${version} 업데이트가 나왔어요`;
+      const list=$("updatePopupChanges");list.replaceChildren();
+      for(const change of changes){const item=document.createElement("li");item.textContent=change.slice(0,180);list.append(item)}
+      updatePopupReturnFocus=document.activeElement;$("appUpdateModal").classList.add("is-open");$("dismissAppUpdateButton").focus();
+    }
     function bindAppUpdates(){
+      $("dismissAppUpdateButton").addEventListener("click",dismissAppUpdatePopup);
+      $("popupApplyAppUpdateButton").addEventListener("click",()=>{$("appUpdateModal").classList.remove("is-open");if(!$("accountModal").classList.contains("is-open"))openAccountSettings();applyAppUpdate()});
+      $("appUpdateModal").addEventListener("keydown",event=>{
+        if(event.key==="Escape"){event.preventDefault();dismissAppUpdatePopup()}
+        if(event.key==="Tab"){const first=$("dismissAppUpdateButton"),last=$("popupApplyAppUpdateButton");if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}}
+      });
       $("appVersionLabel").textContent=`v${APP_VERSION}`;
       $("checkAppUpdateButton").addEventListener("click",checkAppUpdate);
       $("applyAppUpdateButton").addEventListener("click",applyAppUpdate);
