@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.11.6">
+  <meta name="wooriduri-version" content="2026.10.12.1">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
-  <link rel="stylesheet" href="./ui.css?v=2026.10.11.6">
-<script id="appReleaseNotes" type="application/json">{"version":"2026.10.11.6","changes":["메모 대신 함께 저장하는 다음 이벤트를 추가했어요.","스케치북을 뜯은 듯한 종이 가장자리를 넣었어요.","기념일 동기화와 원형 프로필 사진을 개선했어요.","홈·채팅·꾸미기·설정을 밝은 스케치북 디자인으로 정리했어요."]}</script>
+  <link rel="stylesheet" href="./ui.css?v=2026.10.12.1">
+<script id="appReleaseNotes" type="application/json">{"version":"2026.10.12.1","changes":["홈 카드·프로필·메뉴와 말풍선을 작고 아기자기하게 다듬었어요.","연속 메시지를 자연스럽게 묶고, 프로필과 시간 위치를 다듬었어요.","긴 메시지와 사진·답장도 작은 화면에 맞게 정리했어요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -3710,6 +3710,21 @@
       }
     }
 
+    function chatSenderKey(message){
+      if(!message) return "";
+      if(message.senderSlot) return message.senderSlot;
+      if(isMine(message)) return state.mySlot||"my-account";
+      const name=message.senderName||message.sender||"";
+      return name&&name===state.partnerName?partnerSlot():name;
+    }
+    function canGroupChatMessages(before,after){
+      if(!before||!after||before.replyTo||after.replyTo) return false;
+      if((before.type||"text")!=="text"||(after.type||"text")!=="text") return false;
+      const sender=chatSenderKey(before),gap=messageTimestamp(after)-messageTimestamp(before);
+      return !!sender&&sender===chatSenderKey(after)&&gap>=0&&gap<=120000
+        &&formatDate(messageTimestamp(before))===formatDate(messageTimestamp(after));
+    }
+
     renderMessages=function renderMessagesRefined(){
       const box=$("chatMessages");
       const nearBottom=box.scrollHeight-box.scrollTop-box.clientHeight<90;
@@ -3736,7 +3751,6 @@
       }
 
       let previousDate="";
-      let previousSender="";
       const partnerReadIndex=readIndexFor(state.room?.[partnerSlot()]||{});
       const lastMyIndex=[...state.messages].map((message,index)=>isMine(message)?index:-1).filter(index=>index>=0).at(-1);
 
@@ -3749,13 +3763,15 @@
           divider.textContent=dateLabel;
           box.appendChild(divider);
           previousDate=dateLabel;
-          previousSender="";
         }
 
         const mine=isMine(message);
+        const groupedBefore=canGroupChatMessages(state.messages[index-1],message);
+        const groupedAfter=canGroupChatMessages(message,state.messages[index+1]);
         const row=document.createElement("div");
         row.className=`message-row ${mine?"me":"them"}`;
         row.dataset.messageId=message.id;
+        row.classList.add(groupedBefore?(groupedAfter?"is-group-middle":"is-group-end"):(groupedAfter?"is-group-start":"is-standalone"));
         if(!state.messageIdsSeen.has(message.id)) row.classList.add("animate-in");
 
         const hint=document.createElement("div");
@@ -3766,12 +3782,8 @@
         const stack=document.createElement("div");
         stack.className="message-stack";
 
-        if(!mine&&previousSender!==message.senderSlot){
-          const sender=document.createElement("div");
-          sender.className="message-sender";
-          sender.textContent=message.senderName||state.partnerName||"상대방";
-          stack.appendChild(sender);
-        }
+        const body=document.createElement("div");
+        body.className="message-body";
 
         if(message.replyTo){
           const quote=document.createElement("button");
@@ -3783,7 +3795,7 @@
           preview.textContent=message.replyTo.type==="image"?"사진":message.replyTo.text||"";
           quote.append(name,preview);
           quote.addEventListener("click",()=>scrollToMessage(message.replyTo.id));
-          stack.appendChild(quote);
+          body.appendChild(quote);
         }
 
         let content;
@@ -3812,30 +3824,42 @@
           state.searchItems.push({element:content,text:message.text||"",row});
           if(mine) bindLongPress(content,()=>openDeleteDialog(message.id));
         }
-        stack.appendChild(content);
+        if(content.classList.contains("message-bubble")){
+          content.addEventListener("click",()=>{
+            const visible=!row.classList.contains("is-actions-visible");
+            box.querySelectorAll(".is-actions-visible").forEach(item=>item.classList.remove("is-actions-visible"));
+            row.classList.toggle("is-actions-visible",visible);
+          });
+        }
+        body.appendChild(content);
         bindSwipeToReply(content,row,message,mine);
 
         const reactionSummary=createMessageReactionSummary(message);
-        if(reactionSummary) stack.appendChild(reactionSummary);
+        if(reactionSummary) body.appendChild(reactionSummary);
+        stack.appendChild(body);
 
         const meta=document.createElement("div");
         meta.className="message-meta";
+        const status=document.createElement("div");
+        status.className="message-status";
         if(mine&&index===lastMyIndex&&partnerReadIndex>=index){
           const read=document.createElement("span");
           read.className="message-read";
           read.textContent="읽음";
-          meta.appendChild(read);
+          status.appendChild(read);
         }
         if(mine&&state.pendingMessageIds.has(message.id)){
           const pending=document.createElement("span");
           pending.className="message-read";
           pending.textContent="전송 중…";
-          meta.appendChild(pending);
+          status.appendChild(pending);
         }
         const time=document.createElement("span");
         time.className="message-time";
         time.textContent=formatTime(messageMs);
-        meta.appendChild(time);
+        time.hidden=groupedAfter&&formatTime(messageMs)===formatTime(messageTimestamp(state.messages[index+1]));
+        status.appendChild(time);
+        meta.appendChild(status);
 
         const myReaction=message.reactions?.[state.mySlot]||"";
         const reactButton=document.createElement("button");
@@ -3848,7 +3872,7 @@
           event.stopPropagation();
           openMessageReactionPicker(message.id);
         });
-        meta.appendChild(reactButton);
+        body.appendChild(reactButton);
         stack.appendChild(meta);
 
         if(mine){
@@ -3857,14 +3881,14 @@
           const partnerWrap=document.createElement("div");
           partnerWrap.className="partner-message";
           const avatar=document.createElement("div");
-          avatar.className=`message-avatar ${previousSender===message.senderSlot?"is-ghost":""}`;
+          avatar.className=`message-avatar ${groupedAfter?"is-ghost":""}`;
+          avatar.setAttribute("aria-hidden","true");
           renderAvatar(avatar,state.room?.[partnerSlot()]?.avatar,"🐻");
           partnerWrap.append(avatar,stack);
           row.appendChild(partnerWrap);
         }
 
         box.appendChild(row);
-        previousSender=message.senderSlot;
         state.messageIdsSeen.add(message.id);
       });
 
