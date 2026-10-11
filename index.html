@@ -4271,22 +4271,14 @@
         (async()=>{
           try{
             const mineRef=ref(db,`rooms/${FIXED_ROOM_ID}/${slot}`);
-            const [mineSnapshot,roomSnapshot]=await Promise.all([
-              get(mineRef),
-              get(ref(db,`rooms/${FIXED_ROOM_ID}`))
-            ]);
+            const mineSnapshot=await get(mineRef);
+            if(state.authUser?.uid!==user.uid||state.mySlot!==slot||state.roomId!==FIXED_ROOM_ID) return;
             const mine=mineSnapshot.exists()?mineSnapshot.val()||{}:{};
             if(String(mine.name||"").trim()){
               state.myName=String(mine.name).trim().slice(0,12);
               saveFixedNameCache(slot,state.myName);
             }
-            if(roomSnapshot.exists()){
-              state.room=roomSnapshot.val()||{};
-              state.partnerName=state.room?.[partnerSlot()]?.name||state.partnerName||"";
-              if(state.partnerName) saveFixedNameCache(partnerSlot(),state.partnerName);
-              renderRoom();
-              renderMessages();
-            }
+            // Room fields are owned by realtime listeners; an older full snapshot must not overwrite them.
             await update(mineRef,{
               uid:user.uid,
               clientId:state.clientId,
@@ -4320,7 +4312,7 @@
         lastSeenAt:Date.now()
       });
       const roomSnapshot=await get(ref(db,`rooms/${FIXED_ROOM_ID}`));
-      state.room=roomSnapshot.exists()?roomSnapshot.val()||{}:{};
+      state.room=normalizeRoom(roomSnapshot.exists()?roomSnapshot.val()||{}:{});
       state.partnerName=state.room?.[partnerSlot()]?.name||"";
       if(state.partnerName) saveFixedNameCache(partnerSlot(),state.partnerName);
       await enterApp();
