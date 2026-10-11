@@ -11,6 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
+  <meta name="wooriduri-version" content="2026.10.11.1">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -1617,6 +1618,14 @@
 
     .avatar{flex-shrink:0}
     .wd-connection-banner{max-width:calc(100vw - 32px);text-align:center;overflow-wrap:anywhere}
+    .app-update-card{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+    .app-update-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px}
+    .app-update-heading span{font-size:11px;color:var(--text-tertiary)}
+    .app-update-card p{font-size:12px;line-height:1.6;color:var(--text-secondary);margin:10px 0}
+    .app-update-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .app-update-actions button{padding:11px 14px;border-radius:14px;font-size:12px;flex:1}
+    .app-update-card .app-icon-help{font-size:11px;color:var(--text-tertiary)}
+    #accountModal .modal-sheet{max-height:calc(100dvh - 32px);overflow-y:auto}
   </style>
 </head>
 <body>
@@ -1933,7 +1942,7 @@
   <div id="accountModal" class="modal-backdrop">
     <div class="modal-sheet">
       <div class="sheet-handle"></div>
-      <div class="modal-title">내 계정 설정</div>
+      <div class="modal-title">설정</div>
       <div class="account-settings-grid">
         <div>
           <label class="field-label" for="accountNameInput">표시 이름</label>
@@ -1950,6 +1959,15 @@
         <button class="cancel-button" data-close-modal="accountModal">취소</button>
         <button id="saveAccountButton" class="confirm-button">저장</button>
       </div>
+      <section class="app-update-card" aria-labelledby="appUpdateHeading">
+        <div class="app-update-heading"><b id="appUpdateHeading">앱 업데이트</b><span id="appVersionLabel"></span></div>
+        <p id="appUpdateStatus" role="status" aria-live="polite">새 버전이 있는지 확인해 보세요.</p>
+        <div class="app-update-actions">
+          <button id="checkAppUpdateButton" type="button" class="cancel-button">업데이트 확인</button>
+          <button id="applyAppUpdateButton" type="button" class="confirm-button" hidden>업데이트하고 다시 열기</button>
+        </div>
+        <p class="app-icon-help">앱 업데이트와 홈 화면 아이콘 갱신은 별개예요. 아이콘이 그대로면 기기에서 갱신되기를 기다리거나, 브라우저에서 우리두리를 다시 홈 화면에 추가해 주세요.</p>
+      </section>
     </div>
   </div>
 
@@ -5771,6 +5789,52 @@
       flushOutbox().catch(console.warn);
     };
 
+    const APP_VERSION=document.querySelector('meta[name="wooriduri-version"]').content;
+    let pendingAppVersion="";
+    let checkingAppUpdate=false;
+    async function checkAppUpdate(){
+      if(checkingAppUpdate) return;
+      checkingAppUpdate=true;
+      const button=$("checkAppUpdateButton"),apply=$("applyAppUpdateButton"),status=$("appUpdateStatus");
+      button.disabled=true;apply.hidden=true;pendingAppVersion="";status.textContent="새 버전 확인 중…";
+      const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+      try{
+        const url=new URL("./index.html",location.href);url.searchParams.set("_updateCheck",String(Date.now()));
+        const response=await fetch(url,{cache:"no-store",signal:controller.signal});
+        if(!response.ok) throw new Error("UPDATE_CHECK_FAILED");
+        const page=new DOMParser().parseFromString(await response.text(),"text/html");
+        const version=page.querySelector('meta[name="wooriduri-version"]')?.content;
+        if(!version||!/^\d{4}\.\d{2}\.\d{2}\.\d+$/.test(version)) throw new Error("UPDATE_VERSION_MISSING");
+        if(version===APP_VERSION){status.textContent="최신 버전이에요 ♡";return;}
+        pendingAppVersion=version;apply.hidden=false;status.textContent=`새 버전 ${version}을 사용할 수 있어요.`;
+      }catch(error){status.textContent=navigator.onLine?"업데이트를 확인하지 못했어요. 잠시 후 다시 눌러 주세요.":"인터넷 연결 후 다시 확인해 주세요.";}
+      finally{clearTimeout(timer);checkingAppUpdate=false;button.disabled=false;}
+    }
+    async function applyAppUpdate(){
+      if(!pendingAppVersion) return;
+      if(state.upload?.active){$("appUpdateStatus").textContent="사진 전송이 끝나면 업데이트해 주세요.";return;}
+      if($("accountNameInput").value.trim()!==state.myName||$("accountNewPasswordInput").value){$("appUpdateStatus").textContent="변경한 계정 설정을 먼저 저장해 주세요.";return;}
+      if(state.roomId&&state.mySlot){
+        try{const draft=$("messageInput").value;localStorage.setItem(draftKey(),draft);}
+        catch{$("appUpdateStatus").textContent="작성 중인 메시지를 보관하지 못했어요. 메시지를 먼저 보내 주세요.";return;}
+      }
+      $("applyAppUpdateButton").disabled=true;$("appUpdateStatus").textContent="새 버전으로 다시 여는 중…";
+      try{
+        if("serviceWorker" in navigator){
+          const registration=await Promise.race([navigator.serviceWorker.getRegistration(),wait(1500)]);
+          if(registration) await Promise.race([registration.update().catch(()=>{}),wait(2000)]);
+        }
+      }catch{}
+      const url=new URL(location.href);url.searchParams.delete("_updateCheck");url.searchParams.set("_appVersion",pendingAppVersion);
+      location.replace(url.href);
+    }
+    function bindAppUpdates(){
+      $("appVersionLabel").textContent=`v${APP_VERSION}`;
+      $("checkAppUpdateButton").addEventListener("click",checkAppUpdate);
+      $("applyAppUpdateButton").addEventListener("click",applyAppUpdate);
+    }
+
+    bindAppUpdates();
     bindEvents();
     bindRefinedEnhancements();
     bindReliableEnhancements();
