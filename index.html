@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.11.4">
+  <meta name="wooriduri-version" content="2026.10.11.5">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -20,11 +20,12 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
-  <link rel="stylesheet" href="./ui.css?v=2026.10.11.4">
-<script id="appReleaseNotes" type="application/json">{"version":"2026.10.11.4","changes":["홈·채팅·꾸미기·설정을 밝은 스케치북 디자인으로 정리했어요.","프로필 옆 말풍선과 플로팅 메뉴를 다듬었어요.","기념일 동기화와 원형 사진 표시를 개선했어요.","새 버전의 변경 내용을 홈에서 확인할 수 있어요."]}</script>
+  <link rel="stylesheet" href="./ui.css?v=2026.10.11.5">
+<script id="appReleaseNotes" type="application/json">{"version":"2026.10.11.5","changes":["메모 대신 함께 저장하는 다음 이벤트를 추가했어요.","스케치북 위쪽에 작은 펀치 구멍을 넣었어요.","기념일 동기화와 원형 프로필 사진을 개선했어요.","홈·채팅·꾸미기·설정을 밝은 스케치북 디자인으로 정리했어요."]}</script>
 </head>
 <body>
   <div class="app-frame">
+    <div class="sketch-punches" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <div id="splash">
       <div class="splash-content">
         <div class="splash-logo">♡</div>
@@ -104,7 +105,7 @@
       <main class="home-content">
         <div class="quick-grid">
           <button class="quick-action" data-action="open-chat"><span class="quick-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v12H9l-5 4z"/><path d="M8 8h8M8 12h5"/></svg></span><small>채팅</small></button>
-          <button class="quick-action" data-action="open-note"><span class="quick-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4l5 5-10 10-6 1 1-6zM13 6l5 5"/></svg></span><small>메모</small></button>
+          <button class="quick-action" data-action="open-event"><span class="quick-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M12 13v5M9.5 15.5h5"/></svg></span><small>이벤트</small></button>
           <button class="quick-action" data-action="open-deco"><span class="quick-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 12-12-3-3L5 16zM14 7l3 3"/></svg></span><small>꾸미기</small></button>
         </div>
 
@@ -124,13 +125,19 @@
           <div class="home-update-actions"><button id="dismissAppUpdateButton" type="button" class="cancel-button">나중에</button><button id="homeApplyAppUpdateButton" type="button" class="confirm-button">업데이트</button></div>
         </article>
 
-        <article class="card content-card note-card">
+        <article class="card content-card event-card" aria-labelledby="nextEventHeading">
           <div class="card-head">
-            <div class="card-title">우리의 메모</div>
-            <button class="text-button" data-action="open-note">수정</button>
+            <h2 id="nextEventHeading" class="card-title">다음 이벤트</h2>
+            <button id="editNextEventButton" class="text-button" data-action="open-event" hidden>수정</button>
           </div>
-          <div id="dailyNote" class="daily-note">한마디 없음</div>
-          <div id="dailyNoteMeta" class="daily-note-meta"></div>
+          <div id="nextEventEmpty" class="event-empty">
+            <p>다음에 언제 만날까요?</p>
+            <button class="event-create-button" data-action="open-event"><span aria-hidden="true">＋</span> 다음 이벤트 만들기</button>
+          </div>
+          <div id="nextEventDetails" class="event-details" hidden>
+            <div class="event-date-stamp" aria-hidden="true"><span id="nextEventMonth"></span><strong id="nextEventDay"></strong></div>
+            <div class="event-copy"><span id="nextEventCountdown" class="event-countdown"></span><h3 id="nextEventTitle"></h3><p id="nextEventDate"></p><p id="nextEventLocation" class="event-location" hidden></p></div>
+          </div>
         </article>
 
         <article class="card content-card">
@@ -318,12 +325,20 @@
   </div>
 
   <!-- MODALS -->
-  <div id="noteModal" class="modal-backdrop">
-    <div class="modal-sheet">
-      <div class="sheet-handle"></div>
-      <div class="modal-title">우리의 메모</div>
-      <textarea id="noteInput" class="modal-textarea" maxlength="180" placeholder="서로에게 남길 말을 적어보세요"></textarea>
-      <div class="modal-actions"><button class="cancel-button" data-close-modal="noteModal">취소</button><button id="saveNoteButton" class="confirm-button">저장</button></div>
+  <div id="eventModal" class="modal-backdrop">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <h2 id="eventModalTitle" class="modal-title">다음 이벤트 만들기</h2>
+      <form id="nextEventForm" novalidate>
+        <label class="event-field" for="eventTitleInput">어떤 약속인가요?<input id="eventTitleInput" class="modal-input" maxlength="60" required placeholder="예: 같이 영화 보기"></label>
+        <div class="event-form-row">
+          <label class="event-field" for="eventDateInput">날짜<input id="eventDateInput" class="modal-input" type="date" required></label>
+          <label class="event-field" for="eventTimeInput">시간 <span>선택</span><input id="eventTimeInput" class="modal-input" type="time"></label>
+        </div>
+        <label class="event-field" for="eventLocationInput">장소 <span>선택</span><input id="eventLocationInput" class="modal-input" maxlength="80" placeholder="예: 우리 동네 영화관"></label>
+        <p id="eventSaveStatus" class="event-save-status" role="status" aria-live="polite"></p>
+        <div class="modal-actions"><button id="cancelEventButton" type="button" class="cancel-button" data-close-modal="eventModal">취소</button><button id="saveEventButton" type="submit" class="confirm-button">함께 저장하기</button></div>
+      </form>
     </div>
   </div>
 
@@ -640,7 +655,8 @@
         wallpaperUrl:deco.wallpaperUrl ?? raw.wallpaperUrl ?? "",
         dailyNote:deco.dailyNote ?? raw.dailyNote ?? "",
         dailyNoteBy:deco.dailyNoteBy ?? raw.dailyNoteBy ?? "",
-        dailyNoteAt:deco.dailyNoteAt ?? raw.dailyNoteAt ?? 0
+        dailyNoteAt:deco.dailyNoteAt ?? raw.dailyNoteAt ?? 0,
+        nextEvent:deco.nextEvent ?? null
       };
     }
 
@@ -1947,7 +1963,7 @@
 
       const decoDefaults={
         coupleName:"",anniversary:"",wallpaper:"default",wallpaperUrl:"",
-        dailyNote:"",dailyNoteBy:"",dailyNoteAt:0,
+        nextEvent:null,
         anniversaryUpdatedAt:0,anniversaryUpdatedBy:""
       };
       for(const [field,fallback] of Object.entries(decoDefaults)){
@@ -1996,8 +2012,7 @@
         :partnerIsOnline?"지금 접속 중":partnerLastSeen?`최근 접속 ${timeAgo(partnerLastSeen)}`:"현재 접속하지 않음";
 
       $("coupleName").textContent=state.room.coupleName||"우리 둘";
-      $("dailyNote").textContent=state.room.dailyNote||"한마디 없음";
-      $("dailyNoteMeta").textContent=state.room.dailyNoteAt?`${state.room.dailyNoteBy||""} · ${timeAgo(state.room.dailyNoteAt)}`:"";
+      renderNextEvent();
       updateDday(state.room.anniversary);
       const syncInfo=$("anniversarySyncStatus");
       if(syncInfo){
@@ -2457,17 +2472,64 @@
        HOME / DECO ACTIONS
     ========================================================= */
 
-    function openNoteModal(){
-      $("noteInput").value=state.room?.dailyNote||"";
-      openModal("noteModal");
+    let savingNextEvent=false;
+    function localDateValue(date=new Date()){
+      return [date.getFullYear(),String(date.getMonth()+1).padStart(2,"0"),String(date.getDate()).padStart(2,"0")].join("-");
     }
-    async function saveNote(){
-      const note=$("noteInput").value.trim();
+    function renderNextEvent(){
+      const event=state.room?.nextEvent;
+      const dayCount=calendarDayCount(event?.date);
+      const exists=event&&typeof event.title==="string"&&event.title.trim()&&dayCount!==null;
+      $("nextEventEmpty").hidden=!!exists;
+      $("nextEventDetails").hidden=!exists;
+      $("editNextEventButton").hidden=!exists;
+      if(!exists) return;
+      const [year,month,day]=event.date.split("-").map(Number);
+      const date=new Date(year,month-1,day);
+      const remaining=1-dayCount;
+      $("nextEventMonth").textContent=month+"월";
+      $("nextEventDay").textContent=day;
+      $("nextEventCountdown").textContent=remaining>0?"D−"+remaining:remaining===0?"오늘의 약속":"지난 이벤트";
+      $("nextEventTitle").textContent=event.title.slice(0,60);
+      const time=typeof event.time==="string"&&/^([01]\d|2[0-3]):[0-5]\d$/.test(event.time)?event.time:"";
+      $("nextEventDate").textContent=new Intl.DateTimeFormat("ko-KR",{month:"long",day:"numeric",weekday:"short"}).format(date)+(time?" · "+time:"");
+      const location=typeof event.location==="string"?event.location.trim().slice(0,80):"";
+      $("nextEventLocation").textContent=location;
+      $("nextEventLocation").hidden=!location;
+    }
+    function openEventModal(){
+      if(savingNextEvent) return;
+      const event=state.room?.nextEvent||{};
+      $("eventModalTitle").textContent=event.title?"다음 이벤트 수정":"다음 이벤트 만들기";
+      $("eventTitleInput").value=typeof event.title==="string"?event.title:"";
+      $("eventDateInput").value=typeof event.date==="string"?event.date:"";
+      $("eventDateInput").min=localDateValue();
+      $("eventTimeInput").value=typeof event.time==="string"?event.time:"";
+      $("eventLocationInput").value=typeof event.location==="string"?event.location:"";
+      $("eventSaveStatus").textContent="";
+      openModal("eventModal");
+    }
+    async function saveNextEvent(){
+      if(savingNextEvent) return;
+      const title=$("eventTitleInput").value.trim();
+      const date=$("eventDateInput").value;
+      const time=$("eventTimeInput").value;
+      const location=$("eventLocationInput").value.trim();
+      const status=$("eventSaveStatus");
+      const dayCount=calendarDayCount(date);
+      if(!title||title.length>60){status.textContent="약속 이름을 60자 이내로 적어 주세요.";$("eventTitleInput").focus();return;}
+      if(dayCount===null||dayCount>1){status.textContent="오늘 또는 앞으로의 날짜를 골라 주세요.";$("eventDateInput").focus();return;}
+      if(time&&!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)){status.textContent="시간을 다시 확인해 주세요.";return;}
+      if(location.length>80){status.textContent="장소를 80자 이내로 적어 주세요.";return;}
+      if(!state.roomId||!state.mySlot){status.textContent="로그인 후 다시 저장해 주세요.";return;}
+      if(!navigator.onLine){status.textContent="인터넷 연결 후 저장해 주세요.";return;}
+      savingNextEvent=true;$("saveEventButton").disabled=true;$("cancelEventButton").disabled=true;status.textContent="함께 저장하는 중…";
       try{
-        await update(roomRef(),{"decoInfo/dailyNote":note,"decoInfo/dailyNoteBy":state.myName,"decoInfo/dailyNoteAt":Date.now()});
-        closeModal("noteModal");
-        showToast("한마디를 저장했어요");
-      }catch(error){console.error(error);showToast("저장하지 못했어요")}
+        // Store one shared event atomically; do not overwrite memo or other room fields.
+        await update(roomRef(),{"decoInfo/nextEvent":{title,date,time,location,updatedBy:state.mySlot,updatedAt:serverTimestamp()}});
+        closeModal("eventModal");showToast("우리의 다음 약속을 저장했어요");
+      }catch(error){console.error(error);status.textContent="저장하지 못했어요. 잠시 후 다시 눌러 주세요.";}
+      finally{savingNextEvent=false;$("saveEventButton").disabled=false;$("cancelEventButton").disabled=false;}
     }
 
 
@@ -2902,7 +2964,7 @@
       $("searchInput").addEventListener("input",performSearch);
       document.querySelectorAll("[data-search-step]").forEach(button=>button.addEventListener("click",()=>stepSearch(Number(button.dataset.searchStep))));
 
-      $("saveNoteButton").addEventListener("click",saveNote);
+      $("nextEventForm").addEventListener("submit",event=>{event.preventDefault();saveNextEvent()});
       $("saveCoupleButton").addEventListener("click",saveCoupleName);
       $("locationShareButton").addEventListener("click",toggleLocationSharing);
       $("enablePushButton").addEventListener("click",togglePushNotifications);
@@ -2918,7 +2980,7 @@
       document.addEventListener("click",event=>{
         const action=event.target.closest("[data-action]")?.dataset.action;
         if(action==="open-chat") openChat();
-        if(action==="open-note") openNoteModal();
+        if(action==="open-event") openEventModal();
         if(action==="open-couple") openCoupleModal();
         if(action==="open-deco") switchScreen("decoScreen");
         if(action==="pick-avatar") $("avatarInput").click();
@@ -4138,13 +4200,13 @@
         if(state.roomId){
           setPresence(document.visibilityState==="visible").catch(()=>{});
           if(state.batteryManager) publishBattery().catch(()=>{});
-          renderOutbox();flushOutbox().catch(console.warn);updateDday(state.room?.anniversary);
+          renderOutbox();flushOutbox().catch(console.warn);updateDday(state.room?.anniversary);renderNextEvent();
         }
       });
       document.addEventListener("visibilitychange",()=>{
         if(!document.hidden&&state.roomId){
           if(state.batteryManager) publishBattery().catch(()=>{});
-          renderOutbox();flushOutbox().catch(console.warn);updateDday(state.room?.anniversary);
+          renderOutbox();flushOutbox().catch(console.warn);updateDday(state.room?.anniversary);renderNextEvent();
         }
       });
       // Refresh D+ after local midnight without a server write.
@@ -4152,7 +4214,7 @@
         const now=new Date();
         const next=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,1);
         setTimeout(()=>{
-          if(state.roomId) updateDday(state.room?.anniversary);
+          if(state.roomId){updateDday(state.room?.anniversary);renderNextEvent();}
           refreshAtMidnight();
         },next-now);
       }
@@ -4193,6 +4255,7 @@
     }
     async function applyAppUpdate(){
       if(!pendingAppVersion) return;
+      if(savingNextEvent||$("eventModal").classList.contains("is-open")){$("appUpdateStatus").textContent="작성 중인 이벤트를 먼저 저장하거나 닫아 주세요.";return;}
       if(state.upload?.active){$("appUpdateStatus").textContent="사진 전송이 끝나면 업데이트해 주세요.";return;}
       if($("accountNameInput").value.trim()!==state.myName||$("accountNewPasswordInput").value){$("appUpdateStatus").textContent="변경한 계정 설정을 먼저 저장해 주세요.";return;}
       if(state.roomId&&state.mySlot){
