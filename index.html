@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.11.1">
+  <meta name="wooriduri-version" content="2026.10.11.2">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -1570,51 +1570,63 @@
     .wd-connection-banner{position:fixed;z-index:9996;left:50%;top:max(8px,env(safe-area-inset-top));transform:translateX(-50%);
       max-width:calc(100% - 36px);min-width:220px;text-align:center;border-radius:999px;padding:9px 14px;
       background:#44383a;color:#fff;box-shadow:0 5px 18px rgba(35,21,25,.23);font-size:12px;font-weight:650;pointer-events:none}
-    .wd-diagnostic-button{margin-top:12px;background:#fff7f4;border:1px solid #f1d7d4;color:#875458;
-      padding:9px 14px;border-radius:14px;font-size:12px;font-weight:700;cursor:pointer}
-    .wd-diagnostic-result{white-space:pre-line;line-height:1.7;font-size:11px;color:#806b70;margin-top:7px}
     @media(prefers-reduced-motion:reduce){.message-row.animate-in{animation:none!important}}
   
-    /* =========================================================
-       OUR TWO — CLEAN, LOVELY & CALM UI (2026-10-08)
-       ========================================================= */
-    :root{--wd-rose:#e77e98;--wd-rose-soft:#fff0f4;--wd-ink:#53444e;--wd-muted:#987f8c}
-    .home-content,.deco-content{padding-left:17px!important;padding-right:17px!important}
-    .app-header,.simple-header{background:rgba(255,250,250,.97)!important}
-    .header-copy h2{font-family:inherit!important;font-weight:800!important;letter-spacing:-.045em}
-    .quick-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;margin:13px 0 18px!important}
-    .quick-action{min-height:91px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:7px!important;padding:11px 4px!important;border:1px solid #f4e2e9!important;border-radius:23px!important;background:linear-gradient(155deg,#fffefe,#fff2f6)!important;box-shadow:0 5px 18px rgba(207,118,147,.07)!important}
-    .quick-action:nth-child(2){background:linear-gradient(155deg,#fffefa,#fff8e9)!important}
-    .quick-action:nth-child(3){background:linear-gradient(155deg,#fcfffd,#f0f8f5)!important}
-    .quick-action .quick-icon{width:39px!important;height:39px!important;background:#fff!important;border-radius:15px!important;display:grid!important;place-items:center!important;box-shadow:0 2px 8px rgba(211,144,161,.1)!important}
-    .quick-action small{font-size:11px!important;font-weight:750!important;color:#7e6873!important}
-    .dday-card{background:linear-gradient(140deg,#fff1f5 0%,#fff8f4 75%,#fff5e8 100%)!important;border:1px solid #f8dce6!important;border-radius:27px!important;box-shadow:0 7px 22px rgba(213,116,151,.08)!important}
-    .dday-card::before{display:none!important}
-    .dday-card::after{content:"♡"!important;background:transparent!important;opacity:.65;right:20px!important;bottom:9px!important;color:#ec9fb7!important}
-    .dday-value strong{font-family:inherit!important;font-weight:850!important;color:#de7893!important}
-    .card{border-radius:23px!important;border:1px solid #f1e5e9!important;box-shadow:0 4px 18px rgba(110,65,82,.055)!important}
-    .content-card{background:#fffdfd!important}
-    .daily-note{font-family:inherit!important;font-size:13px!important}
-    .chat-preview{background:#fff7f9!important;border:1px solid #f7e4ea!important;border-radius:18px!important;padding:11px!important}
-    .bottom-nav{display:flex!important;justify-content:space-around!important;background:rgba(255,251,253,.97)!important;border:1px solid #f0dfe7!important;box-shadow:0 10px 34px rgba(136,85,109,.12)!important}
-    .bottom-nav .nav-item{flex:1 1 0!important;min-width:0!important;border-radius:17px!important}
-    .nav-item.is-active{color:#db7892!important}
-    .avatar.has-photo{background:linear-gradient(145deg,#ffe8ef,#fdf6f8)!important;overflow:hidden!important}
+    /* Shared visual style. */
+    body{--paper:#faf9f8;--paper-2:#fff;--ink:#343336;--ink-soft:#827d81;--line:#ece8eb;--coral:#c7768c;--coral-deep:#b7647b;--coral-pale:#f8eef1;--wd-muted:#827d81;background:#f0eeee;color:var(--ink)}
+    .app-frame,#splash,.login-wrap{background:#faf9f8!important}
+    .app-header,.simple-header,.chat-header{background:#faf9f8!important;box-shadow:none!important}
+    .header-copy h2,.simple-header,.dday-value strong,.daily-note{font-family:inherit!important}
+    .header-copy h2{font-size:20px!important;font-weight:700!important;letter-spacing:-.03em}
+    .home-content,.deco-content{padding-left:18px!important;padding-right:18px!important}
+    .room-code-row{border-top:1px solid var(--line)!important}
+    .quick-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;margin:8px 0 18px!important}
+    .quick-action{min-height:70px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:5px!important;padding:10px 4px!important;border:1px solid var(--line)!important;border-radius:14px!important;background:#fff!important;box-shadow:none!important}
+    .quick-icon{width:auto!important;height:auto!important;font-size:21px!important;color:var(--coral-deep)!important;background:transparent!important;box-shadow:none!important}
+    .quick-action small{font-size:12px!important;font-weight:600!important;color:var(--ink)!important}
+    .card{border-radius:16px!important;border:1px solid var(--line)!important;box-shadow:none!important;background:#fff!important}
+    .content-card{padding:18px!important}
+    .card-title{font-size:14px!important;font-weight:650!important}
+    .card-title::before,.quick-action::after,.dday-card::before,.dday-card::after,.couple-card::before,.bottom-nav::before,.login-card::before,.splash-logo::before,.login-brand-mark::before{display:none!important}
+    .dday-card,.couple-card{background:#f8eef1!important;border-color:#f0e1e7!important}
+    .dday-value strong{font-weight:700!important;color:#b7647b!important}
+    .dday-symbol{display:none!important}
+    .dday-label,.dday-sub{color:#946e7a!important}
+    .daily-note{font-size:14px!important;line-height:1.7!important}
+    .chat-preview{background:transparent!important;border:0!important;padding:4px 0!important;border-radius:0!important}
+    .bottom-nav{display:flex!important;justify-content:space-around!important;background:#fff!important;border:1px solid var(--line)!important;box-shadow:0 3px 12px #34333608!important;border-radius:19px!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+    .nav-item{flex:1 1 0!important;min-width:0!important;border-radius:12px!important;color:#938d92!important}
+    .nav-item.is-active{color:#b7647b!important;background:#f8eef1!important}
+    .nav-item span{font-size:11px!important;font-weight:600!important}
+    .avatar,.avatar.partner,.message-avatar{background:#f1ecef!important;box-shadow:none!important}
+    .avatar.has-photo{overflow:hidden!important}
     .avatar.has-photo>img,.message-avatar>img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;display:block!important}
     .avatar-stack>.avatar{position:relative}
     .avatar-stack>.avatar.partner{margin-left:-7px!important}
-    .avatar-stack>.avatar.has-photo{box-shadow:0 0 0 2px #fff,0 3px 11px rgba(153,86,108,.12)!important}
     .couple-avatars .avatar{overflow:hidden!important;flex-shrink:0!important}
-    .wd-date-label{display:block;margin:4px 1px 9px;font-size:12px;font-weight:750;color:var(--wd-muted)}
+    .heart-circle{background:transparent!important;border:0!important;box-shadow:none!important;color:#bc8394!important}
+    #chatScreen{background:#f4f2f3!important}
+    #chatMessages{background:transparent!important}
+    .message-bubble{font-size:14px!important;box-shadow:none!important;border:0!important}
+    .message-row.me .message-bubble,.upload-message{background:#edd4de!important;color:#40343a!important}
+    .message-row.them .message-bubble{background:#fff!important;color:#343336!important}
+    .chat-input-bar{background:#fff!important;box-shadow:none!important;border-color:var(--line)!important;border-radius:18px!important}
+    .send-button,.primary-button,.confirm-button,.wd-date-save{background:#b7647b!important;color:#fff!important;box-shadow:none!important}
+    .login-brand-mark,.splash-logo{background:#f4e7ed!important;color:#b7647b!important;box-shadow:none!important;animation:none!important;border-radius:20px!important}
+    .login-card{background:#fff!important;border:1px solid var(--line)!important;box-shadow:none!important;border-radius:18px!important}
+    .fixed-user-button.is-selected{background:#f8eef1!important;border-color:#c98a9e!important;box-shadow:none!important}
+    .wd-date-label{display:block;margin:4px 1px 9px;font-size:12px;font-weight:600;color:var(--wd-muted)}
     .wd-date-edit-row{display:flex;gap:9px;align-items:center}
-    .wd-date-edit-row .date-field{flex:1;min-width:0;margin:0!important;height:46px!important;border-radius:15px!important;background:#fffafa!important}
-    .wd-date-save{height:46px;min-width:84px;padding:0 13px;border-radius:15px;background:#ec94a9;color:white;font-weight:800;font-size:12px;box-shadow:0 4px 12px rgba(221,115,149,.16)}
+    .wd-date-edit-row .date-field{flex:1;min-width:0;margin:0!important;height:46px!important;border-radius:12px!important;background:#fff!important}
+    .wd-date-save{height:46px;min-width:76px;padding:0 13px;border-radius:12px;font-weight:600;font-size:13px}
     .wd-date-save:disabled{opacity:.55}
-    .wd-shared-date-info{margin-top:10px;color:#b38a99;font-size:11px;line-height:1.6}
-    .device-status-card{border-radius:17px!important;padding:8px 0!important}
-    .manual-battery{border-radius:18px!important;background:#fff9f7!important}
-    @media(max-width:350px){.quick-grid{gap:6px!important}.wd-date-save{min-width:73px;padding:0 8px}}
-    @media(prefers-reduced-motion:reduce){.quick-action,.nav-item,.card{transition:none!important;animation:none!important}}
+    .wd-shared-date-info{margin-top:10px;color:#827d81;font-size:11px;line-height:1.6}
+    .device-status-card{padding:8px 0!important}
+    .device-status-icon,.location-pin{background:#f5f3f4!important;border:0!important;box-shadow:none!important}
+    .manual-battery{border-radius:12px!important;background:#f7f5f6!important}
+    .modal-sheet{background:#fff!important;border:0!important;border-radius:22px 22px 0 0!important}
+    .field,.modal-input,.modal-textarea{background:#f9f7f8!important;border-color:var(--line)!important;box-shadow:none!important}
+    @media(max-width:350px){.home-content,.deco-content{padding-left:14px!important;padding-right:14px!important}.quick-grid{gap:6px!important}.wd-date-save{min-width:64px;padding:0 10px}}
 
     .avatar{flex-shrink:0}
     .wd-connection-banner{max-width:calc(100vw - 32px);text-align:center;overflow-wrap:anywhere}
@@ -1649,7 +1661,7 @@
         <div class="login-brand">
           <div class="login-brand-mark">♡</div>
           <h1>우리두리</h1>
-          <p>우리 둘만 들어오는 작은 방</p>
+          <p>둘만의 메신저</p>
         </div>
 
         <div id="fixedLoginPanel" class="login-card">
@@ -1662,17 +1674,17 @@
             <input id="fixedPasswordInput" class="field" type="password" minlength="6" autocomplete="current-password" placeholder="비밀번호를 입력해요">
           </div>
           <button id="fixedLoginButton" class="primary-button" type="button">들어가기</button>
-          <p class="fixed-auth-hint">계정은 두 개만 고정으로 사용해요. 같은 계정으로 휴대폰·PC·태블릿에서 동시에 로그인할 수 있어요.</p>
+          <p class="fixed-auth-hint">다른 기기에서도 같은 계정으로 로그인할 수 있어요.</p>
         </div>
 
         <div id="fixedNameSetupPanel" class="login-card" hidden>
-          <h2 class="fixed-setup-title">처음 한 번만 이름 정하기</h2>
+          <h2 class="fixed-setup-title">이름 설정</h2>
           <p class="fixed-setup-copy">이 이름이 채팅과 프로필에 표시돼요. 나중에 설정에서 바꿀 수 있어요.</p>
           <div class="form-group">
             <label class="field-label" for="fixedNameInput">내 이름</label>
             <input id="fixedNameInput" class="field" maxlength="12" autocomplete="name" placeholder="이름을 입력해요">
           </div>
-          <button id="fixedNameSaveButton" class="primary-button" type="button">이 이름으로 시작</button>
+          <button id="fixedNameSaveButton" class="primary-button" type="button">시작하기</button>
         </div>
       </div>
     </section>
@@ -1776,8 +1788,6 @@
               <span></span>
             </button>
           </div>
-          <button id="pushDiagnosticButton" class="wd-diagnostic-button" type="button">알림 상태 진단</button>
-          <div id="pushDiagnosticOutput" class="wd-diagnostic-result" role="status" aria-live="polite"></div>
         </article>
 
         <article class="card content-card">
@@ -1874,10 +1884,10 @@
           <label class="wd-date-label" for="anniversaryInput">우리의 시작일</label>
           <div class="wd-date-edit-row">
             <input id="anniversaryInput" class="date-field" type="date">
-            <button id="anniversarySaveButton" class="wd-date-save" type="button">저장 ♡</button>
+            <button id="anniversarySaveButton" class="wd-date-save" type="button">저장</button>
           </div>
           <div id="anniversaryNext" class="helper-text" aria-live="polite"></div>
-          <div class="wd-shared-date-info" id="anniversarySyncStatus">두 사람에게 같은 날짜가 표시돼요 ♡</div>
+          <div class="wd-shared-date-info" id="anniversarySyncStatus">두 사람에게 함께 적용돼요.</div>
         </article>
 
         <article class="card content-card">
@@ -1966,7 +1976,7 @@
           <button id="checkAppUpdateButton" type="button" class="cancel-button">업데이트 확인</button>
           <button id="applyAppUpdateButton" type="button" class="confirm-button" hidden>업데이트하고 다시 열기</button>
         </div>
-        <p class="app-icon-help">앱 업데이트와 홈 화면 아이콘 갱신은 별개예요. 아이콘이 그대로면 기기에서 갱신되기를 기다리거나, 브라우저에서 우리두리를 다시 홈 화면에 추가해 주세요.</p>
+        <p class="app-icon-help">홈 화면 아이콘은 기기에 따라 늦게 바뀔 수 있어요.</p>
       </section>
     </div>
   </div>
@@ -3605,8 +3615,8 @@
       if(syncInfo){
         const setBy=state.room?.decoInfo?.anniversaryUpdatedBy;
         syncInfo.textContent=state.room.anniversary
-          ? `공유된 기념일 · ${setBy===state.mySlot?"내가 설정":setBy?"상대방이 설정":"두 사람에게 동기화됨"} ♡`
-          : "한 명이 날짜를 설정하면 두 사람에게 똑같이 표시돼요 ♡";
+          ? `공유된 기념일 · ${setBy===state.mySlot?"내가 설정":setBy?"상대방이 설정":"두 사람에게 동기화됨"}`
+          : "한 명이 날짜를 설정하면 두 사람에게 똑같이 표시돼요";
       }
       renderDeviceStatus();
       renderTyping(partner);
@@ -4105,7 +4115,7 @@
           state.room.decoInfo={...(state.room.decoInfo||{}),anniversary:value||""};
         }
         updateDday(value||"");
-        showToast(previous===value?"두 사람의 기념일이 동기화되어 있어요":value?"기념일을 둘 다에게 저장했어요 ♡":"기념일을 지웠어요");
+        showToast(previous===value?"두 사람의 기념일이 동기화되어 있어요":value?"기념일을 저장했어요.":"기념일을 지웠어요");
       }catch(error){
         console.error("shared anniversary save failed",error);
         showToast("기념일을 저장하지 못했어요. 인터넷 연결을 확인해요");
@@ -5723,31 +5733,12 @@
         }
       }catch(error){console.warn("remote notification clear failed",error?.message||error);}
     };
-    async function diagnosePush(){
-      const output=$("pushDiagnosticOutput");
-      if(!output) return;
-      output.textContent="알림 상태 확인 중…";
-      try{
-        const {response,result}=await workerCall("/diagnose",{});
-        if(!response.ok) throw new Error(result.error||`HTTP ${response.status}`);
-        const platform=isIosDevice()?"아이폰":"현재 기기";
-        const permission="Notification" in window?Notification.permission:"unsupported";
-        const standalone=isStandalonePwa();
-        const devices=(result.myDevices||[]).map(d=>`${d.platform}(${d.pushProvider})`).join(", ")||"없음";
-        const latest=lastPushResult?`최근 전송: ${lastPushResult.sent}대 성공 / ${lastPushResult.failed}대 실패${lastPushResult.reason?` (${lastPushResult.reason})`:""}`:"최근 전송 결과는 이 기기에 없음";
-        output.textContent=`${platform}: ${standalone?"설치형 앱":"브라우저"} · 알림 권한 ${permission}\n`+
-          `내 구독 ${result.subscriberCount}대 (${devices}) / 상대 구독 ${result.partnerSubscriberCount}대\n${latest}`;
-      }catch(error){
-        output.textContent=`진단 실패: ${error.message||error}. Cloudflare Worker부터 배포했는지 확인해 주세요.`;
-      }
-    }
     function bindReliableEnhancements(){
       const input=$("messageInput");
       input?.addEventListener("input",()=>{
         if(!state.roomId||!state.mySlot) return;
         try{localStorage.setItem(draftKey(),input.value.slice(0,6000))}catch{}
       });
-      $("pushDiagnosticButton")?.addEventListener("click",diagnosePush);
       onValue(ref(db,".info/connected"),snapshot=>{
         firebaseConnected=snapshot.val()===true;
         showConnectionState();
@@ -5805,7 +5796,7 @@
         const page=new DOMParser().parseFromString(await response.text(),"text/html");
         const version=page.querySelector('meta[name="wooriduri-version"]')?.content;
         if(!version||!/^\d{4}\.\d{2}\.\d{2}\.\d+$/.test(version)) throw new Error("UPDATE_VERSION_MISSING");
-        if(version===APP_VERSION){status.textContent="최신 버전이에요 ♡";return;}
+        if(version===APP_VERSION){status.textContent="최신 버전이에요.";return;}
         pendingAppVersion=version;apply.hidden=false;status.textContent=`새 버전 ${version}을 사용할 수 있어요.`;
       }catch(error){status.textContent=navigator.onLine?"업데이트를 확인하지 못했어요. 잠시 후 다시 눌러 주세요.":"인터넷 연결 후 다시 확인해 주세요.";}
       finally{clearTimeout(timer);checkingAppUpdate=false;button.disabled=false;}
