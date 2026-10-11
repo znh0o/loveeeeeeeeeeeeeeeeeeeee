@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-  <meta name="theme-color" content="#FFF8F2">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#FFFCF7">
   <meta name="color-scheme" content="light">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,6 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
+  <meta name="wooriduri-version" content="2026.10.11.6">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -19,1608 +20,12 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
-  <style>
-    /* =========================================================
-       DESIGN TOKENS / RESET
-    ========================================================= */
-    *,*::before,*::after{box-sizing:border-box}
-    html,body{width:100%;min-height:100%;margin:0}
-    html{background:#f2eeee}
-    body{
-      --bg:#fff8f7;
-      --surface:#ffffff;
-      --surface-soft:#fff2f1;
-      --surface-muted:#f8f5f5;
-      --primary:#ff6f7d;
-      --primary-strong:#f65365;
-      --primary-soft:#ffd9dc;
-      --peach:#ffb38e;
-      --mint:#9ad7cc;
-      --yellow:#ffd17d;
-      --text:#251f20;
-      --text-secondary:#75696b;
-      --text-tertiary:#b2a6a8;
-      --line:#eee5e6;
-      --danger:#eb5362;
-      --success:#36bd6b;
-      --shadow-sm:0 2px 10px rgba(70,44,48,.05);
-      --shadow-md:0 12px 36px rgba(70,44,48,.10);
-      --radius-sm:14px;
-      --radius-md:20px;
-      --radius-lg:28px;
-      --header-height:92px;
-      font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:#f2eeee;
-      color:var(--text);
-      overscroll-behavior:none;
-      -webkit-tap-highlight-color:transparent;
-      -webkit-font-smoothing:antialiased;
-    }
-    button,input,textarea{font:inherit}
-    button{border:0;cursor:pointer;color:inherit}
-    input,textarea{appearance:none;-webkit-appearance:none}
-    img{max-width:100%}
-    [hidden]{display:none!important}
-
-    .app-frame{
-      position:relative;
-      width:100%;
-      max-width:430px;
-      min-height:100dvh;
-      margin:0 auto;
-      background:var(--bg);
-      overflow:hidden;
-    }
-    .screen{display:none;width:100%;min-height:100dvh;background:var(--bg)}
-    .screen.is-active{display:flex}
-    .safe-top{padding-top:max(18px,env(safe-area-inset-top))}
-    .glass{background:rgba(255,255,255,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
-    .icon-button{
-      width:40px;height:40px;border-radius:14px;background:var(--surface);
-      display:grid;place-items:center;border:1px solid var(--line);box-shadow:var(--shadow-sm);
-      transition:transform .16s ease,background .16s ease;
-    }
-    .icon-button:active{transform:scale(.94);background:var(--surface-soft)}
-    .card{background:var(--surface);border:1px solid rgba(238,229,230,.9);border-radius:var(--radius-md);box-shadow:var(--shadow-sm)}
-    .section-label{font-size:12px;font-weight:700;color:var(--text-tertiary);letter-spacing:.03em;margin:0 4px 10px}
-    .muted{color:var(--text-secondary)}
-
-    /* =========================================================
-       SPLASH / LOGIN
-    ========================================================= */
-    #splash{
-      position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
-      background:
-        radial-gradient(circle at 14% 12%,rgba(154,215,204,.24),transparent 26%),
-        radial-gradient(circle at 88% 16%,rgba(255,209,125,.24),transparent 25%),
-        linear-gradient(160deg,#fffdfc,#ffeceb 60%,#fff6ee);
-      transition:opacity .32s ease,visibility .32s ease;
-    }
-    #splash.is-hidden{opacity:0;visibility:hidden}
-    .splash-content{text-align:center}
-    .splash-logo{width:92px;height:92px;border-radius:30px;background:linear-gradient(135deg,var(--primary),var(--peach));display:grid;place-items:center;margin:0 auto 18px;font-size:45px;box-shadow:0 18px 44px rgba(255,111,125,.25);animation:float 2.6s ease-in-out infinite}
-    .splash-title{font-size:28px;font-weight:800;letter-spacing:-.04em}
-    .splash-sub{font-size:13px;color:var(--text-secondary);margin-top:7px}
-    .dots{display:flex;justify-content:center;gap:6px;margin-top:18px}
-    .dots i{width:7px;height:7px;border-radius:50%;background:var(--primary);animation:pulse 1.2s infinite}
-    .dots i:nth-child(2){animation-delay:.16s}.dots i:nth-child(3){animation-delay:.32s}
-    @keyframes float{50%{transform:translateY(-7px)}}
-    @keyframes pulse{0%,75%,100%{opacity:.22;transform:scale(.88)}40%{opacity:1;transform:scale(1)}}
-
-    #loginScreen{align-items:center;justify-content:center;padding:24px 20px;background:
-      radial-gradient(circle at 12% 10%,rgba(154,215,204,.20),transparent 28%),
-      radial-gradient(circle at 94% 18%,rgba(255,209,125,.20),transparent 24%),
-      linear-gradient(160deg,#fffdfc,#ffeceb 58%,#fff7ef)}
-    .login-wrap{width:100%;max-width:366px}
-    .login-brand{text-align:center;margin-bottom:24px}
-    .login-brand-mark{width:72px;height:72px;margin:0 auto 14px;border-radius:24px;background:linear-gradient(135deg,var(--primary),var(--peach));display:grid;place-items:center;font-size:36px;box-shadow:0 14px 34px rgba(255,111,125,.24)}
-    .login-brand h1{font-size:28px;letter-spacing:-.05em;margin:0;font-weight:800}
-    .login-brand p{margin:7px 0 0;color:var(--text-secondary);font-size:13px}
-    .login-card{padding:24px;border-radius:30px;background:rgba(255,255,255,.94);border:1px solid rgba(255,255,255,.85);box-shadow:var(--shadow-md)}
-    .form-group{margin-bottom:14px}
-    .field-label{display:block;font-size:12px;font-weight:650;color:var(--text-secondary);margin:0 0 8px 3px}
-    .field{width:100%;height:52px;padding:0 16px;border:1.5px solid var(--line);border-radius:16px;background:#fffbfb;color:var(--text);font-size:16px;outline:none;transition:border-color .16s ease,box-shadow .16s ease}
-    .field:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(255,111,125,.10)}
-    .field::placeholder{color:var(--text-tertiary)}
-    .divider{display:flex;align-items:center;gap:10px;margin:17px 0;color:var(--text-tertiary);font-size:11px}
-    .divider::before,.divider::after{content:"";height:1px;flex:1;background:var(--line)}
-    .primary-button,.secondary-button{width:100%;height:52px;border-radius:16px;font-size:15px;font-weight:750;transition:transform .15s ease}
-    .primary-button{background:linear-gradient(135deg,var(--primary),var(--primary-strong));color:white;box-shadow:0 10px 22px rgba(246,83,101,.22)}
-    .secondary-button{margin-top:10px;background:white;border:1.5px solid var(--line);color:var(--text-secondary)}
-    .primary-button:active,.secondary-button:active{transform:scale(.985)}
-    .code-panel{display:none;margin-top:15px;padding:16px;text-align:center;border:1.5px dashed var(--primary);border-radius:17px;background:var(--surface-soft)}
-    .code-panel.is-visible{display:block}
-    .code-panel small{display:block;color:var(--text-secondary);font-size:11px;margin-bottom:6px}
-    .code-value{font-size:27px;font-weight:800;color:var(--primary-strong);letter-spacing:.19em}
-    .code-copy{margin-top:7px;font-size:11px;color:var(--text-secondary);background:transparent}
-    .waiting-line{display:none;align-items:center;justify-content:center;gap:8px;margin-top:13px;color:var(--text-secondary);font-size:12px}
-    .waiting-line.is-visible{display:flex}
-    .mini-spinner{width:16px;height:16px;border-radius:50%;border:2px solid var(--primary-soft);border-top-color:var(--primary);animation:spin .8s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* =========================================================
-       HEADER / HOME
-    ========================================================= */
-    #homeScreen,#decoScreen{flex-direction:column}
-    .app-header{position:sticky;top:0;z-index:50;padding:max(14px,env(safe-area-inset-top)) 16px 12px;border-bottom:1px solid rgba(238,229,230,.72)}
-    .header-main{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .profile-cluster{display:flex;align-items:center;min-width:0}
-    .avatar-stack{display:flex;align-items:center;flex-shrink:0}
-    .avatar{width:42px;height:42px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:linear-gradient(135deg,var(--primary),var(--peach));font-size:20px;border:2px solid white;box-shadow:0 5px 14px rgba(72,46,50,.10)}
-    .avatar.partner{margin-left:-10px;background:linear-gradient(135deg,var(--mint),#dff3ef)}
-    .avatar img{width:100%;height:100%;object-fit:cover}
-    .header-copy{min-width:0;margin-left:10px}
-    .header-copy h2{margin:0;font-size:18px;font-weight:800;letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .header-copy p{margin:4px 0 0;font-size:11px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .header-actions{display:flex;gap:7px;flex-shrink:0}
-    .status-dot{width:8px;height:8px;border-radius:50%;background:var(--text-tertiary)}
-    .status-dot.online{background:var(--success);box-shadow:0 0 0 4px rgba(54,189,107,.10)}
-    .room-code-row{display:flex;align-items:center;gap:7px;margin-top:10px}
-    .room-code-row span{font-size:10px;color:var(--text-tertiary)}
-    .room-code-chip{padding:5px 10px;border-radius:999px;background:var(--surface-soft);color:var(--primary-strong)!important;font-size:11px!important;font-weight:750;letter-spacing:.13em;border:1px solid var(--primary-soft)}
-    .room-code-copy{padding:4px 7px;border-radius:8px;background:transparent;color:var(--text-secondary);font-size:10px}
-
-    .home-content{padding:15px 14px calc(104px + env(safe-area-inset-bottom))}
-
-    .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:13px}
-    .quick-action{min-height:78px;padding:11px 5px;border-radius:18px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-sm);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px}
-    .quick-action .quick-icon{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:var(--surface-soft);font-size:18px}
-    .quick-action small{font-size:10px;font-weight:650;color:var(--text-secondary)}
-
-    .dday-card{position:relative;overflow:hidden;padding:22px;background:linear-gradient(135deg,#ff6f7d,#ff9a89 62%,#ffc976);color:white;border:0;box-shadow:0 16px 32px rgba(255,111,125,.22);margin-bottom:13px}
-    .dday-card::before,.dday-card::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.12)}
-    .dday-card::before{width:150px;height:150px;right:-58px;top:-78px}
-    .dday-card::after{width:90px;height:90px;right:34px;bottom:-58px}
-    .dday-head{display:flex;align-items:flex-start;justify-content:space-between;position:relative;z-index:1}
-    .dday-label{font-size:12px;font-weight:650;opacity:.88}
-    .dday-value{font-size:48px;font-weight:800;line-height:1;letter-spacing:-.05em;margin-top:7px}
-    .dday-value span{font-size:16px;font-weight:600;margin-left:4px}
-    .dday-symbol{font-size:36px}
-    .dday-sub{position:relative;z-index:1;margin-top:13px;font-size:11px;opacity:.82}
-
-    .content-card{padding:17px;margin-bottom:12px}
-    .card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}
-    .card-title{font-size:14px;font-weight:800;letter-spacing:-.02em}
-    .text-button{padding:7px 10px;border-radius:999px;background:var(--surface-soft);color:var(--primary-strong);font-size:10px;font-weight:700}
-    .daily-note{font-size:14px;line-height:1.7;color:var(--text)}
-    .daily-note-meta{margin-top:8px;font-size:10px;color:var(--text-tertiary)}
-    .mood-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-    .mood-button{padding:10px 3px;border-radius:14px;background:#fffcfc;border:1.5px solid var(--line)}
-    .mood-button.is-active{border-color:var(--primary);background:var(--surface-soft)}
-    .mood-button b{display:block;font-size:20px;font-weight:400}
-    .mood-button span{display:block;font-size:9px;color:var(--text-secondary);margin-top:4px}
-    .mood-status{min-height:18px;margin-top:10px;font-size:11px;line-height:1.55;color:var(--text-secondary)}
-    .chat-preview{display:flex;align-items:center;gap:11px;padding:12px;border-radius:16px;background:var(--surface-muted);border:1px solid var(--line)}
-    .chat-preview .avatar{width:46px;height:46px;flex-shrink:0}
-    .chat-preview-copy{min-width:0;flex:1;text-align:left}
-    .chat-preview-copy b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .chat-preview-copy p{margin:4px 0 0;font-size:11px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .unread-badge{display:none;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--primary);color:white;font-size:10px;font-weight:750;align-items:center;justify-content:center}
-    .unread-badge.is-visible{display:flex}
-    .song-row{display:flex;align-items:center;gap:11px}
-    .song-cover{width:48px;height:48px;flex-shrink:0;border-radius:14px;background:linear-gradient(135deg,#34294d,#fb7c8a);display:grid;place-items:center;color:white;font-size:21px}
-    .song-info{min-width:0;flex:1}
-    .song-info b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .song-info p{margin:4px 0 0;font-size:11px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
-    .bottom-nav{position:fixed;z-index:80;left:50%;bottom:0;transform:translateX(-50%);width:100%;max-width:430px;height:calc(72px + env(safe-area-inset-bottom));padding:7px 0 env(safe-area-inset-bottom);display:flex;border-top:1px solid rgba(238,229,230,.9)}
-    .nav-item{flex:1;background:transparent;color:var(--text-tertiary);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px}
-    .nav-item.is-active{color:var(--primary-strong)}
-    .nav-item b{font-size:20px;font-weight:400;line-height:1}
-    .nav-item span{font-size:9px;font-weight:650}
-    .nav-create{width:50px;height:50px;margin-top:-18px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--primary),var(--primary-strong));color:white;border:4px solid rgba(255,255,255,.97);box-shadow:0 9px 22px rgba(246,83,101,.24);font-size:24px}
-
-    /* =========================================================
-       CHAT
-    ========================================================= */
-    #chatScreen{flex-direction:column;height:100dvh;min-height:0;background:#fffafa}
-    .chat-header{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:max(13px,env(safe-area-inset-top)) 13px 11px;border-bottom:1px solid rgba(238,229,230,.8)}
-    .chat-header .avatar{width:38px;height:38px;font-size:18px}
-    .chat-header-copy{min-width:0;flex:1}
-    .chat-header-copy b{display:block;font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .chat-header-copy p{margin:3px 0 0;font-size:10px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .search-panel{display:none;flex:0 0 auto;align-items:center;gap:7px;padding:8px 12px;background:white;border-bottom:1px solid var(--line)}
-    .search-panel.is-open{display:flex}
-    .search-panel input{min-width:0;flex:1;height:38px;padding:0 13px;border:1.5px solid var(--line);border-radius:999px;background:var(--surface-muted);outline:none;font-size:13px}
-    .search-panel input:focus{border-color:var(--primary)}
-    .search-panel span{font-size:10px;color:var(--text-secondary);white-space:nowrap}
-    .search-panel button{background:transparent;color:var(--text-secondary);font-size:15px;padding:5px}
-    #chatMessages{position:relative;flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:15px 10px 18px;display:flex;flex-direction:column;gap:4px;scrollbar-width:none;background-size:cover!important;background-position:center!important}
-    #chatMessages::-webkit-scrollbar{display:none}
-    .empty-state{text-align:center;padding:52px 16px;color:var(--text-tertiary);font-size:12px;line-height:1.65}
-    .date-divider{display:flex;align-items:center;gap:8px;margin:10px 0;color:var(--text-tertiary);font-size:10px}
-    .date-divider::before,.date-divider::after{content:"";height:1px;flex:1;background:rgba(238,229,230,.88)}
-    .message-row{display:flex;width:100%}
-    .message-row.me{justify-content:flex-end}
-    .message-row.them{justify-content:flex-start}
-    .message-row.animate-in{animation:messageIn .28s cubic-bezier(.22,.75,.28,1) both}
-    @keyframes messageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-    .partner-message{display:flex;align-items:flex-end;gap:6px;max-width:84%}
-    .message-avatar{width:29px;height:29px;flex:0 0 29px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,var(--mint),#e2f4f0);display:grid;place-items:center;font-size:14px}
-    .message-avatar img{width:100%;height:100%;object-fit:cover}
-    .message-avatar.is-ghost{visibility:hidden}
-    .message-stack{display:flex;flex-direction:column;max-width:78%}
-    .message-row.me .message-stack{align-items:flex-end}
-    .message-row.them .message-stack{align-items:flex-start;max-width:100%}
-    .message-sender{font-size:10px;color:var(--text-tertiary);margin:0 0 4px 2px}
-    .message-bubble{max-width:100%;padding:10px 13px;border-radius:18px;font-size:13px;line-height:1.52;word-break:break-word;white-space:pre-wrap}
-    .message-row.me .message-bubble{background:linear-gradient(135deg,var(--primary),var(--primary-strong));color:white;border-bottom-right-radius:5px;box-shadow:0 4px 12px rgba(246,83,101,.14)}
-    .message-row.them .message-bubble{background:rgba(255,255,255,.96);color:var(--text);border:1px solid rgba(238,229,230,.95);border-bottom-left-radius:5px;box-shadow:var(--shadow-sm)}
-    .message-meta{display:flex;align-items:center;gap:5px;margin-top:3px;font-size:9px;color:var(--text-tertiary)}
-    .message-read{color:var(--primary)}
-    .image-message{max-width:225px;border-radius:17px;overflow:hidden;border:1px solid rgba(238,229,230,.95);box-shadow:var(--shadow-sm);background:white}
-    .image-message img{display:block;width:100%;max-height:320px;object-fit:cover}
-    .upload-message{display:flex;align-items:center;gap:10px;min-width:162px;padding:13px 15px;border-radius:17px;background:linear-gradient(135deg,var(--primary),var(--primary-strong));color:white;box-shadow:0 4px 14px rgba(246,83,101,.18)}
-    .upload-spinner{width:20px;height:20px;border-radius:50%;border:2.5px solid rgba(255,255,255,.36);border-top-color:white;animation:spin .75s linear infinite;flex-shrink:0}
-    .upload-copy b{display:block;font-size:11px}.upload-copy span{display:block;margin-top:3px;font-size:9px;opacity:.78}
-    mark{background:#ffe58d;color:inherit;border-radius:4px;padding:0 1px}
-    .typing-status{flex:0 0 auto;min-height:22px;padding:2px 14px 4px;font-size:10px;color:var(--text-secondary)}
-    .chat-toolbox{display:none;flex:0 0 auto;padding:10px 12px;gap:7px;flex-wrap:wrap;background:white;border-top:1px solid var(--line)}
-    .chat-toolbox.is-open{display:flex}
-    .emoji-chip{width:38px;height:38px;border-radius:13px;background:var(--surface-soft);font-size:19px}
-    .chat-input-bar{flex:0 0 auto;display:flex;align-items:flex-end;gap:6px;padding:8px 9px calc(8px + env(safe-area-inset-bottom));background:rgba(255,255,255,.95);border-top:1px solid var(--line)}
-    .input-action{width:40px;height:40px;flex:0 0 40px;border-radius:14px;background:transparent;font-size:20px}
-    .message-input{min-width:0;flex:1;resize:none;max-height:104px;overflow-y:auto;padding:10px 14px;border:1.5px solid var(--line);border-radius:20px;background:var(--surface-muted);font-size:16px;line-height:1.4;outline:none}
-    .message-input:focus{border-color:var(--primary)}
-    .send-button{width:40px;height:40px;flex:0 0 40px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-strong));color:white;font-size:18px;box-shadow:0 5px 13px rgba(246,83,101,.22)}
-
-    /* =========================================================
-       DECO
-    ========================================================= */
-    .simple-header{position:sticky;top:0;z-index:40;padding:max(18px,env(safe-area-inset-top)) 18px 15px;border-bottom:1px solid rgba(238,229,230,.72);font-size:19px;font-weight:800;letter-spacing:-.03em}
-    .deco-content{padding:15px 14px calc(104px + env(safe-area-inset-bottom))}
-    .couple-card{padding:23px;text-align:center;background:linear-gradient(135deg,#fff0ef,#fff9ee)}
-    .couple-avatars{display:flex;align-items:center;justify-content:center;margin-bottom:12px}
-    .couple-avatars .avatar{width:72px;height:72px;font-size:29px;border-width:3px}
-    .couple-avatars .avatar.partner{margin-left:0}
-    .heart-circle{width:36px;height:36px;margin:0 -6px;border-radius:50%;background:white;display:grid;place-items:center;position:relative;z-index:2;box-shadow:var(--shadow-sm)}
-    .couple-card h3{margin:0;font-size:16px;font-weight:800}
-    .couple-card p{margin:5px 0 0;font-size:11px;color:var(--text-secondary)}
-    .option-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-    .option-button{aspect-ratio:1;border-radius:15px;background:var(--surface-muted);border:2px solid transparent;display:grid;place-items:center;font-size:23px;overflow:hidden}
-    .option-button.is-selected{border-color:var(--primary);box-shadow:0 0 0 3px rgba(255,111,125,.08)}
-    .option-button.photo-option{border-style:dashed;border-color:var(--line);font-size:18px;align-content:center;gap:3px}
-    .option-button.photo-option small{font-size:8px;color:var(--text-secondary)}
-    .wall-preview{display:none;width:100%;height:100px;margin-top:10px;border-radius:15px;object-fit:cover;border:2px solid var(--primary)}
-    .wall-preview.is-visible{display:block}
-    .date-field{width:100%;height:50px;padding:0 14px;border:1.5px solid var(--line);border-radius:15px;background:var(--surface-muted);outline:none;color:var(--text)}
-    .helper-text{font-size:10px;color:var(--text-tertiary);margin-top:8px;line-height:1.5}
-
-    
-    .modal-backdrop{display:none;position:fixed;inset:0;z-index:300;background:rgba(27,20,21,.38);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);align-items:flex-end;justify-content:center}
-    .modal-backdrop.is-open{display:flex}
-    .modal-sheet{width:100%;max-width:430px;padding:10px 20px calc(24px + env(safe-area-inset-bottom));border-radius:28px 28px 0 0;background:white;animation:sheetUp .26s ease both}
-    @keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
-    .sheet-handle{width:38px;height:4px;border-radius:999px;background:var(--line);margin:0 auto 18px}
-    .modal-title{font-size:18px;font-weight:800;margin-bottom:15px}
-    .modal-input,.modal-textarea{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:15px;background:var(--surface-muted);outline:none;font-size:15px;color:var(--text);margin-bottom:10px}
-    .modal-textarea{min-height:108px;resize:none;line-height:1.55}
-    .modal-input:focus,.modal-textarea:focus{border-color:var(--primary)}
-    .modal-actions{display:flex;gap:8px;margin-top:7px}
-    .modal-actions button{flex:1;height:48px;border-radius:15px;font-size:14px;font-weight:750}
-    .cancel-button{background:var(--surface-muted);color:var(--text-secondary)}
-    .confirm-button{background:linear-gradient(135deg,var(--primary),var(--primary-strong));color:white}
-    .gradient-list{display:flex;justify-content:center;gap:10px;margin:0 0 13px;overflow-x:auto;scrollbar-width:none}
-    .gradient-dot{width:38px;height:38px;flex:0 0 38px;border-radius:50%;border:3px solid white;box-shadow:0 3px 11px rgba(77,45,51,.11);outline:2px solid transparent;transition:transform .14s ease,outline-color .14s ease}
-    .gradient-dot:active{transform:scale(.93)}
-    .gradient-dot.is-selected{outline-color:var(--primary);transform:scale(1.06)}
-    .progress-track{height:3px;flex:1;border-radius:999px;background:rgba(255,255,255,.32);overflow:hidden}
-    .progress-fill{height:100%;background:white;width:0}
-    .viewer-head{position:absolute;z-index:4;left:14px;right:14px;top:calc(max(10px,env(safe-area-inset-top)) + 12px);display:flex;align-items:center;gap:9px}
-    .viewer-head .avatar{width:34px;height:34px;border:1.5px solid white;box-shadow:none}
-    .viewer-copy{flex:1}.viewer-copy b{display:block;font-size:12px}.viewer-copy span{display:block;font-size:9px;opacity:.7;margin-top:2px}
-    .viewer-head button{background:transparent;color:white;font-size:19px;padding:7px}
-    .viewer-bottom{position:absolute;z-index:4;left:14px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom))}
-    .viewer-caption{font-size:13px;line-height:1.5;margin-bottom:10px;text-shadow:0 1px 4px rgba(0,0,0,.35)}
-    .reaction-row{display:flex;align-items:center;gap:7px}
-    .reaction-row button{height:40px;border-radius:14px;background:rgba(255,255,255,.18);color:white;padding:0 12px;font-size:17px;backdrop-filter:blur(10px)}
-    .reaction-row .reply-button{flex:1;text-align:left;font-size:12px;color:rgba(255,255,255,.84)}
-
-    .image-viewer{display:none;position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:20px}
-    .image-viewer.is-open{display:flex}
-    .image-viewer img{max-width:100%;max-height:88dvh;border-radius:14px;object-fit:contain}
-    .image-viewer button{position:absolute;top:max(18px,env(safe-area-inset-top));right:18px;background:rgba(255,255,255,.16);color:white;width:40px;height:40px;border-radius:50%;font-size:18px}
-
-    .confirm-dialog{display:none;position:fixed;inset:0;z-index:800;background:rgba(20,15,16,.40);align-items:center;justify-content:center;padding:20px}
-    .confirm-dialog.is-open{display:flex}
-    .confirm-box{width:100%;max-width:300px;padding:22px;border-radius:22px;background:white;box-shadow:var(--shadow-md);text-align:center}
-    .confirm-box p{margin:0 0 17px;font-size:14px;line-height:1.55}
-    .confirm-actions{display:flex;gap:8px}
-    .confirm-actions button{flex:1;height:44px;border-radius:14px;font-weight:750}
-    .danger-button{background:var(--danger);color:white}
-
-    .toast{position:fixed;z-index:1000;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translate(-50%,16px);max-width:90vw;padding:10px 17px;border-radius:999px;background:rgba(35,29,30,.90);color:white;font-size:12px;white-space:nowrap;opacity:0;pointer-events:none;transition:.22s ease}
-    .toast.is-visible{opacity:1;transform:translate(-50%,0)}
-
-    @media (min-width:431px){
-      .app-frame,#chatScreen{box-shadow:0 0 44px rgba(51,36,39,.12)}
-    }
-    @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
-    /* =========================================================
-       CUTE DIARY REDESIGN OVERRIDES
-       Firebase / app logic is intentionally untouched.
-    ========================================================= */
-    body{
-      --bg:#fffaf5;
-      --surface:#fffefd;
-      --surface-soft:#fff0f4;
-      --surface-muted:#faf4f1;
-      --primary:#f58da0;
-      --primary-strong:#ed6f89;
-      --primary-soft:#ffdce4;
-      --peach:#ffc9a8;
-      --mint:#bfe3d7;
-      --yellow:#ffe7aa;
-      --lavender:#ddd2f4;
-      --sky:#d8eaf7;
-      --text:#43363a;
-      --text-secondary:#806f74;
-      --text-tertiary:#b9a7ab;
-      --line:#f0e2e1;
-      --shadow-sm:0 5px 16px rgba(111,76,83,.055);
-      --shadow-md:0 18px 45px rgba(111,76,83,.11);
-      --radius-sm:16px;
-      --radius-md:24px;
-      --radius-lg:32px;
-      background:#eee8e5;
-    }
-    html{background:#eee8e5}
-    .app-frame{
-      background-color:var(--bg);
-      background-image:
-        radial-gradient(circle at 18px 18px,rgba(245,141,160,.065) 1.2px,transparent 1.3px),
-        radial-gradient(circle at 4px 4px,rgba(191,227,215,.07) 1px,transparent 1.1px);
-      background-size:28px 28px,22px 22px;
-    }
-    .screen{background:transparent}
-    .glass{
-      background:rgba(255,253,249,.92);
-      border-color:rgba(240,226,225,.88);
-      backdrop-filter:blur(18px) saturate(1.08);
-      -webkit-backdrop-filter:blur(18px) saturate(1.08);
-    }
-    .card{
-      border:1px solid rgba(240,226,225,.9);
-      border-radius:24px;
-      box-shadow:0 7px 20px rgba(111,76,83,.055),inset 0 1px 0 rgba(255,255,255,.9);
-    }
-    .section-label{
-      display:inline-flex;align-items:center;gap:5px;
-      margin:0 4px 11px;padding:5px 10px;border-radius:999px;
-      background:#fff1f4;color:#bd7786;font-size:10px;letter-spacing:.02em;
-    }
-    .section-label::before{content:"✿";font-size:10px}
-    .icon-button{
-      width:39px;height:39px;border-radius:15px;background:#fffaf8;
-      border:1px solid #f0e2e1;box-shadow:0 5px 13px rgba(111,76,83,.06)
-    }
-
-    /* splash / login */
-    #splash{
-      background:
-        radial-gradient(circle at 18% 16%,rgba(191,227,215,.34),transparent 23%),
-        radial-gradient(circle at 84% 18%,rgba(255,231,170,.40),transparent 22%),
-        radial-gradient(circle at 72% 83%,rgba(221,210,244,.34),transparent 25%),
-        linear-gradient(155deg,#fffdf9,#fff1f4 55%,#fff8ed);
-    }
-    .splash-logo,.login-brand-mark{
-      position:relative;background:#fff7f8;border:2px solid #ffdce4;color:var(--primary-strong);
-      box-shadow:0 14px 32px rgba(237,111,137,.15),inset 0 0 0 6px rgba(255,255,255,.72);
-    }
-    .splash-logo::before,.login-brand-mark::before{
-      content:"";position:absolute;inset:-8px;border:1.5px dashed rgba(245,141,160,.35);border-radius:inherit;pointer-events:none;
-    }
-    .splash-logo::after,.login-brand-mark::after{
-      content:"♡";position:absolute;right:-12px;top:-12px;width:27px;height:27px;border-radius:50%;display:grid;place-items:center;
-      background:#ffe7aa;color:#d68a64;font-size:14px;border:2px solid #fff;
-    }
-    #loginScreen{
-      background:
-        radial-gradient(circle at 10% 12%,rgba(191,227,215,.32),transparent 24%),
-        radial-gradient(circle at 92% 20%,rgba(255,231,170,.38),transparent 22%),
-        radial-gradient(circle at 80% 88%,rgba(221,210,244,.28),transparent 25%),
-        linear-gradient(155deg,#fffdf9,#fff1f4 56%,#fff8ed);
-    }
-    .login-brand{margin-bottom:28px}
-    .login-brand h1{font-size:27px;color:#4c3b40}
-    .login-brand p{font-size:12px;color:#957d84}
-    .login-card{
-      position:relative;padding:25px 22px;border-radius:31px;background:rgba(255,254,252,.95);
-      border:1.5px solid #f3e3e3;box-shadow:0 20px 48px rgba(111,76,83,.12);
-    }
-    .login-card::before{
-      content:"LOVE NOTE";position:absolute;right:20px;top:-10px;padding:5px 10px;border-radius:8px;
-      background:#ffe7aa;color:#a87755;font-size:8px;font-weight:800;letter-spacing:.12em;transform:rotate(3deg);
-      box-shadow:0 4px 10px rgba(111,76,83,.08)
-    }
-    .field-label{color:#9a7b83;font-size:11px}
-    .field{
-      height:52px;border:1.5px solid #f0dfdf;border-radius:17px;background:#fffaf8;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.9)
-    }
-    .field:focus{border-color:#f58da0;box-shadow:0 0 0 4px rgba(245,141,160,.11)}
-    .primary-button{
-      border-radius:18px;background:#f58da0;color:#fff;box-shadow:0 9px 19px rgba(237,111,137,.20)
-    }
-    .secondary-button{border-radius:18px;background:#fffaf8;border-color:#efdddd;color:#806f74}
-    .code-panel{border-color:#f3a9b7;background:#fff4f6;border-radius:20px}
-    .code-value{color:#df6981}
-
-    /* home */
-    .app-header{
-      margin:0 8px;padding:max(14px,env(safe-area-inset-top)) 14px 13px;
-      border:1px solid rgba(240,226,225,.82);border-top:0;border-radius:0 0 26px 26px;
-      box-shadow:0 7px 22px rgba(111,76,83,.06)
-    }
-    .header-copy h2{font-size:17px;color:#49383e}
-    .header-copy p{color:#a1888f}
-    .avatar{
-      background:linear-gradient(145deg,#ffb1bf,#ffd3bb);border:2.5px solid #fffdf9;
-      box-shadow:0 6px 14px rgba(161,105,116,.12)
-    }
-    .avatar.partner{background:linear-gradient(145deg,#bfe3d7,#dceff0)}
-    .room-code-row{margin-top:9px;padding:7px 9px;border-radius:15px;background:#fff7f6;border:1px dashed #eed9da}
-    .room-code-chip{background:#fff0f4;border-color:#ffd8e1;color:#d66e84!important}
-    .home-content{padding:16px 14px calc(122px + env(safe-area-inset-bottom))}
-    .quick-grid{gap:9px;margin-bottom:14px}
-    .quick-action{
-      min-height:80px;border:0;border-radius:21px;box-shadow:0 6px 15px rgba(111,76,83,.055);
-      transition:transform .16s ease,box-shadow .16s ease
-    }
-    .quick-action:nth-child(1){background:#fff0f4}
-    .quick-action:nth-child(2){background:#fff7df}
-    .quick-action:nth-child(3){background:#edf7fb}
-    .quick-action:nth-child(4){background:#eef8f3}
-    .quick-action:active{transform:translateY(2px) scale(.98);box-shadow:0 3px 8px rgba(111,76,83,.05)}
-    .quick-action .quick-icon{
-      width:38px;height:38px;border-radius:15px;background:rgba(255,255,255,.75);
-      box-shadow:0 3px 9px rgba(111,76,83,.05);font-size:19px
-    }
-    .quick-action small{font-size:9px;color:#806f74}
-    .dday-card{
-      padding:21px;background:linear-gradient(145deg,#fff0f4,#fff7f2);color:#4c3840;
-      border:1.5px solid #ffdce4;box-shadow:0 9px 24px rgba(227,130,150,.10)
-    }
-    .dday-card::before{content:"♡";width:auto;height:auto;right:19px;top:14px;background:transparent;color:#f3a3b2;font-size:25px}
-    .dday-card::after{content:"✿";width:auto;height:auto;right:49px;bottom:14px;background:transparent;color:#e7c97e;font-size:17px}
-    .dday-label{color:#b67b88;opacity:1}
-    .dday-value{font-size:46px;color:#df6f87}
-    .dday-symbol{
-      width:49px;height:49px;border-radius:18px;display:grid;place-items:center;background:#fff;
-      font-size:27px;box-shadow:0 6px 16px rgba(174,113,126,.08);transform:rotate(3deg)
-    }
-    .dday-sub{color:#9a7a82;opacity:1}
-    .content-card{position:relative;padding:18px;margin-bottom:13px;background:rgba(255,254,252,.96)}
-    .content-card:nth-of-type(2){border-color:#f2e2c3}
-    .content-card:nth-of-type(3){border-color:#efdfe7}
-    .content-card:nth-of-type(4){border-color:#dcebe7}
-    .content-card:nth-of-type(5){border-color:#e6ddf2}
-    .card-title{font-size:13px;color:#4f3c42}
-    .card-title::before{content:"·";color:#f58da0;margin-right:5px;font-size:18px;vertical-align:-1px}
-    .text-button{background:#fff0f4;color:#cf7084;border:1px solid #ffdce4}
-    .daily-note{padding:2px 2px;font-size:13px;color:#59474c}
-    .mood-grid{gap:7px}
-    .mood-button{padding:10px 2px;border:1px solid #f0e1e1;border-radius:16px;background:#fffaf8}
-    .mood-button.is-active{border-color:#f5a1b0;background:#fff0f4;box-shadow:0 0 0 3px rgba(245,141,160,.08)}
-    .chat-preview{border-radius:19px;background:#fff7f8;border:1px dashed #eedadd}
-    .song-cover{border-radius:17px;background:linear-gradient(145deg,#ddd2f4,#f3bdd0);color:#654e64;box-shadow:0 6px 14px rgba(115,87,122,.09)}
-
-    /* partner battery / live location */
-    .device-status-card{display:flex;align-items:center;gap:13px;padding:13px;border-radius:20px;background:#fff8ea;border:1px dashed #ead9ad}
-    .device-status-icon{width:48px;height:48px;flex-shrink:0;border-radius:18px;display:grid;place-items:center;background:#fffdf7;font-size:24px;box-shadow:0 5px 13px rgba(126,95,48,.07)}
-    .device-status-copy{min-width:0;flex:1}
-    .device-status-copy b{display:block;font-size:14px;color:#50403e}
-    .device-status-copy span{display:block;margin-top:4px;font-size:10px;line-height:1.5;color:#9b8580}
-    .battery-bar{height:7px;margin-top:8px;border-radius:999px;background:#f0e7d6;overflow:hidden}
-    .battery-fill{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#f2b6c2,#ef8da1);transition:width .35s ease}
-    .location-card{display:grid;gap:10px}
-    .location-row{display:flex;align-items:center;gap:11px;padding:12px;border-radius:18px;background:#f3faf7;border:1px solid #dcebe4}
-    .location-row.partner-location{background:#f7f4fc;border-color:#e7def2}
-    .location-pin{width:39px;height:39px;flex-shrink:0;border-radius:15px;display:grid;place-items:center;background:#fff;font-size:19px;box-shadow:0 4px 11px rgba(71,95,87,.06)}
-    .location-copy{min-width:0;flex:1}
-    .location-copy b{display:block;font-size:12px;color:#4e4145}
-    .location-copy span{display:block;margin-top:3px;font-size:10px;line-height:1.45;color:#97858a}
-    .location-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:1px}
-    .location-action{flex:1;min-width:110px;padding:10px 12px;border-radius:15px;background:#fff0f4;border:1px solid #ffdce4;color:#cc6f83;font-size:11px;font-weight:800}
-    .location-action.secondary{background:#f1f7ff;border-color:#dce9f7;color:#6986a4}
-    .location-action[hidden]{display:none}
-    .distance-pill{display:none;padding:9px 12px;border-radius:15px;background:#fff8e8;border:1px solid #f1dfb8;color:#8d7447;font-size:10px;text-align:center}
-    .distance-pill.is-visible{display:block}
-
-    /* floating cute navigation */
-    .bottom-nav{
-      left:50%;bottom:10px;width:calc(100% - 24px);max-width:406px;height:calc(72px + env(safe-area-inset-bottom));
-      padding:7px 8px env(safe-area-inset-bottom);border:1px solid #efdfde;border-radius:27px;
-      box-shadow:0 14px 38px rgba(91,63,69,.14);overflow:visible
-    }
-    .nav-item{border-radius:18px;color:#ad989e}
-    .nav-item.is-active{background:#fff0f4;color:#df7188}
-    .nav-item b{font-size:20px}
-    .nav-create{
-      width:52px;height:52px;margin-top:-21px;background:#f58da0;border:5px solid #fffdf9;
-      box-shadow:0 9px 19px rgba(237,111,137,.23)
-    }
-
-    /* chat */
-    #chatScreen{background:#fffaf6}
-    .chat-header{
-      margin:0 7px;border:1px solid rgba(240,226,225,.86);border-top:0;border-radius:0 0 24px 24px;
-      box-shadow:0 7px 20px rgba(111,76,83,.055);padding:max(13px,env(safe-area-inset-top)) 13px 12px
-    }
-    #chatMessages{
-      padding:18px 11px 20px;
-      background-color:#fffaf6;
-      background-image:radial-gradient(circle at 1px 1px,rgba(245,141,160,.08) 1px,transparent 0);
-      background-size:23px 23px
-    }
-    .empty-state{margin:auto 18px;padding:28px 18px;border-radius:22px;background:rgba(255,255,255,.72);border:1px dashed #ead8d8}
-    .date-divider{margin:12px 4px;color:#b19ba1}
-    .date-divider::before,.date-divider::after{background:#ecdddd}
-    .message-avatar{background:linear-gradient(145deg,#bfe3d7,#e5f5ee);border:2px solid #fff}
-    .message-bubble{padding:10px 14px;border-radius:19px;font-size:13px}
-    .message-row.me .message-bubble{
-      background:#f58da0;color:#fff;border-bottom-right-radius:6px;
-      box-shadow:0 5px 13px rgba(237,111,137,.14)
-    }
-    .message-row.them .message-bubble{
-      background:#fffefd;border:1px solid #efdfde;border-bottom-left-radius:6px;
-      box-shadow:0 5px 13px rgba(111,76,83,.045)
-    }
-    .image-message{border-radius:20px;border:3px solid #fff;box-shadow:0 7px 18px rgba(111,76,83,.09)}
-    .upload-message{border-radius:19px;background:#f58da0}
-    .typing-status{color:#aa8c94;padding-left:17px}
-    .chat-toolbox{margin:0 8px 6px;padding:10px;border:1px solid #efdfde;border-radius:20px;background:#fffdfb;box-shadow:0 6px 16px rgba(111,76,83,.06)}
-    .emoji-chip{border-radius:14px;background:#fff1f4;border:1px solid #ffdfe6}
-    .chat-input-bar{
-      margin:0 7px 8px;padding:8px 8px calc(8px + env(safe-area-inset-bottom));
-      border:1px solid #efdfde;border-radius:24px;background:rgba(255,253,250,.96);
-      box-shadow:0 10px 26px rgba(111,76,83,.10)
-    }
-    .input-action{border-radius:15px;background:#fff1f4;color:#cf7185}
-    .message-input{border-color:#eddfdd;background:#fffaf8;border-radius:19px}
-    .send-button{background:#f58da0;box-shadow:0 6px 15px rgba(237,111,137,.20)}
-
-    /* deco */
-    .simple-header{
-      margin:0 8px;border:1px solid rgba(240,226,225,.84);border-top:0;border-radius:0 0 25px 25px;
-      box-shadow:0 7px 20px rgba(111,76,83,.055);background:rgba(255,253,249,.93)
-    }
-    .simple-header::after{content:" 𖹭";color:#ef8fa2;font-size:16px}
-    .deco-content{padding:16px 14px calc(122px + env(safe-area-inset-bottom))}
-    .couple-card{
-      position:relative;padding:25px;background:linear-gradient(145deg,#fff0f4,#fff9ec);
-      border:1.5px dashed #edcfd5;box-shadow:0 9px 23px rgba(111,76,83,.06)
-    }
-    .couple-card::before{content:"OUR LITTLE SPACE";position:absolute;top:12px;left:14px;color:#c996a1;font-size:7px;font-weight:800;letter-spacing:.15em}
-    .couple-card::after{content:"✿";position:absolute;right:18px;bottom:16px;color:#d9bc6f;font-size:18px}
-    .couple-avatars .avatar{box-shadow:0 8px 18px rgba(111,76,83,.10)}
-    .heart-circle{background:#fff7f8;color:#ec7188;border:1px solid #ffdce4}
-    .option-grid{gap:9px}
-    .option-button{border-radius:18px;background:#fff9f6;border:1px solid #f0e1df;box-shadow:0 4px 12px rgba(111,76,83,.04)}
-    .option-button.is-selected{border:2px solid #f58da0;background:#fff0f4;box-shadow:0 0 0 3px rgba(245,141,160,.08)}
-    .option-button.photo-option{border:1.5px dashed #e9cfd4;background:#fff7f8}
-    .date-field{border-radius:17px;background:#fffaf8;border-color:#ecdedd}
-    .wall-preview{border-radius:19px;border:3px solid #fff;box-shadow:0 7px 18px rgba(111,76,83,.10)}
-
-    /* sheets */
-    .modal-backdrop{background:rgba(68,48,54,.26)}
-    .modal-sheet{border-radius:31px 31px 0 0;background:#fffdf9;border-top:1px solid #f1e1df}
-    .sheet-handle{background:#ead8d8}
-    .modal-title{color:#4b3940}
-    .modal-input,.modal-textarea{border-radius:18px;background:#fff9f7;border-color:#ecdedd}
-    .modal-actions button{border-radius:17px}
-    .confirm-button{background:#f58da0}
-    .cancel-button{background:#f8f1ef}
-    .gradient-dot.is-selected{border-color:#fff;box-shadow:0 0 0 2px #f58da0}
-
-    .confirm-box{border-radius:25px;background:#fffdf9;border:1px solid #f0dfdf}
-    .toast{background:rgba(74,56,62,.91);box-shadow:0 8px 22px rgba(56,39,44,.18)}
-
-    @media (max-width:355px){
-      .quick-grid{gap:6px}.quick-action{min-height:73px}.quick-action small{font-size:8px}
-    }
-
-  
-
-    /* compact push switch */
-    .push-card{padding:17px 18px}
-    .push-toggle-row{
-      display:flex;align-items:center;justify-content:space-between;gap:16px;
-      min-height:48px
-    }
-    .push-toggle-label{display:flex;align-items:center;gap:12px;min-width:0}
-    .push-toggle-icon{
-      width:42px;height:42px;border-radius:15px;display:grid;place-items:center;
-      background:#fff1f4;border:1px solid #f5dce2;font-size:20px;flex:0 0 auto
-    }
-    .push-toggle-label b{display:block;font-size:14px;color:#503d43;line-height:1.25}
-    .push-toggle-label div>span{
-      display:block;margin-top:3px;font-size:11px;font-weight:700;color:#ae9299
-    }
-    .push-switch{
-      position:relative;width:51px;height:30px;padding:0;border:0;border-radius:999px;
-      background:#e8dddf;box-shadow:inset 0 0 0 1px rgba(89,65,72,.06);
-      transition:background .2s ease;cursor:pointer;flex:0 0 auto
-    }
-    .push-switch>span{
-      position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;
-      background:#fff;box-shadow:0 2px 7px rgba(73,48,56,.18);
-      transition:transform .2s ease
-    }
-    .push-switch.is-on{background:#f58da0}
-    .push-switch.is-on>span{transform:translateX(21px)}
-    .push-switch:disabled{opacity:.5;cursor:default}
-
-    /* =========================================================
-       PIXEL-ALIGNED MOBILE LAYOUT FIX
-       D-Day / bottom navigation / chat composer
-    ========================================================= */
-    .code-panel{
-      display:none;
-      grid-template-columns:1fr auto;
-      align-items:center;
-      column-gap:10px;
-      row-gap:5px;
-      padding:15px 16px;
-      text-align:left;
-    }
-    .code-panel.is-visible{display:grid}
-    .code-panel small{grid-column:1 / -1;margin:0;text-align:center}
-    .code-value{
-      min-width:0;
-      padding-left:.19em;
-      text-align:center;
-      cursor:pointer;
-      user-select:all;
-      -webkit-user-select:all;
-      line-height:1.35;
-    }
-    .code-copy{
-      min-width:72px;
-      min-height:36px;
-      margin:0;
-      padding:0 12px;
-      border:1px solid #f2ccd5;
-      border-radius:12px;
-      background:#fff;
-      color:#cf7185;
-      font-size:11px;
-      font-weight:800;
-      white-space:nowrap;
-    }
-    .waiting-line{grid-column:1 / -1}
-
-    .dday-card{
-      min-height:156px;
-      padding:22px 20px 20px;
-      display:grid;
-      grid-template-rows:1fr auto;
-      align-content:stretch;
-    }
-    .dday-card::before{display:none}
-    .dday-card::after{
-      right:34px;
-      bottom:18px;
-      line-height:1;
-      transform:translateX(50%);
-    }
-    .dday-head{
-      display:grid;
-      grid-template-columns:minmax(0,1fr) 54px;
-      align-items:start;
-      gap:18px;
-      width:100%;
-    }
-    .dday-head>div:first-child{min-width:0}
-    .dday-label{
-      margin:0;
-      line-height:1.3;
-    }
-    .dday-value{
-      display:flex;
-      align-items:baseline;
-      gap:6px;
-      margin-top:12px;
-      line-height:1;
-    }
-    .dday-value strong{display:block;line-height:.9}
-    .dday-value span{margin:0;line-height:1}
-    .dday-symbol{
-      width:54px;
-      height:54px;
-      margin:0;
-      transform:none;
-      align-self:start;
-      justify-self:end;
-    }
-    .dday-sub{
-      align-self:end;
-      margin-top:14px;
-      padding-right:72px;
-      line-height:1.45;
-    }
-
-    .bottom-nav{
-      height:calc(76px + env(safe-area-inset-bottom));
-      padding:0 8px env(safe-area-inset-bottom);
-      align-items:stretch;
-    }
-    .nav-item{
-      position:relative;
-      height:76px;
-      min-width:0;
-      padding:0;
-      display:block;
-      border-radius:18px;
-    }
-    .nav-item b,
-    .nav-item .nav-create{
-      position:absolute;
-      left:50%;
-      top:10px;
-      margin:0;
-      transform:translateX(-50%);
-      display:grid;
-      place-items:center;
-    }
-    .nav-item b{
-      width:38px;
-      height:38px;
-      font-size:20px;
-      line-height:1;
-    }
-    .nav-item .nav-create{
-      top:-15px;
-      width:52px;
-      height:52px;
-    }
-    .nav-item span{
-      position:absolute;
-      left:0;
-      right:0;
-      bottom:8px;
-      display:block;
-      text-align:center;
-      line-height:1;
-    }
-    .nav-item.is-active{background:#fff0f4}
-
-    .chat-input-bar{
-      display:grid;
-      grid-template-columns:44px 44px minmax(0,1fr) 46px;
-      align-items:end;
-      gap:7px;
-      padding:8px 8px calc(8px + env(safe-area-inset-bottom));
-    }
-    .input-action{
-      width:44px;
-      height:44px;
-      min-width:44px;
-      flex-basis:44px;
-      padding:0;
-      display:grid;
-      place-items:center;
-      border-radius:16px;
-      line-height:1;
-    }
-    .message-input{
-      width:100%;
-      min-width:0;
-      min-height:44px;
-      height:44px;
-      padding:10px 14px;
-      border-radius:18px;
-      line-height:22px;
-      box-sizing:border-box;
-    }
-    .send-button{
-      width:46px;
-      height:46px;
-      min-width:46px;
-      flex-basis:46px;
-      padding:0;
-      display:grid;
-      place-items:center;
-      line-height:1;
-    }
-
-    @media(max-width:370px){
-      .chat-input-bar{grid-template-columns:40px 40px minmax(0,1fr) 43px;gap:5px}
-      .input-action{width:40px;height:40px;min-width:40px}
-      .message-input{min-height:40px;height:40px;padding:8px 12px}
-      .send-button{width:43px;height:43px;min-width:43px}
-      .dday-sub{padding-right:58px}
-      .code-value{font-size:23px}
-      .code-copy{min-width:66px;padding:0 10px}
-    }
-
-
-    /* PWA virtual keyboard: 채팅 화면을 실제 보이는 영역 높이에 맞춤 */
-    :root{--visual-viewport-height:100dvh}
-    body.chat-mode{height:var(--visual-viewport-height);min-height:0;overflow:hidden}
-    body.chat-mode .app-frame{height:var(--visual-viewport-height);min-height:0}
-    body.chat-mode #chatScreen{height:var(--visual-viewport-height);min-height:0}
-    body.chat-mode .chat-input-bar{position:relative;z-index:20}
-    body.chat-mode.keyboard-open .chat-input-bar{padding-bottom:8px}
-    .message-input{scroll-padding-bottom:12px}
-
-    /* 2026 refined UI */
-    .helper-text{display:none!important}
-    .push-card{padding:15px 18px}
-    .push-simple-row{display:flex;align-items:center;justify-content:space-between;min-height:34px}
-    .push-simple-row>span{font-size:14px;font-weight:800;color:#4b3d41}
-    .push-switch{width:49px;height:29px;background:#e9dfe0;border:0;border-radius:999px;padding:0;position:relative;box-shadow:none}
-    .push-switch>span{position:absolute;left:3px;top:3px;width:23px;height:23px;border-radius:50%;background:#fff;box-shadow:0 2px 7px rgba(66,44,50,.18);transition:transform .2s ease}
-    .push-switch.is-on{background:#f28fa3}
-    .push-switch.is-on>span{transform:translateX(20px)}
-    .push-switch:disabled{opacity:.45}
-
-    .manual-battery{margin-top:12px;padding:13px;border-radius:18px;background:#fff8f1;border:1px solid #f1e4da}
-    .manual-battery-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-size:12px;color:#8e777c}
-    .manual-battery-top b{font-size:14px;color:#4a3a3e}
-    .manual-battery input[type="range"]{width:100%;accent-color:#f28fa3}
-    .manual-battery-actions{display:flex;gap:8px;margin-top:10px}
-    .manual-chip,.manual-save{height:36px;border-radius:12px;padding:0 13px;font-size:11px;font-weight:800}
-    .manual-chip{background:#fff;border:1px solid #eadbd7;color:#866f73}
-    .manual-chip.is-on{background:#fff0c8;border-color:#f2d27f;color:#7b5d0e}
-    .manual-save{margin-left:auto;background:#f28fa3;color:#fff}
-
-    #chatScreen{background:#faf6f2}
-    .chat-header{
-      margin:0;border:0;border-bottom:1px solid rgba(229,216,211,.72);
-      padding:max(12px,env(safe-area-inset-top)) 13px 10px;
-      background:rgba(255,252,248,.94);box-shadow:0 6px 18px rgba(77,56,60,.045)
-    }
-    .chat-header .avatar{width:40px;height:40px}
-    .chat-header-copy b{font-size:15px;letter-spacing:-.02em}
-    .chat-header-copy p{font-size:10px;margin-top:2px}
-    #chatMessages{
-      padding:16px 12px 15px;gap:2px;
-      background-color:#faf6f2;
-      background-image:
-        radial-gradient(circle at 12px 12px,rgba(241,179,190,.08) 1px,transparent 1.1px),
-        radial-gradient(circle at 4px 4px,rgba(184,215,205,.07) 1px,transparent 1.1px)!important;
-      background-size:24px 24px,19px 19px!important
-    }
-    .date-divider{
-      align-self:center;margin:10px 0 12px;padding:5px 10px;border-radius:999px;
-      background:rgba(231,221,218,.72);color:#99888c;font-size:9px;font-weight:700
-    }
-    .message-row{position:relative;padding:1px 0;--reply-shift:0px}
-    .message-row .message-stack,.message-row .partner-message{transform:translateX(var(--reply-shift));transition:transform .18s cubic-bezier(.2,.8,.2,1)}
-    .message-row.is-swiping .message-stack,.message-row.is-swiping .partner-message{transition:none}
-    .message-stack{max-width:76%}
-    .partner-message{max-width:82%;gap:7px}
-    .message-avatar{width:28px;height:28px;font-size:13px}
-    .message-sender{margin:0 0 4px 4px;font-size:9px;color:#ab989d}
-    .message-bubble{
-      padding:10px 13px;border-radius:19px;font-size:13px;line-height:1.48;
-      letter-spacing:-.01em;box-shadow:none!important
-    }
-    .message-row.me .message-bubble{background:#f191a5;color:#fff;border:0;border-radius:20px 20px 7px 20px}
-    .message-row.them .message-bubble{background:#fffdfb;color:#45383c;border:1px solid #eee2de;border-radius:20px 20px 20px 7px}
-    .image-message{border-radius:18px;overflow:hidden;border:1px solid #eadfdb;background:#fff;box-shadow:none}
-    .image-message img{display:block;max-width:220px;max-height:290px;object-fit:cover}
-    .message-meta{font-size:9px;margin-top:3px;color:#b09fa3;gap:4px}
-    .message-read{color:#e88196}
-    .reply-quote{
-      width:100%;margin-bottom:6px;padding:7px 9px;border-radius:11px;
-      border-left:3px solid currentColor;background:rgba(255,255,255,.23);font-size:10px;line-height:1.35;overflow:hidden
-    }
-    .message-row.them .reply-quote{background:#f8efec;color:#9c6f78}
-    .reply-quote b{display:block;font-size:9px;margin-bottom:2px}
-    .reply-quote span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.9}
-    .reply-swipe-hint{
-      position:absolute;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;
-      display:grid;place-items:center;background:#f6dfe4;color:#d86f86;font-size:14px;opacity:0;transition:opacity .12s
-    }
-    .message-row.them .reply-swipe-hint{left:1px}
-    .message-row.me .reply-swipe-hint{right:1px}
-    .message-row.reply-ready .reply-swipe-hint{opacity:1}
-    .message-bubble,.image-message{touch-action:pan-y}
-
-    .typing-status{padding:0 18px 4px;font-size:9px;color:#aa969a}
-    .reply-composer{
-      flex:0 0 auto;margin:0 10px;padding:9px 11px;display:flex;align-items:center;gap:10px;
-      border:1px solid #eededa;border-bottom:0;border-radius:17px 17px 0 0;background:#fff9f7
-    }
-    .reply-composer[hidden]{display:none}
-    .reply-composer>div{min-width:0;flex:1}
-    .reply-composer b{display:block;font-size:10px;color:#e2778c;margin-bottom:2px}
-    .reply-composer span{display:block;font-size:11px;color:#7e6a6f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .reply-composer button{width:28px;height:28px;border-radius:50%;background:transparent;color:#a68f94;font-size:19px}
-    .reply-composer:not([hidden]) + .chat-toolbox + .chat-input-bar{border-radius:0 0 25px 25px;margin-top:0}
-    .chat-toolbox{
-      margin:0 10px 5px;padding:7px;border:1px solid #eee0dc;border-radius:17px;background:#fffaf8;box-shadow:0 8px 22px rgba(86,62,67,.07)
-    }
-    .emoji-chip{background:#fff;border:1px solid #eee2de}
-    .chat-input-bar{
-      margin:0 9px max(8px,env(safe-area-inset-bottom));padding:6px;
-      border:1px solid #eaded9;border-radius:25px;background:rgba(255,253,251,.98);
-      box-shadow:0 10px 28px rgba(78,57,61,.10);gap:4px
-    }
-    .input-action{width:39px;height:39px;border-radius:50%;background:transparent;font-size:18px}
-    .message-input{
-      min-height:40px;height:40px;padding:9px 10px;border:0!important;background:transparent!important;
-      border-radius:0;box-shadow:none!important;color:#45383c
-    }
-    .send-button{width:40px;height:40px;flex-basis:40px;background:#f18fa3;border-radius:50%;box-shadow:none;font-size:17px}
-    .empty-state{color:#baa8ac;font-size:11px;line-height:1.5}
-
-    .quick-action small,.nav-item span{font-weight:750;letter-spacing:-.02em}
-    .section-label{background:transparent;padding:0;margin-left:2px;color:#a97d86}
-    .section-label::before{display:none}
-
-  
-    /* =========================================================
-       POCKET DIARY — one visual language, no glassmorphism
-    ========================================================= */
-    body{
-      --paper:#fffaf2;
-      --paper-2:#fffdf8;
-      --ink:#4b3d3a;
-      --ink-soft:#8e7b75;
-      --coral:#e9868d;
-      --coral-deep:#d96f78;
-      --coral-pale:#fbe7e5;
-      --sage:#98aa9d;
-      --sage-pale:#edf2ed;
-      --line:#eadfd4;
-      --shadow-sm:0 3px 0 rgba(112,87,76,.07);
-      --shadow-md:0 8px 22px rgba(91,68,59,.08);
-      background:#eee8e1;
-      color:var(--ink);
-    }
-    .app-frame{
-      background:
-        linear-gradient(rgba(255,250,242,.96),rgba(255,250,242,.96)),
-        repeating-linear-gradient(0deg,transparent 0 27px,rgba(190,163,145,.11) 27px 28px);
-    }
-    .glass{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-    .screen,.app-header,.chat-header,.simple-header,.bottom-nav,.chat-input-bar{background:transparent}
-    .app-header,.chat-header,.simple-header{
-      border-bottom:1px solid var(--line);
-      background:rgba(255,250,242,.98);
-      box-shadow:none;
-    }
-    .app-header{padding-bottom:12px}
-    .header-copy h2,.simple-header{font-family:"Nanum Myeongjo",serif;letter-spacing:-.04em}
-    .header-copy h2{font-size:21px}
-    .header-copy p,.room-code-row,.section-label{color:var(--ink-soft)}
-    .room-code-row{border-top:1px dashed var(--line);padding-top:10px;margin-top:10px}
-    .room-code-chip{background:var(--paper-2);border:1px solid var(--line);color:var(--coral-deep);box-shadow:none}
-    .room-code-copy,.text-button{color:var(--coral-deep);font-weight:700}
-    .icon-button{background:transparent;border:0;color:var(--ink-soft);box-shadow:none}
-    .status-dot{box-shadow:0 0 0 3px var(--paper)}
-
-    .home-content,.deco-content{padding-left:15px;padding-right:15px}
-    .section-label{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-left:4px}
-
-    .quick-grid{gap:10px}
-    .quick-action{
-      min-height:72px;background:var(--paper-2);border:1px dashed #dfcec1;border-radius:18px;
-      box-shadow:none;color:var(--ink);position:relative;overflow:hidden
-    }
-    .quick-action::after{content:"";position:absolute;right:8px;top:8px;width:5px;height:5px;border-radius:50%;background:var(--coral-pale)}
-    .quick-icon{font-size:21px;color:var(--coral-deep);filter:none}
-    .quick-action small{font-size:10px;color:var(--ink-soft);font-weight:800}
-
-    .card{
-      background:var(--paper-2);border:1px solid var(--line);border-radius:20px;
-      box-shadow:var(--shadow-sm);margin-bottom:12px
-    }
-    .content-card{padding:17px}
-    .card-title{font-size:12px;color:var(--ink);font-weight:850}
-    .card-title::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--coral);margin-right:7px;vertical-align:2px}
-    .dday-card{
-      background:var(--coral-pale);border-color:#efcac8;box-shadow:0 4px 0 rgba(212,130,135,.09);
-      overflow:visible;position:relative
-    }
-    .dday-card::before{content:"";position:absolute;top:-7px;left:50%;width:58px;height:16px;transform:translateX(-50%) rotate(-1deg);background:rgba(242,218,184,.72);border-radius:2px}
-    .dday-label,.dday-sub{color:#9a696d}
-    .dday-value strong{color:var(--coral-deep);font-family:"Nanum Myeongjo",serif}
-    .dday-symbol{color:var(--coral-deep);font-size:34px;background:transparent;box-shadow:none}
-    .daily-note{font-family:"Nanum Myeongjo",serif;line-height:1.75;color:var(--ink)}
-
-    .device-status-card,.chat-preview,.location-row{
-      background:transparent;border:0;padding:8px 0;border-radius:0;box-shadow:none
-    }
-    .device-status-icon,.location-pin{background:var(--sage-pale);color:var(--sage);border:1px solid #dbe5dc;box-shadow:none}
-    .battery-bar{background:#eee7df;height:6px}
-    .battery-fill{background:var(--sage)}
-    .chat-preview{border-top:1px dashed var(--line);margin-top:4px}
-    .unread-badge{background:var(--coral-deep)}
-    .push-simple-row{min-height:38px}
-    .push-switch{background:#ddd3ca;box-shadow:none}
-    .push-switch.is-on{background:var(--coral)}
-    .push-switch>span{box-shadow:0 1px 4px rgba(75,61,58,.18)}
-    .location-card{background:transparent;border:0;padding:0}
-    .partner-location{border-top:1px dashed var(--line)}
-    .location-action{background:var(--coral-pale);color:var(--coral-deep);border:1px solid #efcac8}
-    .location-action.secondary{background:var(--sage-pale);color:#71877a;border-color:#d6e2d8}
-
-    .bottom-nav{
-      left:50%;bottom:10px;width:calc(100% - 24px);transform:translateX(-50%);
-      border:1px solid var(--line);border-radius:24px;background:rgba(255,253,248,.98);
-      box-shadow:0 10px 28px rgba(84,63,54,.12);padding:7px 8px calc(7px + env(safe-area-inset-bottom))
-    }
-    .nav-item{color:#a08f88;border-radius:17px;min-height:48px}
-    .nav-item b{font-size:19px;font-weight:500}
-    .nav-item.is-active{background:var(--coral-pale);color:var(--coral-deep)}
-    .nav-create{background:var(--coral);box-shadow:none;border:4px solid var(--paper);color:white}
-
-    #chatScreen{background:var(--paper)}
-    .chat-header{box-shadow:none}
-    #chatMessages{
-      background:
-        linear-gradient(rgba(255,250,242,.88),rgba(255,250,242,.88)),
-        repeating-linear-gradient(0deg,transparent 0 29px,rgba(182,157,140,.13) 29px 30px)!important;
-      padding-left:12px;padding-right:12px
-    }
-    .message-bubble{
-      border-radius:17px;border:1px solid #e5d9ce;box-shadow:0 2px 0 rgba(96,73,63,.05);
-      font-size:14px;line-height:1.55
-    }
-    .message-row.them .message-bubble{background:var(--paper-2);color:var(--ink);border-bottom-left-radius:6px}
-    .message-row.me .message-bubble{background:var(--coral);color:#fff;border-color:var(--coral);border-bottom-right-radius:6px}
-    .message-time,.message-read{color:#aa9790;font-size:9px}
-    .message-row.me .message-read{color:var(--coral-deep);font-weight:800}
-    .reply-quote{border-left:2px solid currentColor!important;border-radius:9px!important}
-    .typing-status{color:#9b8880}
-    .reply-composer{background:var(--paper-2);border-color:var(--line);border-radius:15px 15px 0 0}
-    .reply-composer b{color:var(--coral-deep)}
-    .chat-toolbox{background:var(--paper-2);border-color:var(--line)}
-    .emoji-chip{background:transparent;border:0}
-    .chat-input-bar{
-      margin:0 8px 8px;border:1px solid var(--line);border-radius:22px;background:var(--paper-2);
-      box-shadow:0 8px 22px rgba(84,63,54,.09);padding:7px
-    }
-    .message-input{background:transparent;border:0;color:var(--ink)}
-    .input-action{background:transparent;color:#9f8d86}
-    .send-button{background:var(--coral);box-shadow:none;color:white}
-    .search-panel{background:var(--paper-2);border-bottom:1px solid var(--line)}
-    .search-panel input{background:var(--paper);border:1px solid var(--line)}
-
-    .couple-card{background:var(--coral-pale);border-color:#efcac8}
-    .heart-circle{background:var(--paper);color:var(--coral-deep);box-shadow:none}
-    .option-button{background:var(--paper-2);border:1px solid var(--line);box-shadow:none}
-    .option-button.is-selected{border-color:var(--coral);box-shadow:0 0 0 2px var(--coral-pale)}
-    .date-field,.modal-input,.modal-textarea{background:var(--paper);border-color:var(--line)}
-    .modal-sheet{background:var(--paper-2);border:1px solid var(--line)}
-    .confirm-button{background:var(--coral)}
-    .toast{background:#4b3d3a;color:#fffaf2;border-radius:12px}
-
-    @media(min-width:431px){
-      .app-frame{box-shadow:0 0 0 1px #e2d7cd,0 18px 60px rgba(68,49,42,.13)}
-    }
-
-
-    
-    .home-content,.deco-content{
-      padding-bottom:calc(142px + env(safe-area-inset-bottom))!important;
-    }
-
-    .bottom-nav{
-      left:50%!important;
-      right:auto!important;
-      bottom:calc(14px + env(safe-area-inset-bottom))!important;
-      width:min(calc(100% - 28px),398px)!important;
-      height:68px!important;
-      padding:7px 9px!important;
-      transform:translateX(-50%)!important;
-      align-items:center!important;
-      border:1px solid rgba(210,193,184,.72)!important;
-      border-radius:27px!important;
-      background:rgba(255,252,247,.86)!important;
-      box-shadow:
-        0 18px 42px rgba(72,52,43,.16),
-        0 2px 8px rgba(72,52,43,.06),
-        inset 0 1px 0 rgba(255,255,255,.84)!important;
-      backdrop-filter:blur(24px) saturate(1.16)!important;
-      -webkit-backdrop-filter:blur(24px) saturate(1.16)!important;
-      overflow:visible!important;
-    }
-    .bottom-nav::before{
-      content:"";
-      position:absolute;
-      inset:5px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,.56);
-      pointer-events:none;
-    }
-    .bottom-nav .nav-item{
-      position:relative!important;
-      height:54px!important;
-      min-height:54px!important;
-      padding:0!important;
-      display:flex!important;
-      flex-direction:column!important;
-      align-items:center!important;
-      justify-content:center!important;
-      gap:3px!important;
-      border-radius:19px!important;
-      color:#9d8d86!important;
-      background:transparent!important;
-      transition:transform .18s ease,color .18s ease,background .18s ease!important;
-    }
-    .bottom-nav .nav-item:active{transform:scale(.94)}
-    .bottom-nav .nav-item b{
-      position:static!important;
-      transform:none!important;
-      width:34px!important;
-      height:31px!important;
-      display:grid!important;
-      place-items:center!important;
-      margin:0!important;
-      font-size:19px!important;
-      line-height:1!important;
-      border-radius:13px!important;
-      transition:background .18s ease,transform .18s ease!important;
-    }
-    .bottom-nav .nav-item span{
-      position:static!important;
-      display:block!important;
-      font-size:9px!important;
-      line-height:1!important;
-      font-weight:760!important;
-      letter-spacing:-.02em!important;
-      color:inherit!important;
-    }
-    .bottom-nav .nav-item.is-active{
-      color:var(--coral-deep)!important;
-      background:transparent!important;
-    }
-    .bottom-nav .nav-item.is-active b{
-      background:var(--coral-pale)!important;
-      transform:translateY(-1px)!important;
-    }
-    .bottom-nav .nav-item .nav-create{
-      position:static!important;
-      width:48px!important;
-      height:48px!important;
-      margin:-21px 0 -6px!important;
-      transform:none!important;
-      border:4px solid #fffaf4!important;
-      border-radius:18px!important;
-      background:linear-gradient(145deg,#f48b9c,#ed6e89)!important;
-      box-shadow:
-        0 10px 22px rgba(224,104,132,.28),
-        inset 0 1px 0 rgba(255,255,255,.34)!important;
-      font-size:25px!important;
-      line-height:1!important;
-    }
-    .bottom-nav .nav-item:has(.nav-create) span{
-      margin-top:2px!important;
-      color:#987f86!important;
-    }
-    .gradient-list{
-      margin:0!important;
-      justify-content:flex-start!important;
-      gap:8px!important;
-      min-width:0;
-      overflow-x:auto;
-      scrollbar-width:none;
-    }
-    .gradient-list::-webkit-scrollbar{display:none}
-    .gradient-dot{
-      flex:0 0 auto!important;
-      width:30px!important;
-      height:30px!important;
-      border:2px solid rgba(255,255,255,.18)!important;
-      box-shadow:none!important;
-    }
-    .gradient-dot.is-selected{
-      border:3px solid #fff!important;
-      transform:none!important;
-    }
-    .progress-track{
-      height:2.5px!important;
-      background:rgba(255,255,255,.34)!important;
-      border-radius:99px!important;
-      overflow:hidden;
-    }
-    .progress-fill{
-      background:#fff!important;
-      border-radius:99px!important;
-    }
-    .viewer-head{
-      top:calc(max(10px,env(safe-area-inset-top)) + 14px)!important;
-      left:12px!important;
-      right:10px!important;
-      gap:9px!important;
-    }
-    .viewer-head .avatar{
-      width:34px!important;
-      height:34px!important;
-      border:1.5px solid rgba(255,255,255,.90)!important;
-      font-size:16px!important;
-      box-shadow:none!important;
-    }
-    .viewer-copy b{font-size:13px!important;font-weight:750!important}
-    .viewer-copy span{font-size:10px!important;color:rgba(255,255,255,.72)!important}
-    .viewer-bottom{
-      left:12px!important;
-      right:12px!important;
-      bottom:calc(12px + env(safe-area-inset-bottom))!important;
-    }
-    .viewer-caption{
-      margin:0 4px 11px!important;
-      color:#fff!important;
-      font-size:13px!important;
-      line-height:1.45!important;
-      text-shadow:0 2px 10px rgba(0,0,0,.55);
-    }
-    .reaction-row{
-      gap:8px!important;
-      align-items:center!important;
-    }
-    .reaction-row .reply-button{
-      height:46px!important;
-      padding:0 17px!important;
-      border:1px solid rgba(255,255,255,.72)!important;
-      border-radius:999px!important;
-      background:rgba(12,10,13,.16)!important;
-      color:#fff!important;
-      text-align:left!important;
-      font-size:13px!important;
-      font-weight:600!important;
-      backdrop-filter:blur(10px)!important;
-      -webkit-backdrop-filter:blur(10px)!important;
-    }
-    .reaction-row>button:not(.reply-button){
-      width:44px!important;
-      height:44px!important;
-      border-radius:50%!important;
-      background:rgba(14,12,15,.32)!important;
-      border:1px solid rgba(255,255,255,.14)!important;
-      font-size:20px!important;
-      backdrop-filter:blur(10px)!important;
-      -webkit-backdrop-filter:blur(10px)!important;
-      transition:transform .15s ease!important;
-    }
-    .reaction-row>button:not(.reply-button):active{transform:scale(.84)}
-    @keyframes pauseFlash{from{opacity:0;transform:translate(-50%,-50%) scale(.86)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
-
-
-
-    
-    html,body{height:100%;min-height:0;overflow:hidden}
-    .app-frame{height:100dvh;min-height:0;overflow:hidden}
-    .screen{height:100%;min-height:0}
-    #loginScreen{overflow-y:auto}
-    #homeScreen,#decoScreen{height:100%;min-height:0;overflow:hidden}
-    .home-content,.deco-content{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
-
-    body.chat-mode{
-      position:fixed!important;
-      inset:0!important;
-      width:100%!important;
-      height:100%!important;
-      overflow:hidden!important;
-    }
-    body.chat-mode .app-frame{
-      position:fixed!important;
-      top:var(--visual-viewport-top,0px)!important;
-      left:50%!important;
-      transform:translateX(-50%)!important;
-      width:min(100%,430px)!important;
-      height:var(--visual-viewport-height,100dvh)!important;
-      min-height:0!important;
-      overflow:hidden!important;
-    }
-    body.chat-mode #chatScreen{
-      position:absolute!important;
-      inset:0!important;
-      width:100%!important;
-      height:100%!important;
-      min-height:0!important;
-      overflow:hidden!important;
-    }
-    body.chat-mode #chatMessages{
-      flex:1 1 auto!important;
-      min-height:0!important;
-      overflow-y:auto!important;
-      overscroll-behavior:contain!important;
-      -webkit-overflow-scrolling:touch!important;
-      scroll-anchor:none;
-    }
-    body.chat-mode .chat-header,
-    body.chat-mode .search-panel,
-    body.chat-mode .typing-status,
-    body.chat-mode .reply-composer,
-    body.chat-mode .chat-toolbox,
-    body.chat-mode .chat-input-bar{flex:0 0 auto!important}
-    body.chat-mode .chat-input-bar{
-      margin:0 8px max(8px,env(safe-area-inset-bottom))!important;
-      padding:7px!important;
-    }
-    body.chat-mode.keyboard-open .chat-input-bar{margin-bottom:6px!important;padding-bottom:7px!important}
-    .gradient-list{
-      flex:0 0 auto!important;
-      width:auto!important;
-      max-width:162px!important;
-      margin:0!important;
-      gap:6px!important;
-      justify-content:flex-end!important;
-      overflow-x:auto!important;
-    }
-    .gradient-dot{width:28px!important;height:28px!important;flex-basis:28px!important}
-    .viewer-head{top:calc(max(10px,env(safe-area-inset-top)) + 13px)!important;left:12px!important;right:10px!important}
-    .viewer-head .avatar{width:32px!important;height:32px!important}
-    .viewer-copy b{font-size:12px!important;line-height:1.2!important}
-    .viewer-copy span{font-size:9px!important}
-    .viewer-bottom{left:12px!important;right:12px!important;bottom:calc(12px + env(safe-area-inset-bottom))!important}
-    .reaction-row{gap:7px!important}
-    .reaction-row button{height:42px!important;min-width:42px!important;border-radius:21px!important}
-    .reaction-row .reply-button{padding:0 16px!important}
-    
-    .reaction-row > button{
-      -webkit-appearance:none!important;
-      appearance:none!important;
-      box-sizing:border-box!important;
-      margin:0!important;
-      vertical-align:middle!important;
-    }
-
-    .viewer-head{
-      align-items:center!important;
-    }
-    .viewer-copy{
-      min-width:0!important;
-      align-self:center!important;
-    }
-
-    .reaction-row{
-      display:flex!important;
-      align-items:center!important;
-      justify-content:center!important;
-    }
-    .reaction-row > button:not(.reply-button){
-      display:grid!important;
-      place-items:center!important;
-      flex:0 0 44px!important;
-      width:44px!important;
-      min-width:44px!important;
-      height:44px!important;
-      padding:0!important;
-      text-align:center!important;
-      line-height:1!important;
-      font-family:Arial,"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
-      font-size:21px!important;
-      text-indent:0!important;
-      overflow:hidden!important;
-    }
-    .reaction-row .reply-button{
-      display:flex!important;
-      align-items:center!important;
-      min-width:0!important;
-      line-height:1.2!important;
-    }
-
-
-    /* =========================================================
-       iOS CHAT FLOW / EMOJI / MESSAGE REACTION REPAIR
-       ========================================================= */
-    html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-
-    /* Safari의 세로 flex 스크롤 안에서 메시지 행이 비정상적으로 늘어나는 현상을 차단 */
-    #chatMessages{
-      display:block!important;
-      align-content:initial!important;
-      justify-content:initial!important;
-    }
-    #chatMessages>.message-row,
-    #chatMessages>.date-divider,
-    #chatMessages>.empty-state{
-      flex:none!important;
-      height:auto!important;
-      min-height:0!important;
-    }
-    .message-row{
-      width:100%!important;
-      height:auto!important;
-      min-height:0!important;
-      align-items:flex-end!important;
-      margin:0 0 4px!important;
-    }
-    .partner-message{
-      display:flex!important;
-      flex:0 1 auto!important;
-      width:auto!important;
-      height:auto!important;
-      min-height:0!important;
-      align-items:flex-end!important;
-    }
-    .message-stack{
-      flex:0 1 auto!important;
-      width:max-content!important;
-      min-width:0!important;
-      height:auto!important;
-      min-height:0!important;
-    }
-    .message-row.me .message-stack{max-width:76%!important}
-    .message-row.them .message-stack{max-width:calc(100vw - 82px)!important}
-    .message-bubble,
-    .image-message{
-      display:block!important;
-      width:max-content!important;
-      max-width:100%!important;
-      height:auto!important;
-      min-height:0!important;
-    }
-    .message-sender{
-      display:block!important;
-      height:auto!important;
-      min-height:0!important;
-      line-height:1.25!important;
-    }
-    .message-meta{
-      min-height:19px!important;
-      line-height:1!important;
-      flex-wrap:nowrap!important;
-    }
-    .date-divider{
-      width:max-content!important;
-      max-width:calc(100% - 30px)!important;
-      margin:10px auto 12px!important;
-    }
-
-    .message-input{
-      -webkit-user-select:text!important;
-      user-select:text!important;
-      touch-action:manipulation!important;
-      font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
-      font-size:16px!important;
-      unicode-bidi:plaintext;
-    }
-    .message-bubble,.message-sender,.message-meta{
-      font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
-    }
-
-    /* 전체 이모지 선택기 */
-    .chat-toolbox{
-      display:none;
-      flex-direction:column!important;
-      flex-wrap:nowrap!important;
-      gap:7px!important;
-      max-height:min(42dvh,330px)!important;
-      overflow:hidden!important;
-      padding:8px!important;
-    }
-    .chat-toolbox.is-open{display:flex!important}
-    .emoji-panel-head{display:flex;align-items:center;gap:6px;min-width:0}
-    .emoji-category-tabs{
-      min-width:0;flex:1;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;
-      -webkit-overflow-scrolling:touch;padding:1px
-    }
-    .emoji-category-tabs::-webkit-scrollbar{display:none}
-    .emoji-category-button{
-      flex:0 0 34px;width:34px;height:32px;padding:0;border-radius:11px;
-      background:transparent;color:var(--ink-soft);font-size:17px;line-height:1;
-      font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif
-    }
-    .emoji-category-button.is-active{background:var(--coral-pale);color:var(--coral-deep)}
-    .emoji-panel-close{
-      flex:0 0 32px;width:32px;height:32px;border-radius:50%;background:transparent;
-      color:var(--ink-soft);font-size:21px;line-height:1
-    }
-    .emoji-grid{
-      min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
-      display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:3px;padding:3px 1px 5px
-    }
-    .emoji-chip{
-      width:100%!important;height:39px!important;min-width:0!important;padding:0!important;
-      display:grid!important;place-items:center!important;border-radius:11px!important;
-      font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
-      font-size:22px!important;line-height:1!important;background:transparent!important
-    }
-    .emoji-chip:active{background:var(--coral-pale)!important;transform:scale(.88)}
-    .emoji-empty{grid-column:1/-1;padding:28px 10px;text-align:center;color:var(--ink-soft);font-size:11px}
-    @media(max-width:360px){.emoji-grid{grid-template-columns:repeat(7,minmax(0,1fr))}}
-
-    /* 메시지 공감 */
-    .message-react-button{
-      width:24px;height:19px;padding:0;border-radius:999px;background:transparent;
-      color:#b19e97;font-size:14px;line-height:1;
-      font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif
-    }
-    .message-react-button.has-reaction{color:var(--coral-deep)}
-    .message-reaction-summary{
-      display:flex;align-items:center;gap:3px;width:max-content;max-width:100%;
-      margin-top:3px;padding:3px 7px;border:1px solid var(--line);border-radius:999px;
-      background:var(--paper-2);color:var(--ink);font-size:11px;line-height:1.2;
-      box-shadow:0 2px 0 rgba(96,73,63,.04)
-    }
-    .message-row.me .message-reaction-summary{align-self:flex-end}
-    .message-row.them .message-reaction-summary{align-self:flex-start}
-    .message-reaction-summary span{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
-    .message-reaction-summary small{font-size:9px;color:var(--ink-soft);font-weight:800}
-
-    .message-reaction-picker{
-      position:fixed;z-index:220;left:50%;bottom:calc(76px + env(safe-area-inset-bottom));
-      width:max-content;max-width:calc(100vw - 20px);transform:translate(-50%,16px) scale(.96);
-      display:flex;align-items:center;gap:4px;padding:7px;border:1px solid var(--line);
-      border-radius:999px;background:rgba(255,253,248,.98);box-shadow:0 12px 34px rgba(70,50,44,.18);
-      opacity:0;visibility:hidden;pointer-events:none;transition:opacity .14s ease,transform .14s ease,visibility .14s;
-      -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)
-    }
-    .message-reaction-picker.is-open{
-      opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0) scale(1)
-    }
-    .message-reaction-picker button{
-      width:38px;height:38px;padding:0;border-radius:50%;display:grid;place-items:center;
-      background:transparent;font-size:20px;line-height:1;
-      font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif
-    }
-    .message-reaction-picker button:active{background:var(--coral-pale);transform:scale(.86)}
-    .message-reaction-picker .reaction-clear-button{font-family:inherit;font-size:21px;color:var(--ink-soft)}
-
-    /* fixed two-person account mode */
-    .fixed-user-picker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-    .fixed-user-button{border:1px solid rgba(255,111,125,.18);background:#fffaf8;border-radius:18px;padding:14px 10px;font:inherit;font-weight:800;color:var(--text);cursor:pointer;transition:.18s ease}
-    .fixed-user-button.is-selected{background:linear-gradient(135deg,rgba(255,111,125,.16),rgba(255,179,142,.18));border-color:rgba(255,111,125,.55);box-shadow:0 8px 20px rgba(255,111,125,.10)}
-    .fixed-auth-hint{margin:12px 2px 0;color:var(--text-secondary);font-size:12px;line-height:1.55;text-align:center}
-    .fixed-setup-title{text-align:center;margin:0 0 6px;font-size:20px}
-    .fixed-setup-copy{text-align:center;margin:0 0 18px;color:var(--text-secondary);font-size:13px;line-height:1.55}
-    .account-settings-grid{display:grid;gap:16px}
-    .account-settings-grid .helper-text{margin-top:6px}
-
-    /* Additive reliability styles: inherit existing diary/pastel design. */
-    .wd-connection-banner{position:fixed;z-index:9996;left:50%;top:max(8px,env(safe-area-inset-top));transform:translateX(-50%);
-      max-width:calc(100% - 36px);min-width:220px;text-align:center;border-radius:999px;padding:9px 14px;
-      background:#44383a;color:#fff;box-shadow:0 5px 18px rgba(35,21,25,.23);font-size:12px;font-weight:650;pointer-events:none}
-    .wd-diagnostic-button{margin-top:12px;background:#fff7f4;border:1px solid #f1d7d4;color:#875458;
-      padding:9px 14px;border-radius:14px;font-size:12px;font-weight:700;cursor:pointer}
-    .wd-diagnostic-result{white-space:pre-line;line-height:1.7;font-size:11px;color:#806b70;margin-top:7px}
-    @media(prefers-reduced-motion:reduce){.message-row.animate-in{animation:none!important}}
-  
-    /* =========================================================
-       OUR TWO — CLEAN, LOVELY & CALM UI (2026-10-08)
-       ========================================================= */
-    :root{--wd-rose:#e77e98;--wd-rose-soft:#fff0f4;--wd-ink:#53444e;--wd-muted:#987f8c}
-    .home-content,.deco-content{padding-left:17px!important;padding-right:17px!important}
-    .app-header,.simple-header{background:rgba(255,250,250,.97)!important}
-    .header-copy h2{font-family:inherit!important;font-weight:800!important;letter-spacing:-.045em}
-    .quick-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;margin:13px 0 18px!important}
-    .quick-action{min-height:91px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:7px!important;padding:11px 4px!important;border:1px solid #f4e2e9!important;border-radius:23px!important;background:linear-gradient(155deg,#fffefe,#fff2f6)!important;box-shadow:0 5px 18px rgba(207,118,147,.07)!important}
-    .quick-action:nth-child(2){background:linear-gradient(155deg,#fffefa,#fff8e9)!important}
-    .quick-action:nth-child(3){background:linear-gradient(155deg,#fcfffd,#f0f8f5)!important}
-    .quick-action .quick-icon{width:39px!important;height:39px!important;background:#fff!important;border-radius:15px!important;display:grid!important;place-items:center!important;box-shadow:0 2px 8px rgba(211,144,161,.1)!important}
-    .quick-action small{font-size:11px!important;font-weight:750!important;color:#7e6873!important}
-    .dday-card{background:linear-gradient(140deg,#fff1f5 0%,#fff8f4 75%,#fff5e8 100%)!important;border:1px solid #f8dce6!important;border-radius:27px!important;box-shadow:0 7px 22px rgba(213,116,151,.08)!important}
-    .dday-card::before{display:none!important}
-    .dday-card::after{content:"♡"!important;background:transparent!important;opacity:.65;right:20px!important;bottom:9px!important;color:#ec9fb7!important}
-    .dday-value strong{font-family:inherit!important;font-weight:850!important;color:#de7893!important}
-    .card{border-radius:23px!important;border:1px solid #f1e5e9!important;box-shadow:0 4px 18px rgba(110,65,82,.055)!important}
-    .content-card{background:#fffdfd!important}
-    .daily-note{font-family:inherit!important;font-size:13px!important}
-    .chat-preview{background:#fff7f9!important;border:1px solid #f7e4ea!important;border-radius:18px!important;padding:11px!important}
-    .bottom-nav{display:flex!important;justify-content:space-around!important;background:rgba(255,251,253,.97)!important;border:1px solid #f0dfe7!important;box-shadow:0 10px 34px rgba(136,85,109,.12)!important}
-    .bottom-nav .nav-item{flex:1 1 0!important;min-width:0!important;border-radius:17px!important}
-    .nav-item.is-active{color:#db7892!important}
-    .avatar.has-photo{background:linear-gradient(145deg,#ffe8ef,#fdf6f8)!important;overflow:hidden!important}
-    .avatar.has-photo>img,.message-avatar>img{width:var(--avatar-photo-width,66%)!important;height:var(--avatar-photo-height,66%)!important;object-fit:contain!important;object-position:center!important;display:block!important}
-    .avatar-stack>.avatar{position:relative}
-    .avatar-stack>.avatar.partner{margin-left:-7px!important}
-    .avatar-stack>.avatar.has-photo{box-shadow:0 0 0 2px #fff,0 3px 11px rgba(153,86,108,.12)!important}
-    .couple-avatars .avatar{overflow:hidden!important;flex-shrink:0!important}
-    .wd-date-label{display:block;margin:4px 1px 9px;font-size:12px;font-weight:750;color:var(--wd-muted)}
-    .wd-date-edit-row{display:flex;gap:9px;align-items:center}
-    .wd-date-edit-row .date-field{flex:1;min-width:0;margin:0!important;height:46px!important;border-radius:15px!important;background:#fffafa!important}
-    .wd-date-save{height:46px;min-width:84px;padding:0 13px;border-radius:15px;background:#ec94a9;color:white;font-weight:800;font-size:12px;box-shadow:0 4px 12px rgba(221,115,149,.16)}
-    .wd-date-save:disabled{opacity:.55}
-    .wd-shared-date-info{margin-top:10px;color:#b38a99;font-size:11px;line-height:1.6}
-    .device-status-card{border-radius:17px!important;padding:8px 0!important}
-    .manual-battery{border-radius:18px!important;background:#fff9f7!important}
-    @media(max-width:350px){.quick-grid{gap:6px!important}.wd-date-save{min-width:73px;padding:0 8px}}
-    @media(prefers-reduced-motion:reduce){.quick-action,.nav-item,.card{transition:none!important;animation:none!important}}
-
-    .avatar{flex-shrink:0}
-    .wd-connection-banner{max-width:calc(100vw - 32px);text-align:center;overflow-wrap:anywhere}
-  </style>
+  <link rel="stylesheet" href="./ui.css?v=2026.10.11.6">
+<script id="appReleaseNotes" type="application/json">{"version":"2026.10.11.6","changes":["메모 대신 함께 저장하는 다음 이벤트를 추가했어요.","스케치북을 뜯은 듯한 종이 가장자리를 넣었어요.","기념일 동기화와 원형 프로필 사진을 개선했어요.","홈·채팅·꾸미기·설정을 밝은 스케치북 디자인으로 정리했어요."]}</script>
 </head>
 <body>
   <div class="app-frame">
+    <div class="sketch-torn-edge" aria-hidden="true"><svg viewBox="0 0 480 36" preserveAspectRatio="none" focusable="false"><path class="torn-cutout" d="M0 0V12L8 9L15 11L21 8L27 12L29 10L30 16L29 19L32 23Q37 27 41 22L43 18L42 14L45 9L52 12L59 10L65 13L72 9L78 11L84 8L89 11L90 15L89 18L92 23Q97 25 100 21L101 16L104 11L110 9L117 12L124 10L131 13L138 9L145 11L152 8L155 12L156 20L159 25Q164 28 168 23L169 17L171 11L179 13L186 9L193 12L201 10L209 13L215 9L218 12L217 17L220 22Q224 26 228 21L230 16L229 12L233 8L241 11L248 9L255 13L262 10L270 12L277 8L282 11L283 17L282 21L286 26Q292 28 296 22L297 16L299 10L307 13L314 9L321 11L328 8L336 12L344 10L350 13L354 9L355 15L354 19L358 23Q362 25 366 21L367 16L369 11L376 13L383 9L390 12L397 10L404 13L412 8L418 12L419 18L421 24Q426 27 431 23L433 18L432 13L436 9L443 12L450 10L457 13L465 9L472 12L480 10V0Z"/><path class="paper-fibers" d="M29 20l-2 3m15-2 2 3m47-3-2 3m11-5 3 3m55 3-2 3m14-5 2 3m47-7-2 3m13-5 2 3m54 4-2 3m14-6 2 3m57-4-2 3m14-5 2 3m52 2-2 3m14-5 2 3"/></svg></div>
     <div id="splash">
       <div class="splash-content">
         <div class="splash-logo">♡</div>
@@ -1640,7 +45,7 @@
         <div class="login-brand">
           <div class="login-brand-mark">♡</div>
           <h1>우리두리</h1>
-          <p>우리 둘만 들어오는 작은 방</p>
+          <p>둘만의 메신저</p>
         </div>
 
         <div id="fixedLoginPanel" class="login-card">
@@ -1653,17 +58,17 @@
             <input id="fixedPasswordInput" class="field" type="password" minlength="6" autocomplete="current-password" placeholder="비밀번호를 입력해요">
           </div>
           <button id="fixedLoginButton" class="primary-button" type="button">들어가기</button>
-          <p class="fixed-auth-hint">계정은 두 개만 고정으로 사용해요. 같은 계정으로 휴대폰·PC·태블릿에서 동시에 로그인할 수 있어요.</p>
+          <p class="fixed-auth-hint">다른 기기에서도 같은 계정으로 로그인할 수 있어요.</p>
         </div>
 
         <div id="fixedNameSetupPanel" class="login-card" hidden>
-          <h2 class="fixed-setup-title">처음 한 번만 이름 정하기</h2>
+          <h2 class="fixed-setup-title">이름 설정</h2>
           <p class="fixed-setup-copy">이 이름이 채팅과 프로필에 표시돼요. 나중에 설정에서 바꿀 수 있어요.</p>
           <div class="form-group">
             <label class="field-label" for="fixedNameInput">내 이름</label>
             <input id="fixedNameInput" class="field" maxlength="12" autocomplete="name" placeholder="이름을 입력해요">
           </div>
-          <button id="fixedNameSaveButton" class="primary-button" type="button">이 이름으로 시작</button>
+          <button id="fixedNameSaveButton" class="primary-button" type="button">시작하기</button>
         </div>
       </div>
     </section>
@@ -1686,7 +91,7 @@
             <button id="presenceButton" class="icon-button" aria-label="연결 상태">
               <span id="presenceDot" class="status-dot"></span>
             </button>
-            <button id="logoutButton" class="icon-button" aria-label="로그아웃">↗</button>
+            <button id="logoutButton" class="icon-button" aria-label="로그아웃"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H4v16h5M12 12h9M17 8l4 4-4 4"/></svg></button>
           </div>
         </div>
         <div class="room-code-row">
@@ -1699,9 +104,9 @@
 
       <main class="home-content">
         <div class="quick-grid">
-          <button class="quick-action" data-action="open-chat"><span class="quick-icon">✉</span><small>채팅</small></button>
-          <button class="quick-action" data-action="open-note"><span class="quick-icon">✎</span><small>한마디</small></button>
-          <button class="quick-action" data-action="open-deco"><span class="quick-icon">✦</span><small>꾸미기</small></button>
+          <button class="quick-action" data-action="open-chat"><span class="quick-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v12H9l-5 4z"/><path d="M8 8h8M8 12h5"/></svg></span><small>채팅</small></button>
+          <button class="quick-action" data-action="open-event"><span class="quick-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M12 13v5M9.5 15.5h5"/></svg></span><small>이벤트</small></button>
+          <button class="quick-action" data-action="open-deco"><span class="quick-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 12-12-3-3L5 16zM14 7l3 3"/></svg></span><small>꾸미기</small></button>
         </div>
 
         <article class="card dday-card">
@@ -1710,18 +115,29 @@
               <div class="dday-label">함께한 지</div>
               <div class="dday-value"><strong id="ddayValue">0</strong><span>일</span></div>
             </div>
-            <div class="dday-symbol">♡</div>
+            <div class="dday-doodle" aria-hidden="true"><svg viewBox="0 0 64 50"><path d="M25 36C9 26 8 17 15 13c5-3 10 0 11 4 3-6 12-7 15-1 4 9-8 16-16 20z"/><path d="M35 39c-8-6-8-12-3-14 3-2 7 0 8 3 3-4 8-4 10 0 3 6-5 10-9 13"/></svg></div>
           </div>
           <div id="ddaySub" class="dday-sub">기념일 없음</div>
         </article>
 
-        <article class="card content-card">
+        <article id="homeUpdateCard" class="card content-card home-update-card" hidden aria-labelledby="homeUpdateTitle">
+          <h2 id="homeUpdateTitle"></h2><ul id="homeUpdateChanges"></ul>
+          <div class="home-update-actions"><button id="dismissAppUpdateButton" type="button" class="cancel-button">나중에</button><button id="homeApplyAppUpdateButton" type="button" class="confirm-button">업데이트</button></div>
+        </article>
+
+        <article class="card content-card event-card" aria-labelledby="nextEventHeading">
           <div class="card-head">
-            <div class="card-title">오늘의 한마디</div>
-            <button class="text-button" data-action="open-note">수정</button>
+            <h2 id="nextEventHeading" class="card-title">다음 이벤트</h2>
+            <button id="editNextEventButton" class="text-button" data-action="open-event" hidden>수정</button>
           </div>
-          <div id="dailyNote" class="daily-note">한마디 없음</div>
-          <div id="dailyNoteMeta" class="daily-note-meta"></div>
+          <div id="nextEventEmpty" class="event-empty">
+            <p>다음에 언제 만날까요?</p>
+            <button class="event-create-button" data-action="open-event"><span aria-hidden="true">＋</span> 다음 이벤트 만들기</button>
+          </div>
+          <div id="nextEventDetails" class="event-details" hidden>
+            <div class="event-date-stamp" aria-hidden="true"><span id="nextEventMonth"></span><strong id="nextEventDay"></strong></div>
+            <div class="event-copy"><span id="nextEventCountdown" class="event-countdown"></span><h3 id="nextEventTitle"></h3><p id="nextEventDate"></p><p id="nextEventLocation" class="event-location" hidden></p></div>
+          </div>
         </article>
 
         <article class="card content-card">
@@ -1767,8 +183,6 @@
               <span></span>
             </button>
           </div>
-          <button id="pushDiagnosticButton" class="wd-diagnostic-button" type="button">알림 상태 진단</button>
-          <div id="pushDiagnosticOutput" class="wd-diagnostic-result" role="status" aria-live="polite"></div>
         </article>
 
         <article class="card content-card">
@@ -1792,30 +206,30 @@
       </main>
 
       <nav class="bottom-nav glass">
-        <button class="nav-item is-active" data-tab="home"><b>⌂</b><span>홈</span></button>
-        <button class="nav-item" data-action="open-chat"><b>✉</b><span>채팅</span></button>
-        <button class="nav-item" data-tab="deco"><b>✦</b><span>꾸미기</span></button>
+        <button class="nav-item is-active" data-tab="home"><b><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10l9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg></b><span>홈</span></button>
+        <button class="nav-item" data-action="open-chat"><b><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v12H9l-5 4z"/><path d="M8 8h8M8 12h5"/></svg></b><span>채팅</span></button>
+        <button class="nav-item" data-tab="deco"><b><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 12-12-3-3L5 16zM14 7l3 3"/></svg></b><span>꾸미기</span></button>
       </nav>
     </section>
 
     <!-- CHAT -->
     <section id="chatScreen" class="screen">
       <header class="chat-header glass">
-        <button id="chatBackButton" class="icon-button" aria-label="뒤로">←</button>
+        <button id="chatBackButton" class="icon-button" aria-label="뒤로"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
         <div id="chatHeaderAvatar" class="avatar partner">🐻</div>
         <div class="chat-header-copy">
           <b id="chatPartnerName">상대방</b>
           <p id="chatPartnerStatus">연결 대기</p>
         </div>
-        <button id="searchToggleButton" class="icon-button" aria-label="검색">⌕</button>
+        <button id="searchToggleButton" class="icon-button" aria-label="검색"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="M15 15l5 5"/></svg></button>
       </header>
 
       <div id="searchPanel" class="search-panel">
         <input id="searchInput" placeholder="메시지 검색">
         <span id="searchCount"></span>
-        <button data-search-step="-1">↑</button>
-        <button data-search-step="1">↓</button>
-        <button id="searchCloseButton">✕</button>
+        <button data-search-step="-1" aria-label="이전 검색 결과">↑</button>
+        <button data-search-step="1" aria-label="다음 검색 결과">↓</button>
+        <button id="searchCloseButton" aria-label="검색 닫기">✕</button>
       </div>
 
       <div id="chatMessages"></div>
@@ -1838,10 +252,10 @@
       </div>
 
       <div class="chat-input-bar">
-        <button id="toolboxToggleButton" class="input-action" aria-label="이모지">☺</button>
-        <button id="galleryButton" class="input-action" aria-label="사진 첨부">＋</button>
+        <button id="toolboxToggleButton" class="input-action" aria-label="이모지"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 14c2 3 6 3 8 0M8 9h.01M16 9h.01"/></svg></button>
+        <button id="galleryButton" class="input-action" aria-label="사진 첨부"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8" cy="9" r="1"/><path d="M4 17l5-5 4 4 4-5 4 5"/></svg></button>
         <textarea id="messageInput" class="message-input" rows="1" placeholder="메시지" enterkeyhint="send" inputmode="text" autocapitalize="sentences" autocomplete="off" spellcheck="true" lang="ko" aria-label="메시지 입력"></textarea>
-        <button id="sendMessageButton" class="send-button" aria-label="전송">↑</button>
+        <button id="sendMessageButton" class="send-button" aria-label="전송"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V4M6 10l6-6 6 6"/></svg></button>
       </div>
     </section>
 
@@ -1865,10 +279,10 @@
           <label class="wd-date-label" for="anniversaryInput">우리의 시작일</label>
           <div class="wd-date-edit-row">
             <input id="anniversaryInput" class="date-field" type="date">
-            <button id="anniversarySaveButton" class="wd-date-save" type="button">저장 ♡</button>
+            <button id="anniversarySaveButton" class="wd-date-save" type="button">저장</button>
           </div>
           <div id="anniversaryNext" class="helper-text" aria-live="polite"></div>
-          <div class="wd-shared-date-info" id="anniversarySyncStatus">두 사람에게 같은 날짜가 표시돼요 ♡</div>
+          <div class="wd-shared-date-info" id="anniversarySyncStatus">두 사람에게 함께 적용돼요.</div>
         </article>
 
         <article class="card content-card">
@@ -1903,20 +317,28 @@
       </main>
 
       <nav class="bottom-nav glass">
-        <button class="nav-item" data-tab="home"><b>⌂</b><span>홈</span></button>
-        <button class="nav-item" data-action="open-chat"><b>✉</b><span>채팅</span></button>
-        <button class="nav-item is-active" data-tab="deco"><b>✦</b><span>꾸미기</span></button>
+        <button class="nav-item" data-tab="home"><b><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10l9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg></b><span>홈</span></button>
+        <button class="nav-item" data-action="open-chat"><b><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v12H9l-5 4z"/><path d="M8 8h8M8 12h5"/></svg></b><span>채팅</span></button>
+        <button class="nav-item is-active" data-tab="deco"><b><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 12-12-3-3L5 16zM14 7l3 3"/></svg></b><span>꾸미기</span></button>
       </nav>
     </section>
   </div>
 
   <!-- MODALS -->
-  <div id="noteModal" class="modal-backdrop">
-    <div class="modal-sheet">
-      <div class="sheet-handle"></div>
-      <div class="modal-title">오늘의 한마디</div>
-      <textarea id="noteInput" class="modal-textarea" maxlength="180" placeholder="서로에게 남길 말을 적어보세요"></textarea>
-      <div class="modal-actions"><button class="cancel-button" data-close-modal="noteModal">취소</button><button id="saveNoteButton" class="confirm-button">저장</button></div>
+  <div id="eventModal" class="modal-backdrop">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <h2 id="eventModalTitle" class="modal-title">다음 이벤트 만들기</h2>
+      <form id="nextEventForm" novalidate>
+        <label class="event-field" for="eventTitleInput">어떤 약속인가요?<input id="eventTitleInput" class="modal-input" maxlength="60" required placeholder="예: 같이 영화 보기"></label>
+        <div class="event-form-row">
+          <label class="event-field" for="eventDateInput">날짜<input id="eventDateInput" class="modal-input" type="date" required></label>
+          <label class="event-field" for="eventTimeInput">시간 <span>선택</span><input id="eventTimeInput" class="modal-input" type="time"></label>
+        </div>
+        <label class="event-field" for="eventLocationInput">장소 <span>선택</span><input id="eventLocationInput" class="modal-input" maxlength="80" placeholder="예: 우리 동네 영화관"></label>
+        <p id="eventSaveStatus" class="event-save-status" role="status" aria-live="polite"></p>
+        <div class="modal-actions"><button id="cancelEventButton" type="button" class="cancel-button" data-close-modal="eventModal">취소</button><button id="saveEventButton" type="submit" class="confirm-button">함께 저장하기</button></div>
+      </form>
     </div>
   </div>
 
@@ -1933,7 +355,7 @@
   <div id="accountModal" class="modal-backdrop">
     <div class="modal-sheet">
       <div class="sheet-handle"></div>
-      <div class="modal-title">내 계정 설정</div>
+      <div class="modal-title">설정</div>
       <div class="account-settings-grid">
         <div>
           <label class="field-label" for="accountNameInput">표시 이름</label>
@@ -1950,6 +372,15 @@
         <button class="cancel-button" data-close-modal="accountModal">취소</button>
         <button id="saveAccountButton" class="confirm-button">저장</button>
       </div>
+      <section class="app-update-card" aria-labelledby="appUpdateHeading">
+        <div class="app-update-heading"><b id="appUpdateHeading">앱 업데이트</b><span id="appVersionLabel"></span></div>
+        <p id="appUpdateStatus" role="status" aria-live="polite">새 버전이 있는지 확인해 보세요.</p>
+        <div class="app-update-actions">
+          <button id="checkAppUpdateButton" type="button" class="cancel-button">업데이트 확인</button>
+          <button id="applyAppUpdateButton" type="button" class="confirm-button" hidden>업데이트하고 다시 열기</button>
+        </div>
+        <p class="app-icon-help">홈 화면 아이콘은 기기에 따라 늦게 바뀔 수 있어요.</p>
+      </section>
     </div>
   </div>
 
@@ -1965,7 +396,7 @@
   </div>
 
   <!-- IMAGE VIEWER / DELETE CONFIRM / TOAST -->
-  <div id="imageViewer" class="image-viewer"><button id="closeImageViewerButton">✕</button><img id="imageViewerImage" alt="확대 이미지"></div>
+  <div id="imageViewer" class="image-viewer"><button id="closeImageViewerButton" aria-label="확대 사진 닫기">✕</button><img id="imageViewerImage" alt="확대 이미지"></div>
   <div id="deleteDialog" class="confirm-dialog">
     <div class="confirm-box"><p>이 메시지를 삭제할까요?</p><div class="confirm-actions"><button id="cancelDeleteButton" class="cancel-button">취소</button><button id="confirmDeleteButton" class="danger-button">삭제</button></div></div>
   </div>
@@ -2224,7 +655,8 @@
         wallpaperUrl:deco.wallpaperUrl ?? raw.wallpaperUrl ?? "",
         dailyNote:deco.dailyNote ?? raw.dailyNote ?? "",
         dailyNoteBy:deco.dailyNoteBy ?? raw.dailyNoteBy ?? "",
-        dailyNoteAt:deco.dailyNoteAt ?? raw.dailyNoteAt ?? 0
+        dailyNoteAt:deco.dailyNoteAt ?? raw.dailyNoteAt ?? 0,
+        nextEvent:deco.nextEvent ?? null
       };
     }
 
@@ -2361,12 +793,6 @@
       element.innerHTML="";
       if(value?.startsWith?.("data:image")){
         const image=new Image();
-        image.onload=()=>{
-          const diagonal=Math.hypot(image.naturalWidth,image.naturalHeight);
-          if(!diagonal) return;
-          image.style.setProperty("--avatar-photo-width",`${94*image.naturalWidth/diagonal}%`);
-          image.style.setProperty("--avatar-photo-height",`${94*image.naturalHeight/diagonal}%`);
-        };
         image.src=value;
         image.alt="프로필";
         element.appendChild(image);
@@ -3537,7 +1963,7 @@
 
       const decoDefaults={
         coupleName:"",anniversary:"",wallpaper:"default",wallpaperUrl:"",
-        dailyNote:"",dailyNoteBy:"",dailyNoteAt:0,
+        nextEvent:null,
         anniversaryUpdatedAt:0,anniversaryUpdatedBy:""
       };
       for(const [field,fallback] of Object.entries(decoDefaults)){
@@ -3586,15 +2012,14 @@
         :partnerIsOnline?"지금 접속 중":partnerLastSeen?`최근 접속 ${timeAgo(partnerLastSeen)}`:"현재 접속하지 않음";
 
       $("coupleName").textContent=state.room.coupleName||"우리 둘";
-      $("dailyNote").textContent=state.room.dailyNote||"한마디 없음";
-      $("dailyNoteMeta").textContent=state.room.dailyNoteAt?`${state.room.dailyNoteBy||""} · ${timeAgo(state.room.dailyNoteAt)}`:"";
+      renderNextEvent();
       updateDday(state.room.anniversary);
       const syncInfo=$("anniversarySyncStatus");
       if(syncInfo){
         const setBy=state.room?.decoInfo?.anniversaryUpdatedBy;
         syncInfo.textContent=state.room.anniversary
-          ? `공유된 기념일 · ${setBy===state.mySlot?"내가 설정":setBy?"상대방이 설정":"두 사람에게 동기화됨"} ♡`
-          : "한 명이 날짜를 설정하면 두 사람에게 똑같이 표시돼요 ♡";
+          ? `공유된 기념일 · ${setBy===state.mySlot?"내가 설정":setBy?"상대방이 설정":"두 사람에게 동기화됨"}`
+          : "한 명이 날짜를 설정하면 두 사람에게 똑같이 표시돼요";
       }
       renderDeviceStatus();
       renderTyping(partner);
@@ -4047,17 +2472,64 @@
        HOME / DECO ACTIONS
     ========================================================= */
 
-    function openNoteModal(){
-      $("noteInput").value=state.room?.dailyNote||"";
-      openModal("noteModal");
+    let savingNextEvent=false;
+    function localDateValue(date=new Date()){
+      return [date.getFullYear(),String(date.getMonth()+1).padStart(2,"0"),String(date.getDate()).padStart(2,"0")].join("-");
     }
-    async function saveNote(){
-      const note=$("noteInput").value.trim();
+    function renderNextEvent(){
+      const event=state.room?.nextEvent;
+      const dayCount=calendarDayCount(event?.date);
+      const exists=event&&typeof event.title==="string"&&event.title.trim()&&dayCount!==null;
+      $("nextEventEmpty").hidden=!!exists;
+      $("nextEventDetails").hidden=!exists;
+      $("editNextEventButton").hidden=!exists;
+      if(!exists) return;
+      const [year,month,day]=event.date.split("-").map(Number);
+      const date=new Date(year,month-1,day);
+      const remaining=1-dayCount;
+      $("nextEventMonth").textContent=month+"월";
+      $("nextEventDay").textContent=day;
+      $("nextEventCountdown").textContent=remaining>0?"D−"+remaining:remaining===0?"오늘의 약속":"지난 이벤트";
+      $("nextEventTitle").textContent=event.title.slice(0,60);
+      const time=typeof event.time==="string"&&/^([01]\d|2[0-3]):[0-5]\d$/.test(event.time)?event.time:"";
+      $("nextEventDate").textContent=new Intl.DateTimeFormat("ko-KR",{month:"long",day:"numeric",weekday:"short"}).format(date)+(time?" · "+time:"");
+      const location=typeof event.location==="string"?event.location.trim().slice(0,80):"";
+      $("nextEventLocation").textContent=location;
+      $("nextEventLocation").hidden=!location;
+    }
+    function openEventModal(){
+      if(savingNextEvent) return;
+      const event=state.room?.nextEvent||{};
+      $("eventModalTitle").textContent=event.title?"다음 이벤트 수정":"다음 이벤트 만들기";
+      $("eventTitleInput").value=typeof event.title==="string"?event.title:"";
+      $("eventDateInput").value=typeof event.date==="string"?event.date:"";
+      $("eventDateInput").min=localDateValue();
+      $("eventTimeInput").value=typeof event.time==="string"?event.time:"";
+      $("eventLocationInput").value=typeof event.location==="string"?event.location:"";
+      $("eventSaveStatus").textContent="";
+      openModal("eventModal");
+    }
+    async function saveNextEvent(){
+      if(savingNextEvent) return;
+      const title=$("eventTitleInput").value.trim();
+      const date=$("eventDateInput").value;
+      const time=$("eventTimeInput").value;
+      const location=$("eventLocationInput").value.trim();
+      const status=$("eventSaveStatus");
+      const dayCount=calendarDayCount(date);
+      if(!title||title.length>60){status.textContent="약속 이름을 60자 이내로 적어 주세요.";$("eventTitleInput").focus();return;}
+      if(dayCount===null||dayCount>1){status.textContent="오늘 또는 앞으로의 날짜를 골라 주세요.";$("eventDateInput").focus();return;}
+      if(time&&!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)){status.textContent="시간을 다시 확인해 주세요.";return;}
+      if(location.length>80){status.textContent="장소를 80자 이내로 적어 주세요.";return;}
+      if(!state.roomId||!state.mySlot){status.textContent="로그인 후 다시 저장해 주세요.";return;}
+      if(!navigator.onLine){status.textContent="인터넷 연결 후 저장해 주세요.";return;}
+      savingNextEvent=true;$("saveEventButton").disabled=true;$("cancelEventButton").disabled=true;status.textContent="함께 저장하는 중…";
       try{
-        await update(roomRef(),{"decoInfo/dailyNote":note,"decoInfo/dailyNoteBy":state.myName,"decoInfo/dailyNoteAt":Date.now()});
-        closeModal("noteModal");
-        showToast("한마디를 저장했어요");
-      }catch(error){console.error(error);showToast("저장하지 못했어요")}
+        // Store one shared event atomically; do not overwrite memo or other room fields.
+        await update(roomRef(),{"decoInfo/nextEvent":{title,date,time,location,updatedBy:state.mySlot,updatedAt:serverTimestamp()}});
+        closeModal("eventModal");showToast("우리의 다음 약속을 저장했어요");
+      }catch(error){console.error(error);status.textContent="저장하지 못했어요. 잠시 후 다시 눌러 주세요.";}
+      finally{savingNextEvent=false;$("saveEventButton").disabled=false;$("cancelEventButton").disabled=false;}
     }
 
 
@@ -4093,7 +2565,7 @@
           state.room.decoInfo={...(state.room.decoInfo||{}),anniversary:value||""};
         }
         updateDday(value||"");
-        showToast(previous===value?"두 사람의 기념일이 동기화되어 있어요":value?"기념일을 둘 다에게 저장했어요 ♡":"기념일을 지웠어요");
+        showToast(previous===value?"두 사람의 기념일이 동기화되어 있어요":value?"기념일을 저장했어요.":"기념일을 지웠어요");
       }catch(error){
         console.error("shared anniversary save failed",error);
         showToast("기념일을 저장하지 못했어요. 인터넷 연결을 확인해요");
@@ -4121,17 +2593,11 @@
             const w=photo.naturalWidth||photo.width;
             const h=photo.naturalHeight||photo.height;
             if(!w||!h) return reject(new Error("EMPTY_PHOTO"));
-            // 흐린 원본을 배경으로 채우고, 전체 사진을 원형 안쪽에 여백을 두어 배치.
-            const cover=Math.max(size/w,size/h);
-            ctx.save();
-            ctx.filter="blur(22px) brightness(1.1)";
-            ctx.drawImage(photo,(size-w*cover)/2,(size-h*cover)/2,w*cover,h*cover);
-            ctx.restore();
-            ctx.fillStyle="rgba(255,243,247,.38)";
+            // Fill the circular frame with a center crop, without padding or blur.
+            ctx.fillStyle="#fff5f7";
             ctx.fillRect(0,0,size,size);
-            const available=size*.94;
-            const fit=Math.min(available/w,available/h);
-            ctx.drawImage(photo,(size-w*fit)/2,(size-h*fit)/2,w*fit,h*fit);
+            const cover=Math.max(size/w,size/h);
+            ctx.drawImage(photo,(size-w*cover)/2,(size-h*cover)/2,w*cover,h*cover);
             let result="";
             for(const quality of [.85,.75,.65,.55,.45,.35]){
               result=canvas.toDataURL("image/jpeg",quality);
@@ -4283,22 +2749,14 @@
         (async()=>{
           try{
             const mineRef=ref(db,`rooms/${FIXED_ROOM_ID}/${slot}`);
-            const [mineSnapshot,roomSnapshot]=await Promise.all([
-              get(mineRef),
-              get(ref(db,`rooms/${FIXED_ROOM_ID}`))
-            ]);
+            const mineSnapshot=await get(mineRef);
+            if(state.authUser?.uid!==user.uid||state.mySlot!==slot||state.roomId!==FIXED_ROOM_ID) return;
             const mine=mineSnapshot.exists()?mineSnapshot.val()||{}:{};
             if(String(mine.name||"").trim()){
               state.myName=String(mine.name).trim().slice(0,12);
               saveFixedNameCache(slot,state.myName);
             }
-            if(roomSnapshot.exists()){
-              state.room=roomSnapshot.val()||{};
-              state.partnerName=state.room?.[partnerSlot()]?.name||state.partnerName||"";
-              if(state.partnerName) saveFixedNameCache(partnerSlot(),state.partnerName);
-              renderRoom();
-              renderMessages();
-            }
+            // Room fields are owned by realtime listeners; an older full snapshot must not overwrite them.
             await update(mineRef,{
               uid:user.uid,
               clientId:state.clientId,
@@ -4332,7 +2790,7 @@
         lastSeenAt:Date.now()
       });
       const roomSnapshot=await get(ref(db,`rooms/${FIXED_ROOM_ID}`));
-      state.room=roomSnapshot.exists()?roomSnapshot.val()||{}:{};
+      state.room=normalizeRoom(roomSnapshot.exists()?roomSnapshot.val()||{}:{});
       state.partnerName=state.room?.[partnerSlot()]?.name||"";
       if(state.partnerName) saveFixedNameCache(partnerSlot(),state.partnerName);
       await enterApp();
@@ -4506,7 +2964,7 @@
       $("searchInput").addEventListener("input",performSearch);
       document.querySelectorAll("[data-search-step]").forEach(button=>button.addEventListener("click",()=>stepSearch(Number(button.dataset.searchStep))));
 
-      $("saveNoteButton").addEventListener("click",saveNote);
+      $("nextEventForm").addEventListener("submit",event=>{event.preventDefault();saveNextEvent()});
       $("saveCoupleButton").addEventListener("click",saveCoupleName);
       $("locationShareButton").addEventListener("click",toggleLocationSharing);
       $("enablePushButton").addEventListener("click",togglePushNotifications);
@@ -4522,7 +2980,7 @@
       document.addEventListener("click",event=>{
         const action=event.target.closest("[data-action]")?.dataset.action;
         if(action==="open-chat") openChat();
-        if(action==="open-note") openNoteModal();
+        if(action==="open-event") openEventModal();
         if(action==="open-couple") openCoupleModal();
         if(action==="open-deco") switchScreen("decoScreen");
         if(action==="pick-avatar") $("avatarInput").click();
@@ -5725,31 +4183,12 @@
         }
       }catch(error){console.warn("remote notification clear failed",error?.message||error);}
     };
-    async function diagnosePush(){
-      const output=$("pushDiagnosticOutput");
-      if(!output) return;
-      output.textContent="알림 상태 확인 중…";
-      try{
-        const {response,result}=await workerCall("/diagnose",{});
-        if(!response.ok) throw new Error(result.error||`HTTP ${response.status}`);
-        const platform=isIosDevice()?"아이폰":"현재 기기";
-        const permission="Notification" in window?Notification.permission:"unsupported";
-        const standalone=isStandalonePwa();
-        const devices=(result.myDevices||[]).map(d=>`${d.platform}(${d.pushProvider})`).join(", ")||"없음";
-        const latest=lastPushResult?`최근 전송: ${lastPushResult.sent}대 성공 / ${lastPushResult.failed}대 실패${lastPushResult.reason?` (${lastPushResult.reason})`:""}`:"최근 전송 결과는 이 기기에 없음";
-        output.textContent=`${platform}: ${standalone?"설치형 앱":"브라우저"} · 알림 권한 ${permission}\n`+
-          `내 구독 ${result.subscriberCount}대 (${devices}) / 상대 구독 ${result.partnerSubscriberCount}대\n${latest}`;
-      }catch(error){
-        output.textContent=`진단 실패: ${error.message||error}. Cloudflare Worker부터 배포했는지 확인해 주세요.`;
-      }
-    }
     function bindReliableEnhancements(){
       const input=$("messageInput");
       input?.addEventListener("input",()=>{
         if(!state.roomId||!state.mySlot) return;
         try{localStorage.setItem(draftKey(),input.value.slice(0,6000))}catch{}
       });
-      $("pushDiagnosticButton")?.addEventListener("click",diagnosePush);
       onValue(ref(db,".info/connected"),snapshot=>{
         firebaseConnected=snapshot.val()===true;
         showConnectionState();
@@ -5761,13 +4200,13 @@
         if(state.roomId){
           setPresence(document.visibilityState==="visible").catch(()=>{});
           if(state.batteryManager) publishBattery().catch(()=>{});
-          renderOutbox();flushOutbox().catch(console.warn);updateDday(state.room?.anniversary);
+          renderOutbox();flushOutbox().catch(console.warn);updateDday(state.room?.anniversary);renderNextEvent();
         }
       });
       document.addEventListener("visibilitychange",()=>{
         if(!document.hidden&&state.roomId){
           if(state.batteryManager) publishBattery().catch(()=>{});
-          renderOutbox();flushOutbox().catch(console.warn);updateDday(state.room?.anniversary);
+          renderOutbox();flushOutbox().catch(console.warn);updateDday(state.room?.anniversary);renderNextEvent();
         }
       });
       // Refresh D+ after local midnight without a server write.
@@ -5775,7 +4214,7 @@
         const now=new Date();
         const next=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,1);
         setTimeout(()=>{
-          if(state.roomId) updateDday(state.room?.anniversary);
+          if(state.roomId){updateDday(state.room?.anniversary);renderNextEvent();}
           refreshAtMidnight();
         },next-now);
       }
@@ -5789,8 +4228,75 @@
       resizeMessageInput();
       renderOutbox();
       flushOutbox().catch(console.warn);
+      setTimeout(()=>checkAppUpdate({automatic:true}),1800);
     };
 
+    const APP_VERSION=document.querySelector('meta[name="wooriduri-version"]').content;
+    let pendingAppVersion="";
+    let checkingAppUpdate=false;
+    async function checkAppUpdate(options={}){
+      if(checkingAppUpdate) return;
+      checkingAppUpdate=true;
+      const button=$("checkAppUpdateButton"),apply=$("applyAppUpdateButton"),status=$("appUpdateStatus");
+      button.disabled=true;apply.hidden=true;pendingAppVersion="";status.textContent="새 버전 확인 중…";
+      const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+      try{
+        const url=new URL("./index.html",location.href);url.searchParams.set("_updateCheck",String(Date.now()));
+        const response=await fetch(url,{cache:"no-store",signal:controller.signal});
+        if(!response.ok) throw new Error("UPDATE_CHECK_FAILED");
+        const page=new DOMParser().parseFromString(await response.text(),"text/html");
+        const version=page.querySelector('meta[name="wooriduri-version"]')?.content;
+        if(!version||!/^\d{4}\.\d{2}\.\d{2}\.\d+$/.test(version)) throw new Error("UPDATE_VERSION_MISSING");
+        if(version.localeCompare(APP_VERSION,undefined,{numeric:true})<=0){status.textContent="최신 버전이에요.";return;}
+        pendingAppVersion=version;apply.hidden=false;status.textContent=`새 버전 ${version}을 사용할 수 있어요.`;
+        showAppUpdateCard(page,version,options.automatic===true);
+      }catch(error){status.textContent=navigator.onLine?"업데이트를 확인하지 못했어요. 잠시 후 다시 눌러 주세요.":"인터넷 연결 후 다시 확인해 주세요.";}
+      finally{clearTimeout(timer);checkingAppUpdate=false;button.disabled=false;}
+    }
+    async function applyAppUpdate(){
+      if(!pendingAppVersion) return;
+      if(savingNextEvent||$("eventModal").classList.contains("is-open")){$("appUpdateStatus").textContent="작성 중인 이벤트를 먼저 저장하거나 닫아 주세요.";return;}
+      if(state.upload?.active){$("appUpdateStatus").textContent="사진 전송이 끝나면 업데이트해 주세요.";return;}
+      if($("accountNameInput").value.trim()!==state.myName||$("accountNewPasswordInput").value){$("appUpdateStatus").textContent="변경한 계정 설정을 먼저 저장해 주세요.";return;}
+      if(state.roomId&&state.mySlot){
+        try{const draft=$("messageInput").value;localStorage.setItem(draftKey(),draft);}
+        catch{$("appUpdateStatus").textContent="작성 중인 메시지를 보관하지 못했어요. 메시지를 먼저 보내 주세요.";return;}
+      }
+      $("applyAppUpdateButton").disabled=true;$("appUpdateStatus").textContent="새 버전으로 다시 여는 중…";
+      try{
+        if("serviceWorker" in navigator){
+          const registration=await Promise.race([navigator.serviceWorker.getRegistration(),wait(1500)]);
+          if(registration) await Promise.race([registration.update().catch(()=>{}),wait(2000)]);
+        }
+      }catch{}
+      const url=new URL(location.href);url.searchParams.delete("_updateCheck");url.searchParams.set("_appVersion",pendingAppVersion);
+      location.replace(url.href);
+    }
+    function dismissAppUpdateCard(){
+      try{localStorage.setItem("wooriduri_update_dismissed",pendingAppVersion)}catch{}
+      $("homeUpdateCard").hidden=true;
+    }
+    function showAppUpdateCard(page,version,automatic){
+      if(automatic){
+        try{if(localStorage.getItem("wooriduri_update_dismissed")===version)return}catch{}
+      }
+      let changes=[];
+      try{const notes=JSON.parse(page.querySelector("#appReleaseNotes")?.textContent||"{}");if(notes.version===version&&Array.isArray(notes.changes))changes=notes.changes.filter(item=>typeof item==="string").slice(0,6)}catch{}
+      if(!changes.length)changes=["새 버전에서 개선된 기능을 사용할 수 있어요."];
+      $("homeUpdateTitle").textContent=`v${version} 업데이트가 나왔어요`;
+      const list=$("homeUpdateChanges");list.replaceChildren();
+      for(const change of changes){const item=document.createElement("li");item.textContent=change.slice(0,180);list.append(item)}
+      $("homeUpdateCard").hidden=false;
+    }
+    function bindAppUpdates(){
+      $("dismissAppUpdateButton").addEventListener("click",dismissAppUpdateCard);
+      $("homeApplyAppUpdateButton").addEventListener("click",()=>{if(!$("accountModal").classList.contains("is-open"))openAccountSettings();applyAppUpdate()});
+      $("appVersionLabel").textContent=`v${APP_VERSION}`;
+      $("checkAppUpdateButton").addEventListener("click",checkAppUpdate);
+      $("applyAppUpdateButton").addEventListener("click",applyAppUpdate);
+    }
+
+    bindAppUpdates();
     bindEvents();
     bindRefinedEnhancements();
     bindReliableEnhancements();
