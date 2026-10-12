@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.12.2">
+  <meta name="wooriduri-version" content="2026.10.12.3">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
-  <link rel="stylesheet" href="./ui.css?v=2026.10.12.2">
-<script id="appReleaseNotes" type="application/json">{"version":"2026.10.12.2","changes":["꾸미기 아이콘과 프로필을 작게 다듬었어요.","메시지를 길게 눌러 답장·공감·삭제를 선택할 수 있어요.","전송 대기 메시지 다시 보내기와 읽던 위치 유지를 개선했어요.","프로필 사진의 크기와 위치를 직접 맞출 수 있어요.","지난 약속을 남기고 새로운 약속을 만들 수 있어요.","새 버전 안내와 업데이트 완료 내용을 홈에서 확인할 수 있어요."]}</script>
+  <link rel="stylesheet" href="./ui.css?v=2026.10.12.3">
+<script id="appReleaseNotes" type="application/json">{"version":"2026.10.12.3","changes":["꾸미기 아이콘과 프로필을 작게 다듬었어요.","메시지를 길게 눌러 답장·공감·삭제를 선택할 수 있어요.","전송 대기 메시지 다시 보내기와 읽던 위치 유지를 개선했어요.","프로필 사진의 크기와 위치를 직접 맞출 수 있어요.","지난 약속을 남기고 새로운 약속을 만들 수 있어요.","새 버전 안내와 업데이트 완료 내용을 홈에서 확인할 수 있어요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -121,7 +121,7 @@
         </article>
 
         <article id="homeUpdateCard" class="card content-card home-update-card" hidden aria-labelledby="homeUpdateTitle">
-          <h2 id="homeUpdateTitle"></h2><ul id="homeUpdateChanges"></ul>
+          <h2 id="homeUpdateTitle"></h2><ul id="homeUpdateChanges"></ul><button id="toggleUpdateDetails" class="update-details-toggle" type="button" aria-expanded="false" hidden>변경 내용 더 보기</button>
           <div class="home-update-actions"><button id="dismissAppUpdateButton" type="button" class="cancel-button">나중에</button><button id="homeApplyAppUpdateButton" type="button" class="confirm-button">업데이트</button></div>
         </article>
 
@@ -4353,6 +4353,8 @@
       let changes=[];
       try{const notes=JSON.parse(page.querySelector("#appReleaseNotes")?.textContent||"{}");if(notes.version===version&&Array.isArray(notes.changes))changes=notes.changes.filter(item=>typeof item==="string").slice(0,6)}catch{}
       if(!changes.length)changes=["새 버전에서 개선된 기능을 사용할 수 있어요."];
+      $("homeUpdateCard").classList.remove("is-expanded");$("toggleUpdateDetails").hidden=changes.length<=2;
+      $("toggleUpdateDetails").setAttribute("aria-expanded","false");$("toggleUpdateDetails").textContent="변경 내용 더 보기";
       $("homeUpdateCard").dataset.kind="available";$("homeUpdateCard").dataset.version=version;
       $("dismissAppUpdateButton").textContent="나중에";$("homeApplyAppUpdateButton").hidden=false;
       $("homeUpdateTitle").textContent=`v${version} 업데이트가 나왔어요`;
@@ -4361,6 +4363,7 @@
       $("homeUpdateCard").hidden=false;
     }
     function bindAppUpdates(){
+      $("toggleUpdateDetails").addEventListener("click",()=>{const expanded=$("homeUpdateCard").classList.toggle("is-expanded");$("toggleUpdateDetails").setAttribute("aria-expanded",String(expanded));$("toggleUpdateDetails").textContent=expanded?"접기":"변경 내용 더 보기"});
       $("dismissAppUpdateButton").addEventListener("click",dismissAppUpdateCard);
       $("homeApplyAppUpdateButton").addEventListener("click",()=>{if(!$("accountModal").classList.contains("is-open"))openAccountSettings();if(pendingAppVersion)applyAppUpdate();else checkAppUpdate()});
       $("appVersionLabel").textContent=`v${APP_VERSION}`;
