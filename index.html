@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.12.1">
+  <meta name="wooriduri-version" content="2026.10.12.2">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
-  <link rel="stylesheet" href="./ui.css?v=2026.10.12.1">
-<script id="appReleaseNotes" type="application/json">{"version":"2026.10.12.1","changes":["홈 카드·프로필·메뉴와 말풍선을 작고 아기자기하게 다듬었어요.","연속 메시지를 자연스럽게 묶고, 프로필과 시간 위치를 다듬었어요.","긴 메시지와 사진·답장도 작은 화면에 맞게 정리했어요."]}</script>
+  <link rel="stylesheet" href="./ui.css?v=2026.10.12.2">
+<script id="appReleaseNotes" type="application/json">{"version":"2026.10.12.2","changes":["꾸미기 아이콘과 프로필을 작게 다듬었어요.","메시지를 길게 눌러 답장·공감·삭제를 선택할 수 있어요.","전송 대기 메시지 다시 보내기와 읽던 위치 유지를 개선했어요.","프로필 사진의 크기와 위치를 직접 맞출 수 있어요.","지난 약속을 남기고 새로운 약속을 만들 수 있어요.","새 버전 안내와 업데이트 완료 내용을 홈에서 확인할 수 있어요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -98,7 +98,7 @@
           <span>내 계정</span>
           <span id="roomCodeChip" class="room-code-chip"></span>
           <button id="copyRoomCodeButton" type="button" class="room-code-copy">설정</button>
-          <span id="partnerStatusText">상대방 대기 중</span>
+          <span id="partnerStatusText">상대방 대기 중</span><button id="homeBatteryBadge" class="profile-battery-badge" type="button" aria-label="상대 배터리와 공유 설정">배터리 —</button>
         </div>
       </header>
 
@@ -128,6 +128,7 @@
         <article class="card content-card event-card" aria-labelledby="nextEventHeading">
           <div class="card-head">
             <h2 id="nextEventHeading" class="card-title">다음 이벤트</h2>
+            <button id="newNextEventButton" class="text-button" type="button" hidden>새 약속</button>
             <button id="editNextEventButton" class="text-button" data-action="open-event" hidden>수정</button>
           </div>
           <div id="nextEventEmpty" class="event-empty">
@@ -138,30 +139,10 @@
             <div class="event-date-stamp" aria-hidden="true"><span id="nextEventMonth"></span><strong id="nextEventDay"></strong></div>
             <div class="event-copy"><span id="nextEventCountdown" class="event-countdown"></span><h3 id="nextEventTitle"></h3><p id="nextEventDate"></p><p id="nextEventLocation" class="event-location" hidden></p></div>
           </div>
+          <details id="eventHistoryDetails" class="event-history"><summary>약속 기록</summary><ul id="eventHistoryList"></ul></details>
         </article>
 
-        <article class="card content-card">
-          <div class="card-head"><div class="card-title">상대 배터리</div></div>
-          <div class="device-status-card">
-            <div id="partnerBatteryIcon" class="device-status-icon">🔋</div>
-            <div class="device-status-copy">
-              <b id="partnerBatteryLevel">연결 대기</b>
-              <span id="partnerBatteryMeta">—</span>
-              <div class="battery-bar"><div id="partnerBatteryFill" class="battery-fill"></div></div>
-            </div>
-          </div>
-          <div id="manualBatteryPanel" class="manual-battery" hidden>
-            <div class="manual-battery-top">
-              <span>내 배터리</span>
-              <b id="manualBatteryValue">50%</b>
-            </div>
-            <input id="manualBatteryRange" type="range" min="1" max="100" value="50" aria-label="내 배터리 잔량">
-            <div class="manual-battery-actions">
-              <button id="manualChargingButton" type="button" class="manual-chip" aria-pressed="false">⚡ 충전 중</button>
-              <button id="manualBatterySaveButton" type="button" class="manual-save">저장</button>
-            </div>
-          </div>
-        </article>
+
 
         <article class="card content-card">
           <div class="card-head"><div class="card-title">메신저</div></div>
@@ -224,6 +205,7 @@
         <button id="searchToggleButton" class="icon-button" aria-label="검색"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="M15 15l5 5"/></svg></button>
       </header>
 
+      <div id="chatFirstHint" class="chat-first-hint" hidden><span>길게 누르면 메뉴 · 옆으로 밀면 답장</span><button id="dismissChatHint" type="button" aria-label="사용 안내 닫기">×</button></div>
       <div id="searchPanel" class="search-panel">
         <input id="searchInput" placeholder="메시지 검색">
         <span id="searchCount"></span>
@@ -372,6 +354,28 @@
         <button class="cancel-button" data-close-modal="accountModal">취소</button>
         <button id="saveAccountButton" class="confirm-button">저장</button>
       </div>
+        <section class="settings-battery" aria-label="배터리 공유">
+          <div class="card-head"><div class="card-title">상대 배터리</div></div>
+          <div class="device-status-card">
+            <div id="partnerBatteryIcon" class="device-status-icon">🔋</div>
+            <div class="device-status-copy">
+              <b id="partnerBatteryLevel">연결 대기</b>
+              <span id="partnerBatteryMeta">—</span>
+              <div class="battery-bar"><div id="partnerBatteryFill" class="battery-fill"></div></div>
+            </div>
+          </div>
+          <div id="manualBatteryPanel" class="manual-battery" hidden>
+            <div class="manual-battery-top">
+              <span>내 배터리</span>
+              <b id="manualBatteryValue">50%</b>
+            </div>
+            <input id="manualBatteryRange" type="range" min="1" max="100" value="50" aria-label="내 배터리 잔량">
+            <div class="manual-battery-actions">
+              <button id="manualChargingButton" type="button" class="manual-chip" aria-pressed="false">⚡ 충전 중</button>
+              <button id="manualBatterySaveButton" type="button" class="manual-save">저장</button>
+            </div>
+          </div>
+        </section>
       <section class="app-update-card" aria-labelledby="appUpdateHeading">
         <div class="app-update-heading"><b id="appUpdateHeading">앱 업데이트</b><span id="appVersionLabel"></span></div>
         <p id="appUpdateStatus" role="status" aria-live="polite">새 버전이 있는지 확인해 보세요.</p>
@@ -384,6 +388,8 @@
     </div>
   </div>
 
+  <div id="messageActionsModal" class="modal-backdrop"><div class="modal-sheet message-actions-sheet" role="dialog" aria-modal="true" aria-labelledby="messageActionsTitle"><div class="sheet-handle"></div><h2 id="messageActionsTitle" class="modal-title">메시지</h2><p id="messageActionsPreview"></p><div class="message-menu-grid"><button id="messageReplyAction" type="button">↩ 답장</button><button id="messageReactAction" type="button">♡ 공감</button><button id="messageRetryAction" type="button" hidden>다시 보내기</button><button id="messageDeleteAction" type="button" class="danger-action" hidden>삭제</button></div><button class="cancel-button" data-close-modal="messageActionsModal">닫기</button></div></div>
+  <div id="avatarCropModal" class="modal-backdrop"><div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="avatarCropTitle"><div class="sheet-handle"></div><h2 id="avatarCropTitle" class="modal-title">프로필 사진 맞추기</h2><p class="helper-text">원 안에 보이는 모습으로 저장돼요.</p><canvas id="avatarCropCanvas" width="320" height="320" aria-label="원형 프로필 미리보기"></canvas><label class="crop-control" for="avatarZoom">확대<input id="avatarZoom" type="range" min="1" max="3" step="0.01" value="1"></label><label class="crop-control" for="avatarX">좌우 위치<input id="avatarX" type="range" min="-1" max="1" step="0.01" value="0"></label><label class="crop-control" for="avatarY">위아래 위치<input id="avatarY" type="range" min="-1" max="1" step="0.01" value="0"></label><p id="avatarCropStatus" role="status"></p><div class="modal-actions"><button id="cancelAvatarCrop" type="button" class="cancel-button">취소</button><button id="saveAvatarCrop" type="button" class="confirm-button">사진 저장</button></div></div></div>
   <!-- MESSAGE REACTION PICKER -->
   <div id="messageReactionPicker" class="message-reaction-picker" aria-hidden="true">
     <button type="button" data-message-reaction="❤️" aria-label="하트 공감">❤️</button>
@@ -656,7 +662,8 @@
         dailyNote:deco.dailyNote ?? raw.dailyNote ?? "",
         dailyNoteBy:deco.dailyNoteBy ?? raw.dailyNoteBy ?? "",
         dailyNoteAt:deco.dailyNoteAt ?? raw.dailyNoteAt ?? 0,
-        nextEvent:deco.nextEvent ?? null
+        nextEvent:deco.nextEvent ?? null,
+        eventHistory:deco.eventHistory ?? {}
       };
     }
 
@@ -1835,8 +1842,9 @@
       });
     }
 
-    function listenRoomPath(path,apply,{refreshMessages=false}={}){
-      return onValue(ref(db,`rooms/${state.roomId}/${path}`),snapshot=>{
+    function listenRoomPath(path,apply,{refreshMessages=false,limit=0}={}){
+      const source=ref(db,`rooms/${state.roomId}/${path}`);
+      return onValue(limit?query(source,orderByKey(),limitToLast(limit)):source,snapshot=>{
         ensureRoomState();
         apply(snapshot.val(),snapshot.exists());
         scheduleRoomRender(refreshMessages);
@@ -1885,8 +1893,7 @@
     async function loadOlderMessages(){
       if(state.loadingOlderMessages||!state.hasMoreMessages||!state.messages.length) return;
       const box=$("chatMessages");
-      const oldHeight=box.scrollHeight;
-      const oldTop=box.scrollTop;
+      const historyAnchor=captureChatAnchor();
       const first=state.messages[0];
       state.loadingOlderMessages=true;
       renderMessages();
@@ -1904,7 +1911,7 @@
         scheduleMessageCacheSave();
         renderMessages();
         requestAnimationFrame(()=>{
-          box.scrollTop=oldTop+Math.max(0,box.scrollHeight-oldHeight);
+          restoreChatAnchor(historyAnchor);
         });
       }catch(error){
         console.error("older messages load failed",error);
@@ -1963,7 +1970,7 @@
 
       const decoDefaults={
         coupleName:"",anniversary:"",wallpaper:"default",wallpaperUrl:"",
-        nextEvent:null,
+        nextEvent:null,eventHistory:{},
         anniversaryUpdatedAt:0,anniversaryUpdatedBy:""
       };
       for(const [field,fallback] of Object.entries(decoDefaults)){
@@ -1972,7 +1979,7 @@
           const next=exists?value:(field==="anniversary"?legacyAnniversary:fallback);
           state.room.decoInfo[field]=next;
           state.room[field]=next;
-        }));
+        },{limit:field==="eventHistory"?30:0}));
       }
 
       // Push ID는 시간순이라 별도 .indexOn 없이 최근 항목만 받는다.
@@ -2256,11 +2263,13 @@
 
     function bindLongPress(element,callback){
       let timer;
-      const start=()=>{timer=setTimeout(callback,520)};
-      const cancel=()=>clearTimeout(timer);
+      const start=event=>{if(event.button&&event.button!==0)return;clearTimeout(timer);timer=setTimeout(()=>{element.dataset.justHeld="1";callback()},520)};
+      const cancel=()=>{clearTimeout(timer);setTimeout(()=>delete element.dataset.justHeld,350)};
       element.addEventListener("touchstart",start,{passive:true});
       element.addEventListener("touchend",cancel);
       element.addEventListener("touchmove",cancel);
+      element.addEventListener("pointermove",cancel);
+      element.addEventListener("pointercancel",cancel);
       element.addEventListener("mousedown",start);
       element.addEventListener("mouseup",cancel);
       element.addEventListener("mouseleave",cancel);
@@ -2483,6 +2492,10 @@
       $("nextEventEmpty").hidden=!!exists;
       $("nextEventDetails").hidden=!exists;
       $("editNextEventButton").hidden=!exists;
+      renderEventHistory();
+      $("newNextEventButton").hidden=!exists;
+      $("editNextEventButton").hidden=!exists||dayCount>1;
+      $("newNextEventButton").textContent=dayCount>1?"새 약속 만들기":"새 약속";
       if(!exists) return;
       const [year,month,day]=event.date.split("-").map(Number);
       const date=new Date(year,month-1,day);
@@ -2497,9 +2510,11 @@
       $("nextEventLocation").textContent=location;
       $("nextEventLocation").hidden=!location;
     }
-    function openEventModal(){
+    let creatingNextEvent=false;
+    function openEventModal(options={}){
       if(savingNextEvent) return;
-      const event=state.room?.nextEvent||{};
+      creatingNextEvent=options.createNew===true;
+      const event=creatingNextEvent?{}:(state.room?.nextEvent||{});
       $("eventModalTitle").textContent=event.title?"다음 이벤트 수정":"다음 이벤트 만들기";
       $("eventTitleInput").value=typeof event.title==="string"?event.title:"";
       $("eventDateInput").value=typeof event.date==="string"?event.date:"";
@@ -2526,7 +2541,13 @@
       savingNextEvent=true;$("saveEventButton").disabled=true;$("cancelEventButton").disabled=true;status.textContent="함께 저장하는 중…";
       try{
         // Store one shared event atomically; do not overwrite memo or other room fields.
-        await update(roomRef(),{"decoInfo/nextEvent":{title,date,time,location,updatedBy:state.mySlot,updatedAt:serverTimestamp()}});
+        const patch={"decoInfo/nextEvent":{title,date,time,location,updatedBy:state.mySlot,updatedAt:serverTimestamp()}};
+        const previous=state.room?.nextEvent;
+        if(creatingNextEvent&&previous?.title&&calendarDayCount(previous.date)!==null){
+          const key=push(ref(db,`rooms/${state.roomId}/decoInfo/eventHistory`)).key;
+          patch[`decoInfo/eventHistory/${key}`]={...previous,archivedAt:serverTimestamp(),archivedBy:state.mySlot};
+        }
+        await update(roomRef(),patch);
         closeModal("eventModal");showToast("우리의 다음 약속을 저장했어요");
       }catch(error){console.error(error);status.textContent="저장하지 못했어요. 잠시 후 다시 눌러 주세요.";}
       finally{savingNextEvent=false;$("saveEventButton").disabled=false;$("cancelEventButton").disabled=false;}
@@ -3728,6 +3749,7 @@
     renderMessages=function renderMessagesRefined(){
       const box=$("chatMessages");
       const nearBottom=box.scrollHeight-box.scrollTop-box.clientHeight<90;
+      const readingAnchor=captureChatAnchor();
       box.innerHTML="";
       state.searchItems=[];
 
@@ -3807,9 +3829,10 @@
             image.src=message.imageData;
             image.alt="사진";
             image.loading="lazy";
+            image.addEventListener("load",()=>requestAnimationFrame(()=>restoreChatAnchor(chatReadingAnchor)));
             content.appendChild(image);
             content.addEventListener("click",event=>{
-              if(content.dataset.justSwiped==="1"){event.preventDefault();return}
+              if(content.dataset.justSwiped==="1"||content.dataset.justHeld==="1"){event.preventDefault();return}
               openImageViewer(message.imageData);
             });
           }else{
@@ -3822,15 +3845,20 @@
           content.className="message-bubble";
           content.textContent=message.text||"";
           state.searchItems.push({element:content,text:message.text||"",row});
-          if(mine) bindLongPress(content,()=>openDeleteDialog(message.id));
+
         }
         if(content.classList.contains("message-bubble")){
           content.addEventListener("click",()=>{
+            if(content.dataset.justHeld==="1"||content.dataset.justSwiped==="1") return;
             const visible=!row.classList.contains("is-actions-visible");
             box.querySelectorAll(".is-actions-visible").forEach(item=>item.classList.remove("is-actions-visible"));
             row.classList.toggle("is-actions-visible",visible);
           });
         }
+        bindLongPress(content,()=>openMessageActions(message.id));
+        content.addEventListener("contextmenu",event=>{event.preventDefault();openMessageActions(message.id)});
+        content.tabIndex=0;
+        content.addEventListener("keydown",event=>{if(event.key==="F10"&&event.shiftKey){event.preventDefault();openMessageActions(message.id)}});
         body.appendChild(content);
         bindSwipeToReply(content,row,message,mine);
 
@@ -3851,7 +3879,9 @@
         if(mine&&state.pendingMessageIds.has(message.id)){
           const pending=document.createElement("span");
           pending.className="message-read";
-          pending.textContent="전송 중…";
+          pending.textContent=messageSendFailures.has(message.id)?"전송 실패":!navigator.onLine?"연결 대기":"전송 대기";
+          const retry=document.createElement("button");retry.type="button";retry.className="message-retry-button";retry.textContent="다시 보내기";retry.disabled=outboxFlushing;
+          retry.addEventListener("click",()=>retryPendingMessage(message.id));status.appendChild(retry);
           status.appendChild(pending);
         }
         const time=document.createElement("span");
@@ -3902,7 +3932,7 @@
       const last=state.messages.at(-1);
       $("chatPreviewText").textContent=last?.type==="image"?"사진":last?.text||"아직 메시지가 없어요";
       renderUnreadBadge();
-      if(nearBottom||state.upload.active) requestAnimationFrame(()=>box.scrollTop=box.scrollHeight);
+      requestAnimationFrame(()=>{if(nearBottom){box.scrollTop=box.scrollHeight;chatReadingAnchor=null}else{restoreChatAnchor(readingAnchor);chatReadingAnchor=readingAnchor}});
     }
 
     sendMessage=async function sendMessageRefined(){
@@ -4117,8 +4147,10 @@
             }
             writeOutbox(removeOutbox(readOutbox(),row.id));
             state.pendingMessageIds.delete(row.id);
+            messageSendFailures.delete(row.id);
             renderMessages();
           }catch(error){
+            messageSendFailures.add(row.id);renderMessages();
             console.warn("outbox retry pending",error?.code||error);
             if(!isTransientSendFailure(error)){
               showToast("메시지 전송 권한을 확인해 주세요");
@@ -4128,7 +4160,7 @@
         }
       }finally{
         outboxFlushing=false;
-        showConnectionState();
+        renderMessages();showConnectionState();
       }
     }
     // Preserve text through reload/crashes, then send with an immutable message ID.
@@ -4252,6 +4284,7 @@
       resizeMessageInput();
       renderOutbox();
       flushOutbox().catch(console.warn);
+      showInstalledUpdate();
       setTimeout(()=>checkAppUpdate({automatic:true}),1800);
     };
 
@@ -4265,10 +4298,22 @@
       button.disabled=true;apply.hidden=true;pendingAppVersion="";status.textContent="새 버전 확인 중…";
       const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
       try{
-        const url=new URL("./index.html",location.href);url.searchParams.set("_updateCheck",String(Date.now()));
+        const url=new URL("./release.json",location.href);url.searchParams.set("_updateCheck",String(Date.now()));
         const response=await fetch(url,{cache:"no-store",signal:controller.signal});
-        if(!response.ok) throw new Error("UPDATE_CHECK_FAILED");
-        const page=new DOMParser().parseFromString(await response.text(),"text/html");
+        if(!response.ok&&response.status!==404) throw new Error("UPDATE_CHECK_FAILED");
+        let page=null;
+        if(response.ok){
+          try{const release=await response.json();if(typeof release.version==="string"&&Array.isArray(release.changes)){
+            page=document.implementation.createHTMLDocument("");
+            const meta=page.createElement("meta");meta.name="wooriduri-version";meta.content=release.version;page.head.append(meta);
+            const notes=page.createElement("script");notes.id="appReleaseNotes";notes.type="application/json";notes.textContent=JSON.stringify(release);page.body.append(notes);
+          }}catch{}
+        }
+        if(!page){
+          const fallback=new URL("./index.html",location.href);fallback.searchParams.set("_updateCheck",String(Date.now()));
+          const html=await fetch(fallback,{cache:"no-store",signal:controller.signal});if(!html.ok)throw new Error("UPDATE_CHECK_FAILED");
+          page=new DOMParser().parseFromString(await html.text(),"text/html");
+        }
         const version=page.querySelector('meta[name="wooriduri-version"]')?.content;
         if(!version||!/^\d{4}\.\d{2}\.\d{2}\.\d+$/.test(version)) throw new Error("UPDATE_VERSION_MISSING");
         if(version.localeCompare(APP_VERSION,undefined,{numeric:true})<=0){status.textContent="최신 버전이에요.";return;}
@@ -4280,6 +4325,7 @@
     async function applyAppUpdate(){
       if(!pendingAppVersion) return;
       if(savingNextEvent||$("eventModal").classList.contains("is-open")){$("appUpdateStatus").textContent="작성 중인 이벤트를 먼저 저장하거나 닫아 주세요.";return;}
+      if($("avatarCropModal").classList.contains("is-open")){$("appUpdateStatus").textContent="프로필 사진을 먼저 저장하거나 닫아 주세요.";return;}
       if(state.upload?.active){$("appUpdateStatus").textContent="사진 전송이 끝나면 업데이트해 주세요.";return;}
       if($("accountNameInput").value.trim()!==state.myName||$("accountNewPasswordInput").value){$("appUpdateStatus").textContent="변경한 계정 설정을 먼저 저장해 주세요.";return;}
       if(state.roomId&&state.mySlot){
@@ -4297,7 +4343,7 @@
       location.replace(url.href);
     }
     function dismissAppUpdateCard(){
-      try{localStorage.setItem("wooriduri_update_dismissed",pendingAppVersion)}catch{}
+      try{localStorage.setItem($("homeUpdateCard").dataset.kind==="installed"?"wooriduri_release_acknowledged":"wooriduri_update_dismissed",$("homeUpdateCard").dataset.version||pendingAppVersion)}catch{}
       $("homeUpdateCard").hidden=true;
     }
     function showAppUpdateCard(page,version,automatic){
@@ -4307,6 +4353,8 @@
       let changes=[];
       try{const notes=JSON.parse(page.querySelector("#appReleaseNotes")?.textContent||"{}");if(notes.version===version&&Array.isArray(notes.changes))changes=notes.changes.filter(item=>typeof item==="string").slice(0,6)}catch{}
       if(!changes.length)changes=["새 버전에서 개선된 기능을 사용할 수 있어요."];
+      $("homeUpdateCard").dataset.kind="available";$("homeUpdateCard").dataset.version=version;
+      $("dismissAppUpdateButton").textContent="나중에";$("homeApplyAppUpdateButton").hidden=false;
       $("homeUpdateTitle").textContent=`v${version} 업데이트가 나왔어요`;
       const list=$("homeUpdateChanges");list.replaceChildren();
       for(const change of changes){const item=document.createElement("li");item.textContent=change.slice(0,180);list.append(item)}
@@ -4314,12 +4362,149 @@
     }
     function bindAppUpdates(){
       $("dismissAppUpdateButton").addEventListener("click",dismissAppUpdateCard);
-      $("homeApplyAppUpdateButton").addEventListener("click",()=>{if(!$("accountModal").classList.contains("is-open"))openAccountSettings();applyAppUpdate()});
+      $("homeApplyAppUpdateButton").addEventListener("click",()=>{if(!$("accountModal").classList.contains("is-open"))openAccountSettings();if(pendingAppVersion)applyAppUpdate();else checkAppUpdate()});
       $("appVersionLabel").textContent=`v${APP_VERSION}`;
       $("checkAppUpdateButton").addEventListener("click",checkAppUpdate);
       $("applyAppUpdateButton").addEventListener("click",applyAppUpdate);
     }
 
+    const messageSendFailures=new Set();
+let selectedMessageId="",chatReadingAnchor=null,restoringChatAnchor=false;
+function openMessageActions(id){
+  const message=state.messages.find(item=>item.id===id);if(!message)return;
+  selectedMessageId=id;closeMessageReactionPicker();
+  $("messageActionsPreview").textContent=message.type==="image"?"사진":(message.text||"").slice(0,100);
+  $("messageDeleteAction").hidden=!isMine(message)||state.pendingMessageIds.has(id);
+  $("messageRetryAction").hidden=!state.pendingMessageIds.has(id);
+  $("messageReactAction").hidden=state.pendingMessageIds.has(id);
+  openModal("messageActionsModal");$("messageReplyAction").focus();
+}
+async function retryPendingMessage(id){
+  if(!readOutbox().some(item=>item.id===id))return;
+  if(!navigator.onLine){showToast("연결되면 다시 보내 드릴게요");return;}
+  messageSendFailures.delete(id);await flushOutbox();
+}
+function captureChatAnchor(){
+  const box=$("chatMessages");if(!box.clientHeight||box.scrollHeight-box.scrollTop-box.clientHeight<90)return null;
+  const top=box.getBoundingClientRect().top;
+  const row=[...box.querySelectorAll("[data-message-id]")].find(item=>item.getBoundingClientRect().bottom>top+1);
+  return row?{id:row.dataset.messageId,offset:row.getBoundingClientRect().top-top}:null;
+}
+function restoreChatAnchor(anchor){
+  const box=$("chatMessages");if(!box.clientHeight)return;
+  restoringChatAnchor=true;
+  if(anchor){const row=box.querySelector(`[data-message-id="${CSS.escape(anchor.id)}"]`);if(row)box.scrollTop+=row.getBoundingClientRect().top-box.getBoundingClientRect().top-anchor.offset;}
+  else box.scrollTop=box.scrollHeight;
+  requestAnimationFrame(()=>restoringChatAnchor=false);
+}
+function renderEventHistory(){
+  const rows=Object.entries(state.room?.eventHistory||{}).filter(([,event])=>event?.title&&calendarDayCount(event.date)!==null).sort((a,b)=>b[1].date.localeCompare(a[1].date)).slice(0,30);
+  const current=state.room?.nextEvent;
+  if(current?.title&&calendarDayCount(current.date)>1)rows.unshift(["current",current]);
+  const list=$("eventHistoryList");list.replaceChildren();$("eventHistoryDetails").hidden=!rows.length;
+  for(const [id,event] of rows){const item=document.createElement("li"),title=document.createElement("b"),date=document.createElement("span");title.textContent=String(event.title).slice(0,60);date.textContent=event.date+(event.location?" · "+String(event.location).slice(0,80):"");item.append(title,date);list.append(item);}
+}
+let avatarCropPhoto=null,avatarCropSaving=false,avatarCropLoad=0;
+function drawAvatarCrop(){
+  if(!avatarCropPhoto)return;
+  const canvas=$("avatarCropCanvas"),ctx=canvas.getContext("2d",{alpha:false});
+  const size=canvas.width,photo=avatarCropPhoto,scale=Math.max(size/photo.naturalWidth,size/photo.naturalHeight)*Number($("avatarZoom").value);
+  const w=photo.naturalWidth*scale,h=photo.naturalHeight*scale;
+  const x=(size-w)/2-Number($("avatarX").value)*(w-size)/2,y=(size-h)/2-Number($("avatarY").value)*(h-size)/2;
+  ctx.fillStyle="#fff";ctx.fillRect(0,0,size,size);ctx.drawImage(photo,x,y,w,h);
+}
+handleAvatarFile=async function handleAvatarFileWithFraming(file){
+  if(!file||avatarCropSaving)return;
+  if(!file.type.startsWith("image/")){showToast("사진 파일을 골라 주세요");return;}
+  const token=++avatarCropLoad,url=URL.createObjectURL(file);
+  try{
+    const photo=new Image();photo.src=url;await photo.decode();if(token!==avatarCropLoad)return;
+    avatarCropPhoto=photo;$("avatarZoom").value="1";$("avatarX").value=$("avatarY").value="0";$("avatarCropStatus").textContent="";
+    drawAvatarCrop();openModal("avatarCropModal");
+  }catch(error){showToast("사진을 열지 못했어요. 다른 사진을 골라 주세요");}
+  finally{URL.revokeObjectURL(url);}
+};
+async function saveFramedAvatar(){
+  if(avatarCropSaving||!avatarCropPhoto||!state.roomId||!state.mySlot)return;
+  if(!navigator.onLine){$("avatarCropStatus").textContent="인터넷 연결 후 저장해 주세요.";return;}
+  avatarCropSaving=true;$("saveAvatarCrop").disabled=$("cancelAvatarCrop").disabled=true;
+  $("avatarCropStatus").textContent="사진 저장 중…";
+  try{
+    drawAvatarCrop();let data="";
+    for(const quality of [.85,.75,.65,.55,.45,.35]){data=$("avatarCropCanvas").toDataURL("image/jpeg",quality);if(Math.ceil((data.length-data.indexOf(",")-1)*.75)<=120000)break;}
+    await update(roomRef(),{[`${state.mySlot}/avatar`]:data});closeModal("avatarCropModal");avatarCropPhoto=null;showToast("프로필 사진을 바꿨어요");
+  }catch(error){$("avatarCropStatus").textContent="저장하지 못했어요. 사진은 그대로 있으니 다시 눌러 주세요.";}
+  finally{avatarCropSaving=false;$("saveAvatarCrop").disabled=$("cancelAvatarCrop").disabled=false;}
+}
+function openProfilePhoto(slot){
+  const value=state.room?.[slot]?.avatar;
+  if(typeof value==="string"&&value.startsWith("data:image"))openImageViewer(value);else if(slot===state.mySlot)$("avatarInput").click();
+}
+function partnerBatteryLabel(){
+  const battery=latestPartnerBattery(state.room?.[partnerSlot()]?.battery||{});
+  if(!Number.isFinite(battery.level))return "배터리 —";
+  const stale=Number(battery.updatedAt)&&nowOnFirebase()-Number(battery.updatedAt)>180000;
+  return `${battery.charging?"⚡":""}${Math.max(0,Math.min(100,battery.level))}%${battery.manual?" · 수동":""}${stale?" · 최근 기록":""}`;
+}
+let partnerTypingExpiry=null;
+const renderTypingBeforeService=renderTyping;
+renderTyping=function renderTypingWithProfile(partner){
+  renderTypingBeforeService(partner);clearTimeout(partnerTypingExpiry);
+  const header=$("chatPartnerStatus");
+  if(!header.dataset.baseStatus)header.dataset.baseStatus=header.textContent;
+  const active=!!$("typingStatus").textContent;
+  header.textContent=active?"입력 중…":header.dataset.baseStatus;
+  const homeStatus=$("partnerStatusText");
+  if(!homeStatus.dataset.baseStatus)homeStatus.dataset.baseStatus=homeStatus.textContent;
+  homeStatus.textContent=active?`${state.partnerName} · 입력 중…`:homeStatus.dataset.baseStatus;
+  if(active)partnerTypingExpiry=setTimeout(()=>{renderTyping(state.room?.[partnerSlot()]||{})},3100);
+};
+const renderRoomBeforeService=renderRoom;
+renderRoom=function renderRoomWithCompactStatus(){
+  $("chatPartnerStatus").dataset.baseStatus="";$("partnerStatusText").dataset.baseStatus="";renderRoomBeforeService();
+  const status=$("chatPartnerStatus"),label=partnerBatteryLabel();
+  status.dataset.baseStatus=(status.dataset.baseStatus||status.textContent)+(label!=="배터리 —"?" · "+label:"");
+  if(!$("typingStatus").textContent)status.textContent=status.dataset.baseStatus;
+  $("homeBatteryBadge").textContent=label;
+  if($("typingStatus").textContent)$("partnerStatusText").textContent=`${state.partnerName} · 입력 중…`;
+};
+function showInstalledUpdate(){
+  if($("homeUpdateCard").dataset.kind==="available"&&!$("homeUpdateCard").hidden)return;
+  try{if(localStorage.getItem("wooriduri_release_acknowledged")===APP_VERSION)return;}catch{}
+  let notes={};try{notes=JSON.parse($("appReleaseNotes").textContent)}catch{}
+  showAppUpdateCard(document,APP_VERSION,false);
+  $("homeUpdateCard").dataset.kind="installed";$("homeUpdateCard").dataset.version=APP_VERSION;
+  $("homeUpdateTitle").textContent=`업데이트됐어요 · v${APP_VERSION}`;
+  $("dismissAppUpdateButton").textContent="확인했어요";$("homeApplyAppUpdateButton").hidden=true;
+}
+function bindServiceEnhancements(){
+  $("homeBatteryBadge").addEventListener("click",openAccountSettings);
+  $("newNextEventButton").addEventListener("click",()=>openEventModal({createNew:true}));
+  $("messageReplyAction").addEventListener("click",()=>{const message=state.messages.find(item=>item.id===selectedMessageId);closeModal("messageActionsModal");if(message)setReplyTarget(message)});
+  $("messageReactAction").addEventListener("click",()=>{closeModal("messageActionsModal");openMessageReactionPicker(selectedMessageId)});
+  $("messageDeleteAction").addEventListener("click",()=>{const message=state.messages.find(item=>item.id===selectedMessageId);closeModal("messageActionsModal");if(message&&isMine(message)&&!state.pendingMessageIds.has(message.id))openDeleteDialog(message.id)});
+  $("messageRetryAction").addEventListener("click",()=>{closeModal("messageActionsModal");retryPendingMessage(selectedMessageId)});
+  for(const id of ["avatarZoom","avatarX","avatarY"])$(id).addEventListener("input",drawAvatarCrop);
+  $("saveAvatarCrop").addEventListener("click",saveFramedAvatar);
+  $("cancelAvatarCrop").addEventListener("click",()=>{if(avatarCropSaving)return;++avatarCropLoad;avatarCropPhoto=null;closeModal("avatarCropModal")});
+  for(const [id,own] of [["homeMyAvatar",true],["homePartnerAvatar",false],["decoMyAvatar",true],["decoPartnerAvatar",false],["chatHeaderAvatar",false]]){
+    const avatar=$(id);avatar.tabIndex=0;avatar.setAttribute("role","button");avatar.setAttribute("aria-label",own?"내 프로필 사진 크게 보기":"상대 프로필 사진 크게 보기");
+    const open=()=>openProfilePhoto(own?state.mySlot:partnerSlot());avatar.addEventListener("click",open);avatar.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();open()}});
+  }
+  const box=$("chatMessages");box.addEventListener("scroll",()=>{if(!restoringChatAnchor)chatReadingAnchor=captureChatAnchor()},{passive:true});
+  if("ResizeObserver" in window){
+    const observer=new ResizeObserver(()=>{if($("chatScreen").classList.contains("is-active"))restoreChatAnchor(chatReadingAnchor)});
+    const before=renderMessages;renderMessages=function renderMessagesWithAnchor(){before();observer.disconnect();box.querySelectorAll(".message-row").forEach(row=>observer.observe(row))};
+  }
+  $("dismissChatHint").addEventListener("click",()=>{try{localStorage.setItem("wooriduri_chat_hint_seen","1")}catch{}$("chatFirstHint").hidden=true});
+  const originalSwitch=switchScreen;switchScreen=function switchScreenWithHint(id){originalSwitch(id);if(id==="chatScreen"){let seen=false;try{seen=localStorage.getItem("wooriduri_chat_hint_seen")==="1"}catch{}$("chatFirstHint").hidden=seen;}};
+  let lastAutomaticCheck=0;
+  const refresh=()=>{if(document.hidden||!state.roomId||!state.mySlot||!navigator.onLine||Date.now()-lastAutomaticCheck<90000)return;lastAutomaticCheck=Date.now();checkAppUpdate({automatic:true})};
+  document.addEventListener("visibilitychange",refresh);window.addEventListener("pageshow",refresh);window.addEventListener("online",refresh);setInterval(refresh,120000);
+  document.addEventListener("keydown",event=>{if(event.key==="Escape"){closeModal("messageActionsModal");if(!avatarCropSaving)closeModal("avatarCropModal")}});
+}
+
+    bindServiceEnhancements();
     bindAppUpdates();
     bindEvents();
     bindRefinedEnhancements();
