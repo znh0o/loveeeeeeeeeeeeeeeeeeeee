@@ -178,4 +178,5 @@ body.chat-mode #chatScreen{position:absolute;inset:0;width:100%;height:100%}body
 #avatarCropCanvas{display:block;width:176px;height:176px;border-radius:50%;margin:18px auto;border:2px solid #dce6e9;touch-action:none}.crop-control{display:grid;grid-template-columns:80px minmax(0,1fr);align-items:center;gap:12px;margin:13px 0;font-size:13px;color:#60717c}.crop-control input{width:100%;accent-color:#73909c;min-height:32px}#avatarCropStatus{font-size:12px;color:#8e5361;min-height:18px}
 [role=button].avatar{cursor:pointer}.message-bubble:focus-visible,[role=button].avatar:focus-visible{outline:2px solid #7899a6;outline-offset:3px}
 [hidden]{display:none!important}
+.home-update-card:not(.is-expanded) #homeUpdateChanges li:nth-child(n+3){display:none}.update-details-toggle{border:0;background:transparent;color:#607a8a;font-size:11px;padding:4px 0;min-height:36px}.home-update-card .home-update-actions{margin-top:4px}
 @media(max-width:350px){.option-grid{max-width:224px}.option-button{height:44px;min-height:44px}.profile-battery-badge{font-size:10px}}
