@@ -280,20 +280,27 @@ body{font-size:15px}
 /* A small paper ledger between the cover photos and the couple profiles. */
 #homeScreen .photo-diary-hero{margin-bottom:0}
 #homeScreen .sticky-anniversary{bottom:9px}
-.home-milestone-strip{position:relative;z-index:3;display:flex;flex-direction:column;justify-content:center;gap:0;width:calc(100% + 32px);min-height:78px;margin:0 -16px 6px;padding:9px 24px 7px;border:0;border-radius:0;background:transparent;color:#575963;text-align:left;box-sizing:border-box}
-.home-milestone-strip::before,.home-milestone-strip::after{content:"";position:absolute;left:16px;right:16px;height:1px;background:#9598a2;pointer-events:none}
+.home-milestone-strip{position:relative;z-index:3;display:flex;flex-direction:column;justify-content:center;gap:0;width:calc(100% + 32px);min-height:68px;margin:16px -16px 4px;padding:18px 60px 4px;border:0;border-radius:0;background:transparent;color:#575963;text-align:left;box-sizing:border-box}
+.home-milestone-strip::before,.home-milestone-strip::after{content:"";position:absolute;left:15%;right:15%;height:1px;background:#9598a2;pointer-events:none}
 .home-milestone-strip::before{top:0}
 .home-milestone-strip::after{bottom:0}
-.home-strip-hearts{position:absolute;top:-12px;left:50%;display:flex;gap:1px;transform:translateX(-50%);font-size:19px;line-height:1;filter:drop-shadow(1px 1px 0 #fff8)}
+.home-strip-hearts{position:absolute;top:2px;left:50%;display:flex;gap:1px;transform:translateX(-50%);font-size:16px;line-height:1;filter:drop-shadow(1px 1px 0 #fff8)}
 .home-strip-hearts i{font-style:normal;color:#d8b4c2;transform:rotate(-14deg)}
 .home-strip-hearts i+ i{color:#626672;transform:rotate(12deg)}
-.home-strip-row{display:grid;grid-template-columns:20px minmax(0,1fr) auto;align-items:center;gap:6px;min-height:26px;width:100%;font-size:15px;line-height:1.1}
-.home-strip-symbol{font-size:18px;color:#b58199;text-align:center}
+.home-strip-row{display:grid;grid-template-columns:16px minmax(0,1fr) auto;align-items:center;gap:4px;min-height:21px;width:100%;font-size:14px;line-height:1.1}
+.home-strip-symbol{font-size:16px;color:#b58199;text-align:center}
 .home-strip-row:nth-of-type(3) .home-strip-symbol{color:#81869b}
 .home-strip-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.home-strip-count{font-size:16px;white-space:nowrap;color:#6a6670}
-#homeScreen .couple-connection{padding-top:6px}
+.home-strip-count{font-size:15px;white-space:nowrap;color:#6a6670}
+#homeScreen .couple-connection{padding-top:4px}
 #homeScreen .upcoming-anniversary{display:none}
-@media(max-width:350px){.home-milestone-strip{width:calc(100% + 24px);margin-right:-12px;margin-left:-12px;padding-right:20px;padding-left:20px}.home-strip-row{font-size:14px}.home-strip-count{font-size:15px}}
+@media(max-width:350px){.home-milestone-strip{width:calc(100% + 24px);margin-right:-12px;margin-left:-12px;padding-right:48px;padding-left:48px}.home-strip-row{font-size:13px}.home-strip-count{font-size:14px}}
 /* Keep the punched dots inside the small anniversary note. */
 #homeScreen .paper-binding{left:10px;right:10px;top:6px;height:9px;overflow:hidden;color:transparent;font-size:0;line-height:0;letter-spacing:0;background-image:radial-gradient(circle at 4px 50%,#7e6870 3px,transparent 3.5px);background-size:17px 9px;background-repeat:repeat-x}
+/* A compact chat header leaves more room for the conversation. */
+#chatScreen .chat-header{padding:calc(6px + env(safe-area-inset-top)) 12px 4px;gap:5px}
+#chatScreen .chat-header .icon-button{height:40px}
+#chatScreen .chat-header .icon-button svg{width:20px;height:20px}
+#chatScreen .chat-header .avatar{width:30px;height:30px}
+#chatScreen .chat-header-copy b{font-size:19px}
+#chatScreen .chat-header-copy p{margin-top:1px;font-size:12px}
