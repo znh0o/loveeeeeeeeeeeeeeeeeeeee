@@ -11,19 +11,18 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.13.6">
+  <meta name="wooriduri-version" content="2026.10.13.7">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 
-  <link rel="stylesheet" href="./ui.css?v=2026.10.13.6">
-  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.13.6","changes":["오늘의 사진은 각자 올리고 상대가 올린 사진만 볼 수 있어요.","프로필과 스프링, 채팅 상단과 아래 메뉴를 다듬었어요."]}</script>
+  <link rel="stylesheet" href="./ui.css?v=2026.10.13.7">
+  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.13.7","changes":["위쪽 스프링을 없애고 화면 위쪽 여백을 정리했어요.","프로필 사진을 조금 키우고 두 사람의 이름을 표시해요."]}</script>
 </head>
 <body>
   <div class="app-frame">
-    <div class="spring-binding" aria-hidden="true"><div class="spring-coils"><span class="spring-coil"></span><span class="spring-coil"></span><span class="spring-coil"></span><span class="spring-coil"></span><span class="spring-coil"></span><span class="spring-coil"></span><span class="spring-coil"></span><span class="spring-coil"></span><span class="spring-coil"></span><span class="spring-coil"></span><span class="spring-coil"></span><span class="spring-coil"></span></div></div>
     <div id="splash">
       <div class="splash-content">
         <div class="splash-logo">♡</div>
@@ -82,7 +81,7 @@
         </div>
 
         <section class="photo-diary-hero" aria-label="둘만의 사진과 기념일"><div class="diary-photos"><img hidden alt="함께 보낸 사진"><img hidden alt="함께 보낸 사진"></div><span class="photo-caption">우리의 하루</span><button id="benchmarkHeroPhotoButton" class="hero-photo-button" type="button">사진 넣기</button><input id="benchmarkHeroPhotoInput" type="file" accept="image/*" hidden><svg class="plane-sticker" viewBox="0 0 74 70" aria-hidden="true"><path d="M7 8l58 18-24 10-13 21-5-29z" fill="#fff" stroke="#67788a" stroke-width="1.5"/><path d="M7 8l34 28M23 28l42-2M28 57l-5-29" fill="none" stroke="#67788a" stroke-width="1.3"/><path d="M57 47c13-14 21 10 4 11-17 1-12 12-2 11" fill="none" stroke="#d0a4b5" stroke-width="2" stroke-dasharray="3 3"/></svg><article class="dday-card sticky-anniversary"><div class="paper-binding" aria-hidden="true">● ● ● ● ● ● ●</div><div class="dday-label">함께한 지</div><div class="dday-value"><strong id="ddayValue">0</strong><span>일</span></div><div id="ddaySub" class="dday-sub"></div><span class="paper-fold" aria-hidden="true"></span></article></section>
-        <section class="couple-connection" aria-label="두 사람"><div class="mini-person"><div id="homeMyAvatar" class="avatar"></div><span>나</span></div><div class="connection-copy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20S3 15 3 8c0-6 8-6 9-1 2-5 9-5 9 1 0 7-9 12-9 12z"/></svg><span id="partnerStatusText">상대방 대기 중</span><button id="homeBatteryBadge" class="profile-battery-badge" aria-label="배터리 설정">배터리 —</button></div><div class="mini-person"><div id="homePartnerAvatar" class="avatar partner"></div><span>상대</span></div></section>
+        <section class="couple-connection" aria-label="두 사람"><div class="mini-person"><div id="homeMyAvatar" class="avatar"></div><span id="homeMyName"></span></div><div class="connection-copy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20S3 15 3 8c0-6 8-6 9-1 2-5 9-5 9 1 0 7-9 12-9 12z"/></svg><span id="partnerStatusText">상대방 대기 중</span><button id="homeBatteryBadge" class="profile-battery-badge" aria-label="배터리 설정">배터리 —</button></div><div class="mini-person"><div id="homePartnerAvatar" class="avatar partner"></div><span id="homePartnerName"></span></div></section>
         <button class="upcoming-anniversary" data-benchmark-action="calendar"><span>♡</span><b id="benchmarkMilestone">다가오는 기념일</b><span>달력 보기 ↗</span></button>
         <article id="homeUpdateCard" class="card content-card home-update-card" hidden aria-labelledby="homeUpdateTitle">
           <h2 id="homeUpdateTitle"></h2><ul id="homeUpdateChanges"></ul><button id="toggleUpdateDetails" class="update-details-toggle" type="button" aria-expanded="false" hidden>변경 내용 더 보기</button>
@@ -4652,7 +4651,7 @@ renderMessages=function(){benchmarkOriginalMessages();renderBenchmarkRecords();r
 const benchmarkOriginalMessageActions=openMessageActions;
 openMessageActions=function(id){benchmarkOriginalMessageActions(id);compactRepeatedJamo($("messageActionsPreview"))};
 const benchmarkOriginalRoom=renderRoom;
-renderRoom=function(){benchmarkOriginalRoom();renderBenchmarkCalendar();renderBenchmarkRecords();renderBenchmarkHeroPhotos()};
+renderRoom=function(){benchmarkOriginalRoom();$("homeMyName").textContent=state.room?.[state.mySlot]?.name||state.myName||"";$("homePartnerName").textContent=state.room?.[partnerSlot()]?.name||state.partnerName||"";renderBenchmarkCalendar();renderBenchmarkRecords();renderBenchmarkHeroPhotos()};
 const benchmarkOriginalSwitch=switchScreen;
 switchScreen=function(id){benchmarkOriginalSwitch(id);for(const screen of ["benchmarkCalendarScreen","benchmarkRecordsScreen"])$(screen).classList.toggle("is-active",id===screen);if(id!=="chatScreen")state.chatOpen=false;document.querySelectorAll("[data-benchmark-action]").forEach(button=>button.classList.toggle("is-active",button.dataset.benchmarkAction===(id==="benchmarkCalendarScreen"?"calendar":id==="benchmarkRecordsScreen"?"records":id==="homeScreen"?"home":"")));if(id==="benchmarkCalendarScreen")renderBenchmarkCalendar();if(id==="benchmarkRecordsScreen"){refreshBenchmarkTodayPhoto();renderBenchmarkRecords()}};
 function bindDiaryBenchmark(){
