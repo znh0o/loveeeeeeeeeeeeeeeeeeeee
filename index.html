@@ -11,15 +11,15 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.13.1">
+  <meta name="wooriduri-version" content="2026.10.13.2">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 
-  <link rel="stylesheet" href="./ui.css?v=2026.10.13.1">
-  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.13.1","changes":["스프링 노트 느낌의 홈과 손글씨 디자인으로 새로 꾸몄어요.","둘이 함께 보는 달력과 하루 기록을 추가했어요.","채팅 사진을 모아 볼 수 있게 했어요.","칭찬 하트와 쿠폰, 오늘의 선택을 함께 즐길 수 있어요.","프로필과 채팅 등 기존 기능은 그대로 사용할 수 있어요."]}</script>
+  <link rel="stylesheet" href="./ui.css?v=2026.10.13.2">
+  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.13.2","changes":["채팅 말풍선 메뉴 바깥을 누르면 닫혀요.","ㅋㅋㅋ·ㅎㅎㅎ 같은 글자가 자연스럽게 붙어 보여요.","작은 글씨를 키우고 채팅 말풍선 배치를 다듬었어요.","쿠폰을 받은 것과 보낸 것으로 나눠 볼 수 있어요.","쿠폰을 보내면 채팅에 표시되고, 알림을 켠 상대에게 푸시를 보내요.","쿠폰을 사용하면 채팅에서도 사용 완료로 바뀌어요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -4473,7 +4473,7 @@ function bindServiceEnhancements(){
     bindServiceEnhancements();
 // Shared diary fields are additive; existing messenger paths stay intact.
 const benchmarkToday=new Date();
-let benchmarkMonth=new Date(benchmarkToday.getFullYear(),benchmarkToday.getMonth(),1),benchmarkDate=localDateValue(benchmarkToday),benchmarkRecordTab="photos",benchmarkDiaryPhoto="";
+let benchmarkMonth=new Date(benchmarkToday.getFullYear(),benchmarkToday.getMonth(),1),benchmarkDate=localDateValue(benchmarkToday),benchmarkRecordTab="photos",benchmarkCouponView="received",benchmarkDiaryPhoto="";
 let benchmarkSavingDiary=false,benchmarkSavingCoupon=false;
 const benchmarkRedeeming=new Set();
 function benchmarkEntries(field){return Object.entries(state.room?.[field]||{}).filter(([,value])=>value&&typeof value==="object");}
@@ -4536,9 +4536,12 @@ function renderBenchmarkRecords(){
     }
     if(!entries.length)benchmarkEmpty(body,"둘만의 첫 이야기를 남겨봐요.");
   }else if(benchmarkRecordTab==="coupons"){
-    body.className="coupon-list";$("benchmarkRecordHint").textContent="고마운 마음을 작은 약속으로 선물해요.";
-    for(const [id,coupon] of coupons.sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0))){const ticket=document.createElement("article");ticket.className="couple-coupon"+(coupon.usedAt?" is-used":"");const tag=document.createElement("small"),title=document.createElement("h3"),meta=document.createElement("span"),button=document.createElement("button");tag.textContent="FOR YOU · COUPON";title.textContent=coupon.title;meta.textContent=`${state.room?.[coupon.from]?.name||"상대"} → ${state.room?.[coupon.to]?.name||"나"}`;button.type="button";button.disabled=!!coupon.usedAt||coupon.to!==state.mySlot||benchmarkRedeeming.has(id);button.textContent=coupon.usedAt?"함께 썼어요 ♡":coupon.to===state.mySlot?"쿠폰 사용하기":"상대에게 선물했어요";button.onclick=()=>redeemBenchmarkCoupon(id);ticket.append(tag,title,meta,button);body.append(ticket)}
-    if(!coupons.length)benchmarkEmpty(body,"상대에게 첫 쿠폰을 선물해봐요.");
+    body.className="coupon-list";$("benchmarkRecordHint").textContent="받은 쿠폰과 보낸 쿠폰을 나눠서 볼 수 있어요.";
+    const filters=document.createElement("div");filters.className="coupon-filters";
+    for(const [view,label,slot] of [["received","받은 쿠폰","to"],["sent","보낸 쿠폰","from"]]){const button=document.createElement("button");button.type="button";button.className=view===benchmarkCouponView?"is-active":"";button.textContent=`${label} ${coupons.filter(([,coupon])=>coupon[slot]===state.mySlot).length}`;button.setAttribute("aria-pressed",String(view===benchmarkCouponView));button.onclick=()=>{benchmarkCouponView=view;renderBenchmarkRecords()};filters.append(button)}body.append(filters);
+    const visible=coupons.filter(([,coupon])=>coupon[benchmarkCouponView==="received"?"to":"from"]===state.mySlot).sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));
+    for(const [id,coupon] of visible){const ticket=document.createElement("article");ticket.className="couple-coupon"+(coupon.usedAt?" is-used":"");const tag=document.createElement("small"),title=document.createElement("h3"),meta=document.createElement("span"),button=document.createElement("button");tag.textContent=benchmarkCouponView==="received"?"받은 쿠폰":"보낸 쿠폰";title.textContent=coupon.title;meta.textContent=`${state.room?.[coupon.from]?.name||"상대"} → ${state.room?.[coupon.to]?.name||"나"}`;button.type="button";button.disabled=!!coupon.usedAt||coupon.to!==state.mySlot||benchmarkRedeeming.has(id);button.textContent=coupon.usedAt?"사용 완료 ♡":coupon.to===state.mySlot?"쿠폰 사용하기":"상대가 사용할 수 있어요";button.onclick=()=>redeemBenchmarkCoupon(id);ticket.append(tag,title,meta,button);body.append(ticket)}
+    if(!visible.length)benchmarkEmpty(body,benchmarkCouponView==="received"?"아직 받은 쿠폰이 없어요.":"아직 보낸 쿠폰이 없어요.");
   }else{
     body.className="heart-record-list";$("benchmarkRecordHint").textContent="하루에 한 번이라도, 서로에게 마음을 전해요.";
     const header=document.createElement("div");header.className="heart-page-head";header.innerHTML="<span aria-hidden='true'>♡</span><h3>서로에게 마음 한 장</h3><p>오늘 마음에 남은 말을 골라 보내요.</p>";body.append(header);
@@ -4568,8 +4571,15 @@ async function saveBenchmarkDiary(){
 function openBenchmarkCoupon(){ $("benchmarkCouponName").value="";$("benchmarkCouponStatus").textContent="";openModal("benchmarkCouponModal")}
 async function createBenchmarkCoupon(){
   if(benchmarkSavingCoupon)return;const title=$("benchmarkCouponName").value.trim();if(!title||title.length>40){$("benchmarkCouponStatus").textContent="쿠폰 이름을 적어 주세요.";return;}
+  if(!state.roomId||!state.mySlot||!isPaired()){$("benchmarkCouponStatus").textContent="두 사람이 연결된 뒤 선물할 수 있어요.";return;}
   benchmarkSavingCoupon=true;$("benchmarkCouponSave").disabled=true;
-  try{const id=push(ref(db,`rooms/${state.roomId}/decoInfo/coupons`)).key;await update(roomRef(),{[`decoInfo/coupons/${id}`]:{title,from:state.mySlot,to:partnerSlot(),createdAt:serverTimestamp(),usedAt:0}});closeModal("benchmarkCouponModal");benchmarkRecordTab="coupons";switchScreen("benchmarkRecordsScreen");showToast("상대에게 쿠폰을 선물했어요");}
+  try{
+    const id=push(ref(db,`rooms/${state.roomId}/decoInfo/coupons`)).key,messageId=push(messagesRef()).key,now=Date.now();
+    const message={sender:state.myName,senderSlot:state.mySlot,senderName:state.myName,type:"text",text:"🎟️ 쿠폰을 선물했어요",imageData:"",couponId:id,timestamp:now,clientCreatedAt:now,createdAt:now};
+    await update(ref(db),{[`rooms/${state.roomId}/decoInfo/coupons/${id}`]:{title,from:state.mySlot,to:partnerSlot(),createdAt:serverTimestamp(),usedAt:0},[`chat/${state.roomId}/${messageId}`]:message});
+    requestBackgroundPush(messageId).catch(error=>console.warn("coupon push request failed",error));
+    closeModal("benchmarkCouponModal");benchmarkRecordTab="coupons";benchmarkCouponView="sent";switchScreen("benchmarkRecordsScreen");showToast("상대에게 쿠폰을 선물했어요");
+  }
   catch(error){$("benchmarkCouponStatus").textContent="선물하지 못했어요. 다시 눌러 주세요.";}
   finally{benchmarkSavingCoupon=false;$("benchmarkCouponSave").disabled=false;}
 }
@@ -4583,17 +4593,35 @@ async function redeemBenchmarkCoupon(id){
 async function sendBenchmarkPraise(label){if(!["오늘도 고마워","많이 보고 싶어","늘 네 편이야"].includes(label))return;try{const id=push(ref(db,`rooms/${state.roomId}/decoInfo/play/praise`)).key;await update(roomRef(),{[`decoInfo/play/praise/${id}`]:{label,from:state.mySlot,to:partnerSlot(),createdAt:serverTimestamp()}});showToast("마음을 전했어요 ♡")}catch{showToast("마음을 보내지 못했어요")}}
 async function voteBenchmarkBalance(choice){if(!["바다 보러 가기","동네 카페 가기"].includes(choice))return;try{await update(roomRef(),{[`decoInfo/play/balance/${localDateValue()}/answers/${state.mySlot}`]:choice});showToast("선택을 남겼어요")}catch{showToast("선택을 남기지 못했어요")}}
 const benchmarkOriginalRealtime=startRealtimeListeners;
-startRealtimeListeners=function(){benchmarkOriginalRealtime();for(const field of ["journal","coupons","play"]){state.unsubscribers.push(listenRoomPath(`decoInfo/${field}`,value=>{state.room[field]=value||{};renderBenchmarkCalendar();renderBenchmarkRecords()}));}};
+startRealtimeListeners=function(){benchmarkOriginalRealtime();for(const field of ["journal","coupons","play"]){state.unsubscribers.push(listenRoomPath(`decoInfo/${field}`,value=>{state.room[field]=value||{};renderBenchmarkCalendar();renderBenchmarkRecords();if(field==="coupons"&&state.messages.length)renderMessages()}));}};
+const benchmarkOriginalGrouping=canGroupChatMessages;
+canGroupChatMessages=function(before,after){return !before?.couponId&&!after?.couponId&&benchmarkOriginalGrouping(before,after)};
+function renderBenchmarkChatCoupons(){
+  for(const message of state.messages){if(!message.couponId)continue;const row=$("chatMessages").querySelector(`[data-message-id="${CSS.escape(message.id)}"]`),body=row?.querySelector(".message-body");if(!body)continue;
+    const coupon=state.room?.coupons?.[message.couponId],card=document.createElement("button"),label=document.createElement("small"),title=document.createElement("strong"),status=document.createElement("span");
+    card.type="button";card.className="chat-coupon-card"+(coupon?.usedAt?" is-used":"");label.textContent=coupon?.to===state.mySlot?"받은 쿠폰":"보낸 쿠폰";title.textContent=coupon?.title||"쿠폰";status.textContent=coupon?.usedAt?"사용 완료 ♡":coupon?.to===state.mySlot?"사용할 수 있어요 · 쿠폰함 열기 ↗":"상대가 사용할 수 있어요 · 쿠폰함 열기 ↗";
+    card.append(label,title,status);card.onclick=event=>{event.stopPropagation();benchmarkRecordTab="coupons";benchmarkCouponView=coupon?.to===state.mySlot?"received":"sent";switchScreen("benchmarkRecordsScreen")};body.append(card);
+  }
+}
 const benchmarkOriginalMessages=renderMessages;
-renderMessages=function(){benchmarkOriginalMessages();renderBenchmarkRecords();renderBenchmarkHeroPhotos();document.querySelectorAll(".message-read").forEach(label=>{if(label.textContent==="읽음"){label.textContent="♥";label.setAttribute("aria-label","상대가 읽었어요")}})};
+function compactRepeatedJamo(element){
+  const walker=document.createTreeWalker(element,NodeFilter.SHOW_TEXT),matches=[];
+  while(walker.nextNode())if(!walker.currentNode.parentElement?.closest(".compact-jamo")&&/[ㄱ-ㅎㅏ-ㅣ]{3,}/.test(walker.currentNode.textContent))matches.push(walker.currentNode);
+  for(const node of matches){const fragment=document.createDocumentFragment(),text=node.textContent;let last=0;for(const match of text.matchAll(/[ㄱ-ㅎㅏ-ㅣ]{3,}/g)){if(match.index>last)fragment.append(document.createTextNode(text.slice(last,match.index)));const span=document.createElement("span");span.className="compact-jamo";span.textContent=match[0];fragment.append(span);last=match.index+match[0].length}if(last<text.length)fragment.append(document.createTextNode(text.slice(last)));node.replaceWith(fragment)}
+}
+renderMessages=function(){benchmarkOriginalMessages();renderBenchmarkRecords();renderBenchmarkHeroPhotos();renderBenchmarkChatCoupons();document.querySelectorAll(".message-row .message-bubble,.message-row .reply-quote span").forEach(compactRepeatedJamo);compactRepeatedJamo($("chatPreviewText"));document.querySelectorAll(".message-read").forEach(label=>{if(label.textContent==="읽음"){label.textContent="♥";label.setAttribute("aria-label","상대가 읽었어요")}})};
+const benchmarkOriginalMessageActions=openMessageActions;
+openMessageActions=function(id){benchmarkOriginalMessageActions(id);compactRepeatedJamo($("messageActionsPreview"))};
 const benchmarkOriginalRoom=renderRoom;
 renderRoom=function(){benchmarkOriginalRoom();renderBenchmarkCalendar();renderBenchmarkRecords()};
 const benchmarkOriginalSwitch=switchScreen;
 switchScreen=function(id){benchmarkOriginalSwitch(id);for(const screen of ["benchmarkCalendarScreen","benchmarkRecordsScreen"])$(screen).classList.toggle("is-active",id===screen);if(id!=="chatScreen")state.chatOpen=false;document.querySelectorAll("[data-benchmark-action]").forEach(button=>button.classList.toggle("is-active",button.dataset.benchmarkAction===(id==="benchmarkCalendarScreen"?"calendar":id==="benchmarkRecordsScreen"?"records":id==="homeScreen"?"home":"")));if(id==="benchmarkCalendarScreen")renderBenchmarkCalendar();if(id==="benchmarkRecordsScreen")renderBenchmarkRecords()};
 function bindDiaryBenchmark(){
+  $("messageActionsModal").addEventListener("click",event=>{if(event.target===event.currentTarget)closeModal("messageActionsModal")});
+  const composer=$("messageInput"),updateComposerSpacing=()=>composer.classList.toggle("is-jamo-only",/^[ㄱ-ㅎㅏ-ㅣ]{2,}$/.test(composer.value.trim()));composer.addEventListener("input",updateComposerSpacing);updateComposerSpacing();
   document.addEventListener("click",event=>{
     const action=event.target.closest("[data-benchmark-action]")?.dataset.benchmarkAction;
-    if(action==="home")switchScreen("homeScreen");if(action==="calendar")switchScreen("benchmarkCalendarScreen");if(action==="records")switchScreen("benchmarkRecordsScreen");if(action==="coupons"){benchmarkRecordTab="coupons";switchScreen("benchmarkRecordsScreen")};if(action==="hearts"){benchmarkRecordTab="hearts";switchScreen("benchmarkRecordsScreen")};if(action==="deco")switchScreen("decoScreen");if(action==="settings")openAccountSettings();
+    if(action==="home")switchScreen("homeScreen");if(action==="calendar")switchScreen("benchmarkCalendarScreen");if(action==="records")switchScreen("benchmarkRecordsScreen");if(action==="coupons"){benchmarkRecordTab="coupons";benchmarkCouponView="received";switchScreen("benchmarkRecordsScreen")};if(action==="hearts"){benchmarkRecordTab="hearts";switchScreen("benchmarkRecordsScreen")};if(action==="deco")switchScreen("decoScreen");if(action==="settings")openAccountSettings();
     const tab=event.target.closest("[data-record-tab]")?.dataset.recordTab;if(tab){benchmarkRecordTab=tab;renderBenchmarkRecords()}
     const suggested=event.target.closest("[data-coupon-suggestion]")?.dataset.couponSuggestion;if(suggested)$("benchmarkCouponName").value=suggested;
     const praise=event.target.closest("[data-heart-send]")?.dataset.heartSend;if(praise)sendBenchmarkPraise(praise);
