@@ -284,7 +284,7 @@ body{font-size:15px}
 .home-milestone-strip::before,.home-milestone-strip::after{content:"";position:absolute;left:15%;right:15%;height:1px;background:#9598a2;pointer-events:none}
 .home-milestone-strip::before{top:0}
 .home-milestone-strip::after{bottom:0}
-.home-strip-hearts{position:absolute;top:2px;left:50%;display:flex;gap:1px;transform:translateX(-50%);font-size:16px;line-height:1;filter:drop-shadow(1px 1px 0 #fff8)}
+.home-strip-hearts{position:absolute;top:-8px;left:50%;display:flex;gap:1px;transform:translateX(-50%);font-size:16px;line-height:1;filter:drop-shadow(1px 1px 0 #fff8)}
 .home-strip-hearts i{font-style:normal;color:#d8b4c2;transform:rotate(-14deg)}
 .home-strip-hearts i+ i{color:#626672;transform:rotate(12deg)}
 .home-strip-row{display:grid;grid-template-columns:16px minmax(0,1fr) auto;align-items:center;gap:4px;min-height:21px;width:100%;font-size:14px;line-height:1.1}
