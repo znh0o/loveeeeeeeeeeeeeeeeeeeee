@@ -11,15 +11,15 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.13.3">
+  <meta name="wooriduri-version" content="2026.10.13.4">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 
-  <link rel="stylesheet" href="./ui.css?v=2026.10.13.3">
-  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.13.3","changes":["스프링을 손으로 그린 듯한 검은 선으로 다듬었어요."]}</script>
+  <link rel="stylesheet" href="./ui.css?v=2026.10.13.4">
+  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.13.4","changes":["홈 사진을 직접 골라 둘이 함께 볼 수 있어요.","채팅의 ㅎㅎㅎㅎ 글자와 입력창 표시를 바로잡았어요.","업데이트 카드의 글씨와 버튼을 읽기 쉽게 키웠어요.","아래에서 올라오는 창을 쓸어 내리거나 바깥을 눌러 닫을 수 있어요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -81,7 +81,7 @@
           <button class="quick-action" data-action="open-deco"><span class="quick-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 12-12-3-3L5 16zM14 7l3 3"/></svg></span><small>꾸미기</small></button>
         </div>
 
-        <section class="photo-diary-hero" aria-label="둘만의 사진과 기념일"><div class="diary-photos"><img hidden alt="함께 보낸 사진"><img hidden alt="함께 보낸 사진"></div><span class="photo-caption">우리의 하루</span><svg class="plane-sticker" viewBox="0 0 74 70" aria-hidden="true"><path d="M7 8l58 18-24 10-13 21-5-29z" fill="#fff" stroke="#67788a" stroke-width="1.5"/><path d="M7 8l34 28M23 28l42-2M28 57l-5-29" fill="none" stroke="#67788a" stroke-width="1.3"/><path d="M57 47c13-14 21 10 4 11-17 1-12 12-2 11" fill="none" stroke="#d0a4b5" stroke-width="2" stroke-dasharray="3 3"/></svg><article class="dday-card sticky-anniversary"><div class="paper-binding" aria-hidden="true">● ● ● ● ● ● ●</div><div class="dday-label">함께한 지</div><div class="dday-value"><strong id="ddayValue">0</strong><span>일</span></div><div id="ddaySub" class="dday-sub"></div><span class="paper-fold" aria-hidden="true"></span></article></section>
+        <section class="photo-diary-hero" aria-label="둘만의 사진과 기념일"><div class="diary-photos"><img hidden alt="함께 보낸 사진"><img hidden alt="함께 보낸 사진"></div><span class="photo-caption">우리의 하루</span><button id="benchmarkHeroPhotoButton" class="hero-photo-button" type="button">사진 넣기</button><input id="benchmarkHeroPhotoInput" type="file" accept="image/*" hidden><svg class="plane-sticker" viewBox="0 0 74 70" aria-hidden="true"><path d="M7 8l58 18-24 10-13 21-5-29z" fill="#fff" stroke="#67788a" stroke-width="1.5"/><path d="M7 8l34 28M23 28l42-2M28 57l-5-29" fill="none" stroke="#67788a" stroke-width="1.3"/><path d="M57 47c13-14 21 10 4 11-17 1-12 12-2 11" fill="none" stroke="#d0a4b5" stroke-width="2" stroke-dasharray="3 3"/></svg><article class="dday-card sticky-anniversary"><div class="paper-binding" aria-hidden="true">● ● ● ● ● ● ●</div><div class="dday-label">함께한 지</div><div class="dday-value"><strong id="ddayValue">0</strong><span>일</span></div><div id="ddaySub" class="dday-sub"></div><span class="paper-fold" aria-hidden="true"></span></article></section>
         <section class="couple-connection" aria-label="두 사람"><div class="mini-person"><div id="homeMyAvatar" class="avatar"></div><span>나</span></div><div class="connection-copy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20S3 15 3 8c0-6 8-6 9-1 2-5 9-5 9 1 0 7-9 12-9 12z"/></svg><span id="partnerStatusText">상대방 대기 중</span><button id="homeBatteryBadge" class="profile-battery-badge" aria-label="배터리 설정">배터리 —</button></div><div class="mini-person"><div id="homePartnerAvatar" class="avatar partner"></div><span>상대</span></div></section>
         <button class="upcoming-anniversary" data-benchmark-action="calendar"><span>♡</span><b id="benchmarkMilestone">다가오는 기념일</b><span>달력 보기 ↗</span></button>
         <article id="homeUpdateCard" class="card content-card home-update-card" hidden aria-labelledby="homeUpdateTitle">
@@ -4557,7 +4557,23 @@ function renderBenchmarkRecords(){
   }
 }
 function benchmarkEmpty(parent,text){const empty=document.createElement("p");empty.className="benchmark-empty";empty.textContent=text;parent.append(empty)}
-function renderBenchmarkHeroPhotos(){const photos=state.messages.filter(item=>item.type==="image"&&item.imageData).sort((a,b)=>messageTimestamp(b)-messageTimestamp(a)).slice(0,2);document.querySelector(".diary-photos").classList.toggle("is-empty",!photos.length);document.querySelectorAll(".diary-photos img").forEach((image,index)=>{const source=photos[index]?.imageData;if(source){if(image.src!==source)image.src=source;image.hidden=false}else{image.removeAttribute("src");image.hidden=true}})}
+function renderBenchmarkHeroPhotos(){
+  const chosen=state.room?.heroPhoto?.imageData;
+  const latest=state.messages.filter(item=>item.type==="image"&&item.imageData).sort((a,b)=>messageTimestamp(b)-messageTimestamp(a))[0]?.imageData;
+  const source=typeof chosen==="string"&&chosen.startsWith("data:image/")?chosen:latest;
+  document.querySelector(".diary-photos").classList.toggle("is-empty",!source);
+  document.querySelectorAll(".diary-photos img").forEach((image,index)=>{if(index===0&&source){if(image.src!==source)image.src=source;image.hidden=false}else{image.removeAttribute("src");image.hidden=true}});
+  const button=$("benchmarkHeroPhotoButton");if(!button.disabled)button.textContent=chosen?"사진 바꾸기":"사진 넣기";
+}
+async function saveBenchmarkHeroPhoto(file){
+  if(!file)return;
+  if(!file.type.startsWith("image/")){showToast("사진 파일을 골라 주세요");return}
+  if(!state.roomId||!state.mySlot){showToast("로그인한 뒤 사진을 골라 주세요");return}
+  const button=$("benchmarkHeroPhotoButton");button.disabled=true;button.textContent="사진 저장 중…";
+  try{const imageData=await compressImage(file,{maxWidth:1000,quality:.7,maxBytes:180000});const photo={imageData,by:state.mySlot,updatedAt:serverTimestamp()};await update(roomRef(),{"decoInfo/heroPhoto":photo});state.room.heroPhoto={...photo,updatedAt:Date.now()};renderBenchmarkHeroPhotos();showToast("홈 사진을 함께 볼 수 있어요")}
+  catch(error){console.warn("home photo save failed",error);showToast("사진을 저장하지 못했어요. 다시 골라 주세요")}
+  finally{button.disabled=false;renderBenchmarkHeroPhotos()}
+}
 function openBenchmarkDiary(){benchmarkDiaryPhoto="";$("benchmarkDiaryPhotoPreview").hidden=true;$("benchmarkDiaryPhoto").value="";$("benchmarkDiaryDate").value=benchmarkDate;$("benchmarkDiaryName").value="";$("benchmarkDiaryBody").value="";$("benchmarkDiaryStatus").textContent="";openModal("benchmarkDiaryModal")}
 async function saveBenchmarkDiary(){
   if(benchmarkSavingDiary)return;
@@ -4593,7 +4609,7 @@ async function redeemBenchmarkCoupon(id){
 async function sendBenchmarkPraise(label){if(!["오늘도 고마워","많이 보고 싶어","늘 네 편이야"].includes(label))return;try{const id=push(ref(db,`rooms/${state.roomId}/decoInfo/play/praise`)).key;await update(roomRef(),{[`decoInfo/play/praise/${id}`]:{label,from:state.mySlot,to:partnerSlot(),createdAt:serverTimestamp()}});showToast("마음을 전했어요 ♡")}catch{showToast("마음을 보내지 못했어요")}}
 async function voteBenchmarkBalance(choice){if(!["바다 보러 가기","동네 카페 가기"].includes(choice))return;try{await update(roomRef(),{[`decoInfo/play/balance/${localDateValue()}/answers/${state.mySlot}`]:choice});showToast("선택을 남겼어요")}catch{showToast("선택을 남기지 못했어요")}}
 const benchmarkOriginalRealtime=startRealtimeListeners;
-startRealtimeListeners=function(){benchmarkOriginalRealtime();for(const field of ["journal","coupons","play"]){state.unsubscribers.push(listenRoomPath(`decoInfo/${field}`,value=>{state.room[field]=value||{};renderBenchmarkCalendar();renderBenchmarkRecords();if(field==="coupons"&&state.messages.length)renderMessages()}));}};
+startRealtimeListeners=function(){benchmarkOriginalRealtime();for(const field of ["journal","coupons","play"]){state.unsubscribers.push(listenRoomPath(`decoInfo/${field}`,value=>{state.room[field]=value||{};renderBenchmarkCalendar();renderBenchmarkRecords();if(field==="coupons"&&state.messages.length)renderMessages()}));}state.unsubscribers.push(listenRoomPath("decoInfo/heroPhoto",value=>{state.room.heroPhoto=value||null;renderBenchmarkHeroPhotos()}));};
 const benchmarkOriginalGrouping=canGroupChatMessages;
 canGroupChatMessages=function(before,after){return !before?.couponId&&!after?.couponId&&benchmarkOriginalGrouping(before,after)};
 function renderBenchmarkChatCoupons(){
@@ -4609,15 +4625,25 @@ function compactRepeatedJamo(element){
   while(walker.nextNode())if(!walker.currentNode.parentElement?.closest(".compact-jamo")&&/[ㄱ-ㅎㅏ-ㅣ]{3,}/.test(walker.currentNode.textContent))matches.push(walker.currentNode);
   for(const node of matches){const fragment=document.createDocumentFragment(),text=node.textContent;let last=0;for(const match of text.matchAll(/[ㄱ-ㅎㅏ-ㅣ]{3,}/g)){if(match.index>last)fragment.append(document.createTextNode(text.slice(last,match.index)));const span=document.createElement("span");span.className="compact-jamo";span.textContent=match[0];fragment.append(span);last=match.index+match[0].length}if(last<text.length)fragment.append(document.createTextNode(text.slice(last)));node.replaceWith(fragment)}
 }
-renderMessages=function(){benchmarkOriginalMessages();renderBenchmarkRecords();renderBenchmarkHeroPhotos();renderBenchmarkChatCoupons();document.querySelectorAll(".message-row .message-bubble,.message-row .reply-quote span").forEach(compactRepeatedJamo);compactRepeatedJamo($("chatPreviewText"));document.querySelectorAll(".message-read").forEach(label=>{if(label.textContent==="읽음"){label.textContent="♥";label.setAttribute("aria-label","상대가 읽었어요")}})};
+function compactVisibleChat(){document.querySelectorAll(".message-row .message-bubble,.message-row .reply-quote span").forEach(compactRepeatedJamo);compactRepeatedJamo($("chatPreviewText"))}
+renderMessages=function(){benchmarkOriginalMessages();renderBenchmarkRecords();renderBenchmarkHeroPhotos();renderBenchmarkChatCoupons();compactVisibleChat();if(!$("messageInput").value)$("messageInput").classList.remove("is-jamo-only");document.querySelectorAll(".message-read").forEach(label=>{if(label.textContent==="읽음"){label.textContent="♥";label.setAttribute("aria-label","상대가 읽었어요")}})};
 const benchmarkOriginalMessageActions=openMessageActions;
 openMessageActions=function(id){benchmarkOriginalMessageActions(id);compactRepeatedJamo($("messageActionsPreview"))};
 const benchmarkOriginalRoom=renderRoom;
-renderRoom=function(){benchmarkOriginalRoom();renderBenchmarkCalendar();renderBenchmarkRecords()};
+renderRoom=function(){benchmarkOriginalRoom();renderBenchmarkCalendar();renderBenchmarkRecords();renderBenchmarkHeroPhotos()};
 const benchmarkOriginalSwitch=switchScreen;
 switchScreen=function(id){benchmarkOriginalSwitch(id);for(const screen of ["benchmarkCalendarScreen","benchmarkRecordsScreen"])$(screen).classList.toggle("is-active",id===screen);if(id!=="chatScreen")state.chatOpen=false;document.querySelectorAll("[data-benchmark-action]").forEach(button=>button.classList.toggle("is-active",button.dataset.benchmarkAction===(id==="benchmarkCalendarScreen"?"calendar":id==="benchmarkRecordsScreen"?"records":id==="homeScreen"?"home":"")));if(id==="benchmarkCalendarScreen")renderBenchmarkCalendar();if(id==="benchmarkRecordsScreen")renderBenchmarkRecords()};
 function bindDiaryBenchmark(){
-  $("messageActionsModal").addEventListener("click",event=>{if(event.target===event.currentTarget)closeModal("messageActionsModal")});
+  for(const backdrop of document.querySelectorAll(".modal-backdrop")){
+    const sheet=backdrop.querySelector(".modal-sheet"),handle=sheet?.querySelector(".sheet-handle");if(!handle||!backdrop.id)continue;
+    backdrop.addEventListener("click",event=>{if(event.target===backdrop)closeModal(backdrop.id)});
+    let drag=null;
+    handle.addEventListener("pointerdown",event=>{if(event.pointerType==="mouse"&&event.button!==0)return;drag={id:event.pointerId,startY:event.clientY,offset:0};handle.setPointerCapture(event.pointerId);sheet.style.transition="";sheet.classList.add("is-dragging")});
+    handle.addEventListener("pointermove",event=>{if(!drag||event.pointerId!==drag.id)return;drag.offset=Math.max(0,event.clientY-drag.startY);sheet.style.transform=`translateY(${drag.offset}px)`});
+    const finish=event=>{if(!drag||event.pointerId!==drag.id)return;const close=drag.offset>Math.min(90,sheet.clientHeight*.2);drag=null;sheet.classList.remove("is-dragging");if(close){closeModal(backdrop.id);sheet.style.transform="";sheet.style.transition=""}else{sheet.style.transition="transform .18s ease";sheet.style.transform="translateY(0)";setTimeout(()=>{sheet.style.transition="";sheet.style.transform=""},190)}};
+    handle.addEventListener("pointerup",finish);handle.addEventListener("pointercancel",finish);
+  }
+  const chatJamoObserver=new MutationObserver(compactVisibleChat);chatJamoObserver.observe($("chatMessages"),{subtree:true,childList:true,characterData:true});chatJamoObserver.observe($("chatPreviewText"),{subtree:true,childList:true,characterData:true});compactVisibleChat();document.fonts?.ready.then(compactVisibleChat).catch(()=>{});
   const composer=$("messageInput"),updateComposerSpacing=()=>composer.classList.toggle("is-jamo-only",/^[ㄱ-ㅎㅏ-ㅣ]{2,}$/.test(composer.value.trim()));composer.addEventListener("input",updateComposerSpacing);updateComposerSpacing();
   document.addEventListener("click",event=>{
     const action=event.target.closest("[data-benchmark-action]")?.dataset.benchmarkAction;
@@ -4632,6 +4658,7 @@ function bindDiaryBenchmark(){
   $("benchmarkAddRecord").onclick=()=>{if(benchmarkRecordTab==="photos"){openChat();$("galleryInput").click()}else if(benchmarkRecordTab==="journal")openBenchmarkDiary();else openBenchmarkCoupon()};
   $("benchmarkDiaryForm").onsubmit=event=>{event.preventDefault();saveBenchmarkDiary()};$("benchmarkCouponForm").onsubmit=event=>{event.preventDefault();createBenchmarkCoupon()};
   $("benchmarkDiaryPhoto").onchange=async event=>{const file=event.target.files[0];if(!file)return;try{benchmarkDiaryPhoto=await compressImage(file,{maxWidth:720,quality:.65,maxBytes:160000});$("benchmarkDiaryPhotoPreview").src=benchmarkDiaryPhoto;$("benchmarkDiaryPhotoPreview").hidden=false;}catch(error){$("benchmarkDiaryStatus").textContent="사진을 열지 못했어요."}};
+  $("benchmarkHeroPhotoButton").onclick=()=>$("benchmarkHeroPhotoInput").click();$("benchmarkHeroPhotoInput").onchange=event=>{const file=event.target.files?.[0];event.target.value="";saveBenchmarkHeroPhoto(file)};
 }
 
     bindDiaryBenchmark();

@@ -229,10 +229,10 @@ body,body *{font-family:var(--hand)!important}
 .spring-coil:nth-child(4n+2):after{transform:rotate(-18deg) translateY(1px)}.spring-coil:nth-child(4n+3):after{transform:rotate(-25deg) translateX(1px)}.spring-coil:nth-child(4n):after{transform:rotate(-20deg) translateY(-1px)}
 .benchmark-header{padding-top:calc(39px + env(safe-area-inset-top))}.simple-header{padding-top:calc(39px + env(safe-area-inset-top))}.chat-header{padding-top:calc(39px + env(safe-area-inset-top))}
 .diary-photos.is-empty{display:grid;place-items:center;background:linear-gradient(135deg,#f6e6ee,#ece7f5 56%,#e7ecf3)}
-.diary-photos.is-empty:before{content:"대화에서 사진을 보내면 여기에 쌓여요";font-size:23px;color:#856f86;padding:45px 32px 0;text-align:center}
+.diary-photos.is-empty:before{content:"사진을 넣어 우리의 하루를 꾸며봐요";font-size:23px;color:#856f86;padding:45px 32px 0;text-align:center}
 .diary-photos.is-empty~.photo-caption{color:#856f86;text-shadow:none}
 .compact-jamo{letter-spacing:-.42em;margin-right:.42em}
-.chat-input-bar .message-input.is-jamo-only{letter-spacing:-.42em}
+.chat-input-bar .message-input.is-jamo-only:not(:placeholder-shown){letter-spacing:-.42em}
 
 body{font-size:15px}
 .brand-date,.dday-sub,.mini-person span,.connection-copy #partnerStatusText,.upcoming-anniversary,.event-copy p,.event-history summary,.quiet-label,.record-hint,.journal-entry>small,.journal-by,.couple-coupon>span{font-size:16px}
@@ -242,3 +242,6 @@ body{font-size:15px}
 .coupon-filters{display:flex;gap:8px;margin:0 0 16px}.coupon-filters button{flex:1;min-width:0;min-height:38px;padding:6px 8px;border:1px solid #e8d9e4;border-radius:8px;background:#fff;color:#927f91;font-size:18px}.coupon-filters button.is-active{background:#fbeaf2;border-color:#dab9cd;color:#9d6481}
 .chat-coupon-card{display:flex;flex-direction:column;gap:4px;min-width:190px;max-width:230px;padding:10px 13px;margin-top:4px;text-align:left;border:1px solid #e8cddd;border-radius:8px;background:#fff8fb;color:#8c6a80;box-shadow:1px 2px 0 #ddcbd83b}.chat-coupon-card small{font-size:14px;color:#aa8aa1}.chat-coupon-card strong{font-size:20px;font-weight:400;line-height:1.2}.chat-coupon-card span{font-size:15px;color:#a17e94}.chat-coupon-card.is-used{background:#f7f5f8;color:#928b98;border-color:#e3dfe5}.chat-coupon-card.is-used span{color:#918994}
 #chatMessages{padding:9px 12px 12px}.message-row{margin-bottom:12px}.message-row.is-group-start,.message-row.is-group-middle{margin-bottom:2px}.message-stack{max-width:95%}.message-row.them .message-stack{max-width:calc(100% - 36px)}.message-bubble{padding:5px 10px;line-height:1.32;border-radius:17px}
+.hero-photo-button{position:absolute;right:13px;bottom:37px;z-index:4;min-height:38px;padding:7px 13px;border:1px solid #fff9;border-radius:18px;background:#fffde;color:#6b5966;box-shadow:0 2px 8px #382e3840;font-size:16px;line-height:1.1}.hero-photo-button:disabled{opacity:.7}
+.home-update-card{padding:14px 16px!important;margin:14px 0!important}.home-update-card h2{font-size:19px;line-height:1.35;margin-bottom:9px}.home-update-card ul{font-size:16px;line-height:1.45;margin:8px 0 10px;padding-left:21px}.home-update-card li+li{margin-top:5px}.home-update-card .home-update-actions{gap:10px;margin-top:9px}.home-update-actions button,.update-details-toggle{font-size:16px;min-height:38px;padding:7px 10px}
+.sheet-handle{position:relative;width:88px;height:24px;margin:0 auto 1px;background:transparent;touch-action:none;cursor:grab}.sheet-handle:before{content:"";position:absolute;top:4px;left:21px;right:21px;height:5px;border-radius:10px;background:#d8dde5}.sheet-handle:active{cursor:grabbing}.modal-sheet.is-dragging{animation:none;transition:none}
