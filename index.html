@@ -11,15 +11,15 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.13.5">
+  <meta name="wooriduri-version" content="2026.10.13.6">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 
-  <link rel="stylesheet" href="./ui.css?v=2026.10.13.5">
-  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.13.5","changes":["기록의 사진 탭을 ‘오늘의 사진’으로 바꿨어요.","사진을 올리면 둘이 함께 보고, 한국 시간 자정에 새 사진 자리로 바뀌어요."]}</script>
+  <link rel="stylesheet" href="./ui.css?v=2026.10.13.6">
+  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.13.6","changes":["오늘의 사진은 각자 올리고 상대가 올린 사진만 볼 수 있어요.","프로필과 스프링, 채팅 상단과 아래 메뉴를 다듬었어요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -4478,6 +4478,11 @@ let benchmarkSavingDiary=false,benchmarkSavingCoupon=false,benchmarkSavingTodayP
 let benchmarkTodayPhotoDate="",benchmarkTodayPhotoUnsub=null;
 const benchmarkRedeeming=new Set();
 function benchmarkTodayKey(date=new Date()){return new Date(date.getTime()+9*60*60*1000).toISOString().slice(0,10)}
+function benchmarkTodayPhotoFor(slot,day=benchmarkTodayKey()){
+  const saved=state.room?.dailyPhoto||{};
+  const photo=saved[slot]||((saved.by===slot&&saved.date===day)?saved:null);
+  return photo?.date===day&&typeof photo.imageData==="string"&&photo.imageData.startsWith("data:image/")?photo:null;
+}
 function benchmarkEntries(field){return Object.entries(state.room?.[field]||{}).filter(([,value])=>value&&typeof value==="object");}
 function benchmarkTopic(name){const last=name.charCodeAt(name.length-1);return name+((last>=0xac00&&last<=0xd7a3&&(last-0xac00)%28!==0)?"은":"는")}
 function benchmarkAllEvents(){
@@ -4525,10 +4530,10 @@ function renderBenchmarkRecords(){
   $("benchmarkAddRecord").hidden=benchmarkRecordTab==="hearts";
   $("benchmarkAddRecord").setAttribute("aria-label",benchmarkRecordTab==="coupons"?"쿠폰 선물하기":benchmarkRecordTab==="journal"?"일기 쓰기":"오늘의 사진 올리기");
   if(benchmarkRecordTab==="photos"){
-    const day=benchmarkTodayKey(),photo=state.room?.dailyPhoto?.date===day?state.room.dailyPhoto:null;
-    $("benchmarkRecordHint").textContent="오늘의 사진 한 장을 둘이 함께 봐요.";body.className="today-photo-page";
-    const card=document.createElement("article"),date=document.createElement("small"),stage=document.createElement("div"),action=document.createElement("button"),note=document.createElement("p");card.className="today-photo-card";date.className="today-photo-date";date.textContent=day.replaceAll("-",".")+" · 오늘";stage.className="today-photo-stage";action.type="button";action.className="today-photo-action";action.disabled=benchmarkSavingTodayPhoto;action.textContent=benchmarkSavingTodayPhoto?"사진 저장 중…":photo?.imageData?"오늘의 사진 바꾸기":"오늘의 사진 올리기";action.onclick=()=>$("benchmarkTodayPhotoInput").click();note.className="today-photo-note";note.textContent="한국 시간 자정에 새 사진 자리로 바뀌어요.";
-    if(photo?.imageData){const imageButton=document.createElement("button"),image=new Image(),by=document.createElement("span");imageButton.type="button";imageButton.className="today-photo-image";image.src=photo.imageData;image.alt="오늘의 사진 크게 보기";imageButton.append(image);imageButton.onclick=()=>openImageViewer(photo.imageData);by.className="today-photo-by";by.textContent="올린 사람 · "+(state.room?.[photo.by]?.name||"우리");stage.append(imageButton,by)}else{const empty=document.createElement("div");empty.className="today-photo-empty";empty.innerHTML="<span aria-hidden='true'>♡</span><strong>오늘의 사진을 골라봐요</strong><small>같이 보고 싶은 한 장이면 충분해요.</small>";stage.append(empty)}
+    const day=benchmarkTodayKey(),photo=benchmarkTodayPhotoFor(partnerSlot(),day),mine=benchmarkTodayPhotoFor(state.mySlot,day);
+    $("benchmarkRecordHint").textContent="각자 한 장씩 올리고, 상대가 올린 사진만 봐요.";body.className="today-photo-page";
+    const card=document.createElement("article"),date=document.createElement("small"),stage=document.createElement("div"),action=document.createElement("button"),note=document.createElement("p");card.className="today-photo-card";date.className="today-photo-date";date.textContent=day.replaceAll("-",".")+" · 오늘";stage.className="today-photo-stage";action.type="button";action.className="today-photo-action";action.disabled=benchmarkSavingTodayPhoto;action.textContent=benchmarkSavingTodayPhoto?"사진 저장 중…":mine?"내 사진 바꾸기":"내 사진 올리기";action.onclick=()=>$("benchmarkTodayPhotoInput").click();note.className="today-photo-note";note.textContent=mine?"내 사진은 상대에게만 보여요 · 한국 시간 자정에 새 사진 자리로 바뀌어요.":"한국 시간 자정에 새 사진 자리로 바뀌어요.";
+    if(photo){const imageButton=document.createElement("button"),image=new Image(),by=document.createElement("span");imageButton.type="button";imageButton.className="today-photo-image";image.src=photo.imageData;image.alt="상대가 올린 오늘의 사진 크게 보기";imageButton.append(image);imageButton.onclick=()=>openImageViewer(photo.imageData);by.className="today-photo-by";by.textContent="상대가 올린 사진";stage.append(imageButton,by)}else{const empty=document.createElement("div");empty.className="today-photo-empty";empty.innerHTML="<span aria-hidden='true'>♡</span><strong>상대의 오늘을 기다려요</strong><small>상대가 사진을 올리면 여기 보여요.</small>";stage.append(empty)}
     card.append(date,stage,action,note);body.append(card);
   }else if(benchmarkRecordTab==="journal"){
     body.className="journal-record-list";$("benchmarkRecordHint").textContent="데이트와 일상을, 둘이 보는 한 장의 일기로.";
@@ -4578,7 +4583,7 @@ async function saveBenchmarkTodayPhoto(file){
   if(!file.type.startsWith("image/")){showToast("사진 파일을 골라 주세요");return}
   if(!state.roomId||!state.mySlot){showToast("로그인한 뒤 사진을 올려 주세요");return}
   const roomId=state.roomId,slot=state.mySlot;benchmarkSavingTodayPhoto=true;renderBenchmarkRecords();
-  try{const imageData=await compressImage(file,{maxWidth:1000,quality:.7,maxBytes:160000});if(state.roomId!==roomId||state.mySlot!==slot)return;const day=benchmarkTodayKey(),photo={date:day,imageData,by:slot,updatedAt:serverTimestamp()};await update(roomRef(),{[`decoInfo/dailyPhotos/${day}`]:photo});refreshBenchmarkTodayPhoto();if(benchmarkTodayPhotoDate===day)state.room.dailyPhoto={...photo,updatedAt:Date.now()};renderBenchmarkRecords();showToast("오늘의 사진을 함께 볼 수 있어요")}
+  try{const imageData=await compressImage(file,{maxWidth:1000,quality:.7,maxBytes:160000});if(state.roomId!==roomId||state.mySlot!==slot)return;const day=benchmarkTodayKey(),photo={date:day,imageData,by:slot,updatedAt:serverTimestamp()};await update(roomRef(),{[`decoInfo/dailyPhotos/${day}/${slot}`]:photo});refreshBenchmarkTodayPhoto();if(benchmarkTodayPhotoDate===day)state.room.dailyPhoto={...(state.room.dailyPhoto||{}),[slot]:{...photo,updatedAt:Date.now()}};renderBenchmarkRecords();showToast("상대에게 오늘의 사진을 보냈어요")}
   catch(error){console.warn("today photo save failed",error);showToast("사진을 올리지 못했어요. 다시 골라 주세요")}
   finally{benchmarkSavingTodayPhoto=false;renderBenchmarkRecords()}
 }
@@ -4679,8 +4684,7 @@ function bindDiaryBenchmark(){
   $("benchmarkDiaryPhoto").onchange=async event=>{const file=event.target.files[0];if(!file)return;try{benchmarkDiaryPhoto=await compressImage(file,{maxWidth:720,quality:.65,maxBytes:160000});$("benchmarkDiaryPhotoPreview").src=benchmarkDiaryPhoto;$("benchmarkDiaryPhotoPreview").hidden=false;}catch(error){$("benchmarkDiaryStatus").textContent="사진을 열지 못했어요."}};
   $("benchmarkHeroPhotoButton").onclick=()=>$("benchmarkHeroPhotoInput").click();$("benchmarkHeroPhotoInput").onchange=event=>{const file=event.target.files?.[0];event.target.value="";saveBenchmarkHeroPhoto(file)};
 }
-
-    bindDiaryBenchmark();
+bindDiaryBenchmark();
     bindAppUpdates();
     bindEvents();
     bindRefinedEnhancements();
