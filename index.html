@@ -11,15 +11,15 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.14.1">
+  <meta name="wooriduri-version" content="2026.10.14.2">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 
-  <link rel="stylesheet" href="./ui.css?v=2026.10.14.1">
-  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.14.1","changes":["로그인 화면의 계정 이름을 준호와 세은으로 표시해요."]}</script>
+  <link rel="stylesheet" href="./ui.css?v=2026.10.14.2">
+  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.14.2","changes":["세은만 생리 시작일과 종료일을 기록·수정·삭제할 수 있고, 두 사람의 달력에 띠로 보여요.","달력의 일정 표시와 날짜 아래 글씨를 조금 키웠어요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -231,8 +231,9 @@
 
       <nav class="bottom-nav glass"><button class="nav-item" data-benchmark-action="home"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg></b><span>우리</span></button><button class="nav-item" data-benchmark-action="calendar"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2m4 0h2m-8 3h2"/></svg></b><span>달력</span></button><button class="nav-item" data-action="open-chat"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M4 4h16v12H9l-5 4z"/><path d="M8 8h8M8 12h5"/></svg></b><span>대화</span></button><button class="nav-item" data-benchmark-action="records"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 3v18M11 8h5M11 12h5M11 16h3"/></svg></b><span>기록</span></button><button class="nav-item" data-benchmark-action="deco" aria-label="꾸미기와 설정"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M4 20l4-1 12-12-3-3L5 16zM14 7l3 3"/></svg></b><span>꾸미기와 설정</span></button></nav>
     </section>
-    <section id="benchmarkCalendarScreen" class="screen"><header class="simple-header"><span>우리의 달력</span><button class="icon-button" data-action="open-event" aria-label="약속 추가">＋</button></header><main class="benchmark-content"><div class="month-switch"><button id="benchmarkPreviousMonth" aria-label="이전 달">‹</button><h2 id="benchmarkMonth"></h2><button id="benchmarkNextMonth" aria-label="다음 달">›</button></div><div class="calendar-legend"><span>♡ 기념일</span><span>● 약속</span><span>✎ 일기</span></div><div class="week-labels" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div><div id="benchmarkCalendarGrid" class="benchmark-calendar"></div><section class="calendar-agenda"><h3 id="benchmarkSelectedDate"></h3><div id="benchmarkAgenda"></div><button id="benchmarkAddDateEvent" class="paper-action">＋ 이 날의 약속 만들기</button></section></main><nav class="bottom-nav glass"><button class="nav-item" data-benchmark-action="home"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg></b><span>우리</span></button><button class="nav-item" data-benchmark-action="calendar"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2m4 0h2m-8 3h2"/></svg></b><span>달력</span></button><button class="nav-item" data-action="open-chat"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M4 4h16v12H9l-5 4z"/><path d="M8 8h8M8 12h5"/></svg></b><span>대화</span></button><button class="nav-item" data-benchmark-action="records"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 3v18M11 8h5M11 12h5M11 16h3"/></svg></b><span>기록</span></button><button class="nav-item" data-benchmark-action="deco" aria-label="꾸미기와 설정"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M4 20l4-1 12-12-3-3L5 16zM14 7l3 3"/></svg></b><span>꾸미기와 설정</span></button></nav></section>
+    <section id="benchmarkCalendarScreen" class="screen"><header class="simple-header"><span>우리의 달력</span><button class="icon-button" data-action="open-event" aria-label="약속 추가">＋</button></header><main class="benchmark-content"><div class="month-switch"><button id="benchmarkPreviousMonth" aria-label="이전 달">‹</button><h2 id="benchmarkMonth"></h2><button id="benchmarkNextMonth" aria-label="다음 달">›</button></div><div class="calendar-legend"><span>♡ 기념일</span><span>● 약속</span><span>✎ 일기</span><span class="period-legend">● 생리</span></div><div class="week-labels" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div><div id="benchmarkCalendarGrid" class="benchmark-calendar"></div><section class="calendar-agenda"><h3 id="benchmarkSelectedDate"></h3><div id="benchmarkAgenda"></div><button id="benchmarkAddDateEvent" class="paper-action">＋ 이 날의 약속 만들기</button></section><section class="period-tracker" aria-labelledby="benchmarkPeriodHeading"><div class="period-tracker-head"><h3 id="benchmarkPeriodHeading">생리 기록</h3><button id="benchmarkOpenPeriod" type="button">＋ 기록하기</button></div><p id="benchmarkPeriodSummary"></p><small id="benchmarkPeriodHint"></small></section></main><nav class="bottom-nav glass"><button class="nav-item" data-benchmark-action="home"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg></b><span>우리</span></button><button class="nav-item" data-benchmark-action="calendar"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2m4 0h2m-8 3h2"/></svg></b><span>달력</span></button><button class="nav-item" data-action="open-chat"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M4 4h16v12H9l-5 4z"/><path d="M8 8h8M8 12h5"/></svg></b><span>대화</span></button><button class="nav-item" data-benchmark-action="records"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 3v18M11 8h5M11 12h5M11 16h3"/></svg></b><span>기록</span></button><button class="nav-item" data-benchmark-action="deco" aria-label="꾸미기와 설정"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M4 20l4-1 12-12-3-3L5 16zM14 7l3 3"/></svg></b><span>꾸미기와 설정</span></button></nav></section>
     <section id="benchmarkRecordsScreen" class="screen"><header class="simple-header"><span>둘이 남긴 기록</span><button id="benchmarkAddRecord" class="icon-button" aria-label="기록 추가">＋</button></header><main class="benchmark-content"><div class="record-tabs" role="tablist" aria-label="기록 종류"><button class="is-active" data-record-tab="photos" role="tab" aria-selected="true">오늘의 사진</button><button data-record-tab="journal" role="tab" aria-selected="false">일기</button><button data-record-tab="coupons" role="tab" aria-selected="false">쿠폰</button><button data-record-tab="hearts" role="tab" aria-selected="false">마음</button></div><p id="benchmarkRecordHint" class="record-hint"></p><div id="benchmarkRecordBody"></div><input id="benchmarkTodayPhotoInput" type="file" accept="image/*" hidden></main><nav class="bottom-nav glass"><button class="nav-item" data-benchmark-action="home"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg></b><span>우리</span></button><button class="nav-item" data-benchmark-action="calendar"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2m4 0h2m-8 3h2"/></svg></b><span>달력</span></button><button class="nav-item" data-action="open-chat"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M4 4h16v12H9l-5 4z"/><path d="M8 8h8M8 12h5"/></svg></b><span>대화</span></button><button class="nav-item" data-benchmark-action="records"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 3v18M11 8h5M11 12h5M11 16h3"/></svg></b><span>기록</span></button><button class="nav-item" data-benchmark-action="deco" aria-label="꾸미기와 설정"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M4 20l4-1 12-12-3-3L5 16zM14 7l3 3"/></svg></b><span>꾸미기와 설정</span></button></nav></section>
+    <div id="benchmarkPeriodModal" class="modal-backdrop"><div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="benchmarkPeriodTitle"><div class="sheet-handle" aria-hidden="true"></div><h2 id="benchmarkPeriodTitle" class="modal-title">생리 기록</h2><p class="helper-text">저장한 날짜는 두 사람의 달력에 함께 표시돼요.</p><form id="benchmarkPeriodForm"><label class="event-field">시작일<input id="benchmarkPeriodStart" class="modal-input" type="date" required></label><label class="event-field">종료일 <span>나중에 입력해도 돼요</span><input id="benchmarkPeriodEnd" class="modal-input" type="date"></label><p id="benchmarkPeriodStatus" role="status" aria-live="polite"></p><div class="modal-actions"><button id="benchmarkPeriodDelete" class="cancel-button period-delete" type="button" hidden>기록 삭제</button><button type="button" class="cancel-button" data-close-modal="benchmarkPeriodModal">취소</button><button id="benchmarkPeriodSave" class="confirm-button" type="submit">저장</button></div></form></div></div>
     <div id="benchmarkDiaryModal" class="modal-backdrop"><div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="benchmarkDiaryTitle"><div class="sheet-handle"></div><h2 id="benchmarkDiaryTitle" class="modal-title">오늘을 한 장 남기기</h2><form id="benchmarkDiaryForm"><label class="event-field">날짜<input id="benchmarkDiaryDate" class="modal-input" type="date" required></label><label class="event-field">제목<input id="benchmarkDiaryName" class="modal-input" maxlength="60" placeholder="예: 같이 걸었던 저녁" required></label><label class="event-field">기억하고 싶은 이야기<textarea id="benchmarkDiaryBody" class="modal-input" rows="4" maxlength="600" placeholder="그날의 이야기를 남겨요"></textarea></label><label class="diary-photo-button">＋ 사진 한 장<input id="benchmarkDiaryPhoto" type="file" accept="image/*" hidden></label><img id="benchmarkDiaryPhotoPreview" class="journal-photo-preview" alt="일기 사진 미리보기" hidden><p id="benchmarkDiaryStatus" role="status"></p><div class="modal-actions"><button type="button" class="cancel-button" data-close-modal="benchmarkDiaryModal">취소</button><button id="benchmarkDiarySave" class="confirm-button" type="submit">함께 남기기</button></div></form></div></div>
     <div id="benchmarkCouponModal" class="modal-backdrop"><div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="benchmarkCouponTitle"><div class="sheet-handle"></div><h2 id="benchmarkCouponTitle" class="modal-title">상대에게 쿠폰 주기</h2><p class="helper-text">거창하지 않아도 좋아요. 둘만의 작은 약속이에요.</p><form id="benchmarkCouponForm"><label class="event-field">쿠폰 이름<input id="benchmarkCouponName" class="modal-input" maxlength="40" placeholder="예: 맛있는 커피 한 잔" required></label><div class="coupon-suggestions"><button type="button" data-coupon-suggestion="원하는 영화 같이 보기">영화 같이 보기</button><button type="button" data-coupon-suggestion="산책 같이 가기">산책 같이 가기</button><button type="button" data-coupon-suggestion="맛있는 커피 한 잔">커피 한 잔</button></div><p id="benchmarkCouponStatus" role="status"></p><div class="modal-actions"><button type="button" class="cancel-button" data-close-modal="benchmarkCouponModal">취소</button><button id="benchmarkCouponSave" type="submit" class="confirm-button">쿠폰 선물하기</button></div></form></div></div>
 
@@ -4474,6 +4475,7 @@ function bindServiceEnhancements(){
 const benchmarkToday=new Date();
 let benchmarkMonth=new Date(benchmarkToday.getFullYear(),benchmarkToday.getMonth(),1),benchmarkDate=localDateValue(benchmarkToday),benchmarkRecordTab="photos",benchmarkCouponView="received",benchmarkDiaryPhoto="";
 let benchmarkSavingDiary=false,benchmarkSavingCoupon=false,benchmarkSavingTodayPhoto=false;
+let benchmarkPeriodEditingId="",benchmarkPeriodSaving=false;
 let benchmarkTodayPhotoDate="",benchmarkTodayPhotoUnsub=null;
 let benchmarkHomeStripDate="";
 const benchmarkRedeeming=new Set();
@@ -4523,6 +4525,29 @@ function renderHomeMilestoneStrip(){
     $("homeMilestoneCount"+index).textContent=row?row.remaining===0?"D-day":`D−${row.remaining}`:"—";
   }
 }
+function benchmarkPeriodRecords(){
+  return Object.entries(state.room?.periodTracking?.records||{})
+    .filter(([,record])=>record&&calendarDayCount(record.startDate)!==null&&(!record.endDate||calendarDayCount(record.endDate)!==null&&record.endDate>=record.startDate))
+    .map(([id,record])=>({id,...record}))
+    .sort((a,b)=>a.startDate.localeCompare(b.startDate));
+}
+function benchmarkPeriodOnDate(date,records=benchmarkPeriodRecords()){
+  return records.find(record=>record.startDate<=date&&date<=(record.endDate||record.startDate));
+}
+function benchmarkShortDate(date){
+  const [year,month,day]=date.split("-").map(Number);
+  return `${year}년 ${month}월 ${day}일`;
+}
+function renderBenchmarkPeriodSummary(records){
+  const latest=records.at(-1);
+  const summary=$("benchmarkPeriodSummary"),hint=$("benchmarkPeriodHint");
+  summary.textContent=latest
+    ? `최근 시작 · ${benchmarkShortDate(latest.startDate)}${latest.endDate?` ~ ${benchmarkShortDate(latest.endDate)}`:" · 종료일 미입력"}`
+    : "아직 기록이 없어요. 시작일을 남겨 보세요.";
+  hint.textContent=state.mySlot==="user2"?"입력한 기록은 두 사람의 달력에 함께 보여요.":"세은이 올린 기록을 함께 볼 수 있어요.";
+  $("benchmarkOpenPeriod").hidden=state.mySlot!=="user2";
+  $("benchmarkOpenPeriod").textContent=benchmarkPeriodOnDate(benchmarkDate,records)?"기록 수정":"＋ 기록하기";
+}
 function renderBenchmarkCalendar(){
   renderHomeMilestoneStrip();
   const milestone=benchmarkMilestone();
@@ -4532,21 +4557,29 @@ function renderBenchmarkCalendar(){
   $("benchmarkMonth").textContent=`${year}년 ${month+1}월`;
   $("benchmarkSelectedDate").textContent=new Intl.DateTimeFormat("ko-KR",{month:"long",day:"numeric",weekday:"long"}).format(new Date(benchmarkDate+"T12:00:00"));
   const grid=$("benchmarkCalendarGrid");grid.replaceChildren();
-  const events=benchmarkAllEvents(),journal=benchmarkEntries("journal");
+  const events=benchmarkAllEvents(),journal=benchmarkEntries("journal"),periods=benchmarkPeriodRecords();
   for(let i=0;i<new Date(year,month,1).getDay();i++){const blank=document.createElement("span");blank.setAttribute("aria-hidden","true");grid.append(blank)}
-  for(let day=1;day<=new Date(year,month+1,0).getDate();day++){
+  const lastDay=new Date(year,month+1,0).getDate();
+  for(let day=1;day<=lastDay;day++){
     const date=localDateValue(new Date(year,month,day)),button=document.createElement("button");button.type="button";button.className="calendar-day";button.textContent=day;button.dataset.date=date;
     button.classList.toggle("is-selected",date===benchmarkDate);button.classList.toggle("is-today",date===localDateValue());button.setAttribute("aria-pressed",String(date===benchmarkDate));
+    const period=benchmarkPeriodOnDate(date,periods),weekday=new Date(year,month,day).getDay();
+    button.classList.toggle("is-period",!!period);
+    button.classList.toggle("is-period-strip-start",!!period&&(period.startDate===date||weekday===0||day===1));
+    button.classList.toggle("is-period-strip-end",!!period&&((period.endDate||period.startDate)===date||weekday===6||day===lastDay));
     const marks=[];if(milestone?.date===date)marks.push("♡");if(events.some(event=>event.date===date))marks.push("●");if(journal.some(([,entry])=>entry.date===date))marks.push("✎");
-    button.setAttribute("aria-label",date+(marks.length?" · 기록 있음":""));
+    button.setAttribute("aria-label",date+(period?" · 생리 기록":marks.length?" · 기록 있음":""));
     if(marks.length){const mark=document.createElement("small");mark.className="calendar-marks";mark.textContent=marks.join(" ");button.append(mark)}
     button.onclick=()=>{benchmarkDate=date;renderBenchmarkCalendar()};grid.append(button);
   }
   const agenda=$("benchmarkAgenda");agenda.replaceChildren();let count=0;
   for(const event of events.filter(event=>event.date===benchmarkDate)){const row=document.createElement("div");row.className="agenda-row";const title=document.createElement("b"),detail=document.createElement("span");title.textContent=event.title||"약속";detail.textContent=[event.time,event.location].filter(Boolean).join(" · ");row.append(title,detail);agenda.append(row);count++;}
   if(milestone?.date===benchmarkDate){const row=document.createElement("p");row.className="milestone-agenda";row.textContent="♡ "+milestone.title;agenda.append(row);count++;}
+  const selectedPeriod=benchmarkPeriodOnDate(benchmarkDate,periods);
+  if(selectedPeriod){const row=document.createElement("p");row.className="period-agenda";const dayNumber=Math.round((Date.parse(benchmarkDate+"T00:00:00Z")-Date.parse(selectedPeriod.startDate+"T00:00:00Z"))/86400000)+1;row.textContent=`● 생리 기록 · ${dayNumber}일째`;agenda.append(row);count++;}
   for(const [,entry] of journal.filter(([,entry])=>entry.date===benchmarkDate)){const row=document.createElement("button");row.className="journal-agenda";row.textContent="✎ "+entry.title;row.onclick=()=>{benchmarkRecordTab="journal";state.chatOpen=false;switchScreen("benchmarkRecordsScreen")};agenda.append(row);count++;}
   if(!count){const empty=document.createElement("p");empty.className="agenda-empty";empty.textContent="아직 적어 둔 약속이 없어요.";agenda.append(empty)}
+  renderBenchmarkPeriodSummary(periods);
 }
 function renderBenchmarkRecords(){
   const coupons=benchmarkEntries("coupons");$("couponHomeCount").textContent=`사용할 수 있는 쿠폰 ${coupons.filter(([,coupon])=>!coupon.usedAt&&coupon.to===state.mySlot).length}장`;
@@ -4658,8 +4691,53 @@ async function redeemBenchmarkCoupon(id){
 }
 async function sendBenchmarkPraise(label){if(!["오늘도 고마워","많이 보고 싶어","늘 네 편이야"].includes(label))return;try{const id=push(ref(db,`rooms/${state.roomId}/decoInfo/play/praise`)).key;await update(roomRef(),{[`decoInfo/play/praise/${id}`]:{label,from:state.mySlot,to:partnerSlot(),createdAt:serverTimestamp()}});showToast("마음을 전했어요 ♡")}catch{showToast("마음을 보내지 못했어요")}}
 async function voteBenchmarkBalance(choice){if(!["바다 보러 가기","동네 카페 가기"].includes(choice))return;try{await update(roomRef(),{[`decoInfo/play/balance/${localDateValue()}/answers/${state.mySlot}`]:choice});showToast("선택을 남겼어요")}catch{showToast("선택을 남기지 못했어요")}}
+function openBenchmarkPeriod(){
+  if(state.mySlot!=="user2")return;
+  const record=benchmarkPeriodOnDate(benchmarkDate);
+  benchmarkPeriodEditingId=record?.id||"";
+  $("benchmarkPeriodStart").value=record?.startDate||benchmarkDate;
+  $("benchmarkPeriodEnd").value=record?.endDate||"";
+  $("benchmarkPeriodDelete").hidden=!record;
+  $("benchmarkPeriodStatus").textContent="";
+  openModal("benchmarkPeriodModal");
+}
+async function saveBenchmarkPeriod(){
+  if(benchmarkPeriodSaving||!state.roomId||state.mySlot!=="user2")return;
+  const startDate=$("benchmarkPeriodStart").value,endDate=$("benchmarkPeriodEnd").value;
+  const today=benchmarkTodayKey();
+  const status=$("benchmarkPeriodStatus");
+  if(calendarDayCount(startDate)===null||startDate>today||endDate&&(calendarDayCount(endDate)===null||endDate<startDate||endDate>today)){
+    status.textContent="시작일과 종료일을 확인해 주세요.";return;
+  }
+  const overlaps=benchmarkPeriodRecords().some(record=>record.id!==benchmarkPeriodEditingId&&record.startDate<=(endDate||startDate)&&(record.endDate||record.startDate)>=startDate);
+  if(overlaps){status.textContent="이미 기록한 기간과 겹쳐요. 날짜를 확인해 주세요.";return;}
+  const id=benchmarkPeriodEditingId||push(ref(db,`rooms/${state.roomId}/decoInfo/periodTracking/records`)).key;
+  const previous=state.room?.periodTracking?.records?.[id]||{};
+  benchmarkPeriodSaving=true;$("benchmarkPeriodSave").disabled=true;status.textContent="저장 중…";
+  try{
+    await update(roomRef(),{
+      [`decoInfo/periodTracking/records/${id}`]:{
+        startDate,endDate,by:previous.by||state.mySlot,
+        createdAt:previous.createdAt||serverTimestamp(),updatedAt:serverTimestamp()
+      }
+    });
+    benchmarkDate=startDate;
+    benchmarkMonth=new Date(Number(startDate.slice(0,4)),Number(startDate.slice(5,7))-1,1);
+    closeModal("benchmarkPeriodModal");renderBenchmarkCalendar();showToast("생리 기록을 함께 저장했어요");
+  }catch(error){status.textContent="저장하지 못했어요. 다시 시도해 주세요.";}
+  finally{benchmarkPeriodSaving=false;$("benchmarkPeriodSave").disabled=false;}
+}
+async function deleteBenchmarkPeriod(){
+  const id=benchmarkPeriodEditingId;
+  if(state.mySlot!=="user2"||!id||benchmarkPeriodSaving||!state.room?.periodTracking?.records?.[id])return;
+  if(!window.confirm("이 생리 기록을 삭제할까요? 두 사람의 달력에서 사라져요."))return;
+  benchmarkPeriodSaving=true;$("benchmarkPeriodDelete").disabled=true;
+  try{await update(roomRef(),{[`decoInfo/periodTracking/records/${id}`]:null});closeModal("benchmarkPeriodModal");benchmarkPeriodEditingId="";showToast("생리 기록을 삭제했어요");}
+  catch(error){$("benchmarkPeriodStatus").textContent="삭제하지 못했어요. 다시 시도해 주세요.";}
+  finally{benchmarkPeriodSaving=false;$("benchmarkPeriodDelete").disabled=false;}
+}
 const benchmarkOriginalRealtime=startRealtimeListeners;
-startRealtimeListeners=function(){benchmarkTodayPhotoUnsub?.();benchmarkTodayPhotoUnsub=null;benchmarkTodayPhotoDate="";benchmarkOriginalRealtime();for(const field of ["journal","coupons","play"]){state.unsubscribers.push(listenRoomPath(`decoInfo/${field}`,value=>{state.room[field]=value||{};renderBenchmarkCalendar();renderBenchmarkRecords();if(field==="coupons"&&state.messages.length)renderMessages()}));}for(const field of ["heroPhoto","heroPhotoRight"]){state.unsubscribers.push(listenRoomPath(`decoInfo/${field}`,value=>{state.room[field]=value||null;renderBenchmarkHeroPhotos()}))}refreshBenchmarkTodayPhoto()};
+startRealtimeListeners=function(){benchmarkTodayPhotoUnsub?.();benchmarkTodayPhotoUnsub=null;benchmarkTodayPhotoDate="";benchmarkOriginalRealtime();for(const field of ["journal","coupons","play","periodTracking"]){state.unsubscribers.push(listenRoomPath(`decoInfo/${field}`,value=>{state.room[field]=value||{};renderBenchmarkCalendar();renderBenchmarkRecords();if(field==="coupons"&&state.messages.length)renderMessages()}));}for(const field of ["heroPhoto","heroPhotoRight"]){state.unsubscribers.push(listenRoomPath(`decoInfo/${field}`,value=>{state.room[field]=value||null;renderBenchmarkHeroPhotos()}))}refreshBenchmarkTodayPhoto()};
 const benchmarkOriginalGrouping=canGroupChatMessages;
 canGroupChatMessages=function(before,after){return !before?.couponId&&!after?.couponId&&benchmarkOriginalGrouping(before,after)};
 function renderBenchmarkChatCoupons(){
@@ -4705,6 +4783,9 @@ function bindDiaryBenchmark(){
   });
   $("benchmarkPreviousMonth").onclick=()=>{benchmarkMonth=new Date(benchmarkMonth.getFullYear(),benchmarkMonth.getMonth()-1,1);renderBenchmarkCalendar()};$("benchmarkNextMonth").onclick=()=>{benchmarkMonth=new Date(benchmarkMonth.getFullYear(),benchmarkMonth.getMonth()+1,1);renderBenchmarkCalendar()};
   $("benchmarkAddDateEvent").onclick=()=>{openEventModal({createNew:true});$("eventDateInput").value=benchmarkDate;};
+  $("benchmarkOpenPeriod").onclick=openBenchmarkPeriod;
+  $("benchmarkPeriodForm").onsubmit=event=>{event.preventDefault();saveBenchmarkPeriod()};
+  $("benchmarkPeriodDelete").onclick=deleteBenchmarkPeriod;
   $("benchmarkAddRecord").onclick=()=>{if(benchmarkRecordTab==="photos")$("benchmarkTodayPhotoInput").click();else if(benchmarkRecordTab==="journal")openBenchmarkDiary();else openBenchmarkCoupon()};
   $("benchmarkDiaryForm").onsubmit=event=>{event.preventDefault();saveBenchmarkDiary()};$("benchmarkCouponForm").onsubmit=event=>{event.preventDefault();createBenchmarkCoupon()};
   $("benchmarkTodayPhotoInput").onchange=event=>{const file=event.target.files?.[0];event.target.value="";saveBenchmarkTodayPhoto(file)};
