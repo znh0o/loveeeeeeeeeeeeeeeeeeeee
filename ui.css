@@ -248,3 +248,32 @@ body{font-size:15px}
 .bottom-nav{width:min(calc(100% - 40px),300px);height:49px;padding:5px 8px}.bottom-nav .nav-item{gap:0;min-height:38px}.bottom-nav .nav-item b{display:flex;align-items:center;justify-content:center}.bottom-nav .nav-item b svg{width:21px;height:21px}.bottom-nav .nav-item span{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 .couple-connection{gap:clamp(6px,3.4vw,19px);padding-left:8px;padding-right:8px}.mini-person{min-width:0;flex:0 1 76px}.mini-person .avatar{width:50px;height:50px}.mini-person span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.connection-copy{min-width:100px;flex:0 1 134px}
 .benchmark-header,.simple-header{padding-top:calc(16px + env(safe-area-inset-top))}.chat-header{padding-top:calc(14px + env(safe-area-inset-top))}
+/* Two edge-to-edge home photos, with editing kept in the fifth bottom tab. */
+#homeScreen .benchmark-header{display:none}
+#homeScreen .home-content{padding-top:0}
+#homeScreen .photo-diary-hero{width:calc(100% + 32px);height:clamp(240px,33svh,340px);margin:0 -16px 42px;border-radius:0}
+#homeScreen .diary-photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;width:100%;height:100%;overflow:hidden;transform:none;box-shadow:none;border-radius:0;background:#f5edf1}
+#homeScreen .hero-photo-slot{position:relative;min-width:0;height:100%;overflow:hidden;background:linear-gradient(135deg,#f8edf3,#ebe9f2)}
+#homeScreen .hero-photo-slot:nth-child(2){background:linear-gradient(145deg,#eceaf4,#f7eaf0)}
+#homeScreen .hero-photo-slot img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;border:0}
+#homeScreen .hero-photo-slot img[hidden]{display:none}
+#homeScreen .hero-photo-slot.is-empty:before{content:"사진을 골라 주세요";position:absolute;inset:0;display:grid;place-items:center;padding:14px;color:#9d8293;text-align:center;font-size:18px}
+#homeScreen .photo-caption{top:calc(12px + env(safe-area-inset-top));left:14px;color:#fff;text-shadow:0 1px 5px #342b37b0;font-size:24px}
+#homeScreen .plane-sticker{top:calc(7px + env(safe-area-inset-top));right:8px;width:51px;height:49px}
+#homeScreen .sticky-anniversary{left:13px;bottom:-28px;width:116px;min-height:112px;padding:17px 10px 8px;transform:rotate(-4deg)}
+#homeScreen .sticky-anniversary .dday-label{font-size:16px}
+#homeScreen .sticky-anniversary .dday-value strong{font-size:37px}
+#homeScreen .sticky-anniversary .dday-value span{font-size:18px}
+#homeScreen .sticky-anniversary .dday-sub{font-size:13px;white-space:normal;line-height:1.05}
+#homeScreen .couple-connection{margin:0;padding-top:2px}
+.home-two-cards{align-items:stretch}
+.home-two-cards .event-card{margin:0;min-width:0;height:100%;box-sizing:border-box}
+.home-two-cards .coupon-home-card{min-width:0;height:100%;min-height:0;box-sizing:border-box}
+.bottom-nav{width:min(calc(100% - 30px),340px)}
+.bottom-nav .nav-item{min-width:0;flex:1}
+.home-photo-settings{margin:0 0 12px}
+.home-photo-settings .helper-text{margin:4px 0 12px}
+.home-photo-setting-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.home-photo-setting-actions button{min-height:44px;padding:6px 8px;border:1px solid #e3cfdb;border-radius:8px;background:#fff7fa;color:#936e84;font-size:17px}
+.home-photo-setting-actions button:disabled{opacity:.65}
+@media(max-width:350px){#homeScreen .photo-diary-hero{width:calc(100% + 24px);margin-right:-12px;margin-left:-12px;height:clamp(220px,33svh,300px)}.home-photo-setting-actions button{font-size:15px}}
