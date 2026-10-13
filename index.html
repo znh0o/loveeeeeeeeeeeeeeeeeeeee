@@ -11,15 +11,15 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.13.4">
+  <meta name="wooriduri-version" content="2026.10.13.5">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 
-  <link rel="stylesheet" href="./ui.css?v=2026.10.13.4">
-  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.13.4","changes":["홈 사진을 직접 골라 둘이 함께 볼 수 있어요.","채팅의 ㅎㅎㅎㅎ 글자와 입력창 표시를 바로잡았어요.","업데이트 카드의 글씨와 버튼을 읽기 쉽게 키웠어요.","아래에서 올라오는 창을 쓸어 내리거나 바깥을 눌러 닫을 수 있어요."]}</script>
+  <link rel="stylesheet" href="./ui.css?v=2026.10.13.5">
+  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.13.5","changes":["기록의 사진 탭을 ‘오늘의 사진’으로 바꿨어요.","사진을 올리면 둘이 함께 보고, 한국 시간 자정에 새 사진 자리로 바뀌어요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -233,7 +233,7 @@
       <nav class="bottom-nav glass"><button class="nav-item" data-benchmark-action="home"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg></b><span>우리</span></button><button class="nav-item" data-benchmark-action="calendar"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2m4 0h2m-8 3h2"/></svg></b><span>달력</span></button><button class="nav-item" data-action="open-chat"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M4 4h16v12H9l-5 4z"/><path d="M8 8h8M8 12h5"/></svg></b><span>대화</span></button><button class="nav-item" data-benchmark-action="records"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 3v18M11 8h5M11 12h5M11 16h3"/></svg></b><span>기록</span></button></nav>
     </section>
     <section id="benchmarkCalendarScreen" class="screen"><header class="simple-header"><span>우리의 달력</span><button class="icon-button" data-action="open-event" aria-label="약속 추가">＋</button></header><main class="benchmark-content"><div class="month-switch"><button id="benchmarkPreviousMonth" aria-label="이전 달">‹</button><h2 id="benchmarkMonth"></h2><button id="benchmarkNextMonth" aria-label="다음 달">›</button></div><div class="calendar-legend"><span>♡ 기념일</span><span>● 약속</span><span>✎ 일기</span></div><div class="week-labels" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div><div id="benchmarkCalendarGrid" class="benchmark-calendar"></div><section class="calendar-agenda"><h3 id="benchmarkSelectedDate"></h3><div id="benchmarkAgenda"></div><button id="benchmarkAddDateEvent" class="paper-action">＋ 이 날의 약속 만들기</button></section></main><nav class="bottom-nav glass"><button class="nav-item" data-benchmark-action="home"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg></b><span>우리</span></button><button class="nav-item" data-benchmark-action="calendar"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2m4 0h2m-8 3h2"/></svg></b><span>달력</span></button><button class="nav-item" data-action="open-chat"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M4 4h16v12H9l-5 4z"/><path d="M8 8h8M8 12h5"/></svg></b><span>대화</span></button><button class="nav-item" data-benchmark-action="records"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 3v18M11 8h5M11 12h5M11 16h3"/></svg></b><span>기록</span></button></nav></section>
-    <section id="benchmarkRecordsScreen" class="screen"><header class="simple-header"><span>둘이 남긴 기록</span><button id="benchmarkAddRecord" class="icon-button" aria-label="기록 추가">＋</button></header><main class="benchmark-content"><div class="record-tabs" role="tablist" aria-label="기록 종류"><button class="is-active" data-record-tab="photos" role="tab" aria-selected="true">사진</button><button data-record-tab="journal" role="tab" aria-selected="false">일기</button><button data-record-tab="coupons" role="tab" aria-selected="false">쿠폰</button><button data-record-tab="hearts" role="tab" aria-selected="false">마음</button></div><p id="benchmarkRecordHint" class="record-hint"></p><div id="benchmarkRecordBody"></div></main><nav class="bottom-nav glass"><button class="nav-item" data-benchmark-action="home"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg></b><span>우리</span></button><button class="nav-item" data-benchmark-action="calendar"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2m4 0h2m-8 3h2"/></svg></b><span>달력</span></button><button class="nav-item" data-action="open-chat"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M4 4h16v12H9l-5 4z"/><path d="M8 8h8M8 12h5"/></svg></b><span>대화</span></button><button class="nav-item" data-benchmark-action="records"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 3v18M11 8h5M11 12h5M11 16h3"/></svg></b><span>기록</span></button></nav></section>
+    <section id="benchmarkRecordsScreen" class="screen"><header class="simple-header"><span>둘이 남긴 기록</span><button id="benchmarkAddRecord" class="icon-button" aria-label="기록 추가">＋</button></header><main class="benchmark-content"><div class="record-tabs" role="tablist" aria-label="기록 종류"><button class="is-active" data-record-tab="photos" role="tab" aria-selected="true">오늘의 사진</button><button data-record-tab="journal" role="tab" aria-selected="false">일기</button><button data-record-tab="coupons" role="tab" aria-selected="false">쿠폰</button><button data-record-tab="hearts" role="tab" aria-selected="false">마음</button></div><p id="benchmarkRecordHint" class="record-hint"></p><div id="benchmarkRecordBody"></div><input id="benchmarkTodayPhotoInput" type="file" accept="image/*" hidden></main><nav class="bottom-nav glass"><button class="nav-item" data-benchmark-action="home"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg></b><span>우리</span></button><button class="nav-item" data-benchmark-action="calendar"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2m4 0h2m-8 3h2"/></svg></b><span>달력</span></button><button class="nav-item" data-action="open-chat"><b><svg class="ui-icon" viewBox="0 0 24 24"><path d="M4 4h16v12H9l-5 4z"/><path d="M8 8h8M8 12h5"/></svg></b><span>대화</span></button><button class="nav-item" data-benchmark-action="records"><b><svg class="ui-icon" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 3v18M11 8h5M11 12h5M11 16h3"/></svg></b><span>기록</span></button></nav></section>
     <div id="benchmarkDiaryModal" class="modal-backdrop"><div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="benchmarkDiaryTitle"><div class="sheet-handle"></div><h2 id="benchmarkDiaryTitle" class="modal-title">오늘을 한 장 남기기</h2><form id="benchmarkDiaryForm"><label class="event-field">날짜<input id="benchmarkDiaryDate" class="modal-input" type="date" required></label><label class="event-field">제목<input id="benchmarkDiaryName" class="modal-input" maxlength="60" placeholder="예: 같이 걸었던 저녁" required></label><label class="event-field">기억하고 싶은 이야기<textarea id="benchmarkDiaryBody" class="modal-input" rows="4" maxlength="600" placeholder="그날의 이야기를 남겨요"></textarea></label><label class="diary-photo-button">＋ 사진 한 장<input id="benchmarkDiaryPhoto" type="file" accept="image/*" hidden></label><img id="benchmarkDiaryPhotoPreview" class="journal-photo-preview" alt="일기 사진 미리보기" hidden><p id="benchmarkDiaryStatus" role="status"></p><div class="modal-actions"><button type="button" class="cancel-button" data-close-modal="benchmarkDiaryModal">취소</button><button id="benchmarkDiarySave" class="confirm-button" type="submit">함께 남기기</button></div></form></div></div>
     <div id="benchmarkCouponModal" class="modal-backdrop"><div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="benchmarkCouponTitle"><div class="sheet-handle"></div><h2 id="benchmarkCouponTitle" class="modal-title">상대에게 쿠폰 주기</h2><p class="helper-text">거창하지 않아도 좋아요. 둘만의 작은 약속이에요.</p><form id="benchmarkCouponForm"><label class="event-field">쿠폰 이름<input id="benchmarkCouponName" class="modal-input" maxlength="40" placeholder="예: 맛있는 커피 한 잔" required></label><div class="coupon-suggestions"><button type="button" data-coupon-suggestion="원하는 영화 같이 보기">영화 같이 보기</button><button type="button" data-coupon-suggestion="산책 같이 가기">산책 같이 가기</button><button type="button" data-coupon-suggestion="맛있는 커피 한 잔">커피 한 잔</button></div><p id="benchmarkCouponStatus" role="status"></p><div class="modal-actions"><button type="button" class="cancel-button" data-close-modal="benchmarkCouponModal">취소</button><button id="benchmarkCouponSave" type="submit" class="confirm-button">쿠폰 선물하기</button></div></form></div></div>
 
@@ -4474,8 +4474,10 @@ function bindServiceEnhancements(){
 // Shared diary fields are additive; existing messenger paths stay intact.
 const benchmarkToday=new Date();
 let benchmarkMonth=new Date(benchmarkToday.getFullYear(),benchmarkToday.getMonth(),1),benchmarkDate=localDateValue(benchmarkToday),benchmarkRecordTab="photos",benchmarkCouponView="received",benchmarkDiaryPhoto="";
-let benchmarkSavingDiary=false,benchmarkSavingCoupon=false;
+let benchmarkSavingDiary=false,benchmarkSavingCoupon=false,benchmarkSavingTodayPhoto=false;
+let benchmarkTodayPhotoDate="",benchmarkTodayPhotoUnsub=null;
 const benchmarkRedeeming=new Set();
+function benchmarkTodayKey(date=new Date()){return new Date(date.getTime()+9*60*60*1000).toISOString().slice(0,10)}
 function benchmarkEntries(field){return Object.entries(state.room?.[field]||{}).filter(([,value])=>value&&typeof value==="object");}
 function benchmarkTopic(name){const last=name.charCodeAt(name.length-1);return name+((last>=0xac00&&last<=0xd7a3&&(last-0xac00)%28!==0)?"은":"는")}
 function benchmarkAllEvents(){
@@ -4521,13 +4523,13 @@ function renderBenchmarkRecords(){
   document.querySelectorAll("[data-record-tab]").forEach(button=>{const selected=button.dataset.recordTab===benchmarkRecordTab;button.classList.toggle("is-active",selected);button.setAttribute("aria-selected",String(selected))});
   const body=$("benchmarkRecordBody");body.replaceChildren();
   $("benchmarkAddRecord").hidden=benchmarkRecordTab==="hearts";
-  $("benchmarkAddRecord").setAttribute("aria-label",benchmarkRecordTab==="coupons"?"쿠폰 선물하기":benchmarkRecordTab==="journal"?"일기 쓰기":"사진 보내기");
+  $("benchmarkAddRecord").setAttribute("aria-label",benchmarkRecordTab==="coupons"?"쿠폰 선물하기":benchmarkRecordTab==="journal"?"일기 쓰기":"오늘의 사진 올리기");
   if(benchmarkRecordTab==="photos"){
-    $("benchmarkRecordHint").textContent="대화와 일기에 보낸 사진을 한곳에서 봐요.";
-    const photos=[...state.messages.filter(item=>item.type==="image"&&item.imageData).map(item=>({src:item.imageData,date:localDateValue(new Date(messageTimestamp(item)))})),...benchmarkEntries("journal").filter(([,entry])=>entry.imageData&&typeof entry.date==="string").map(([,entry])=>({src:entry.imageData,date:entry.date}))].reverse();
-    body.className="photo-record-grid";
-    for(const photo of photos){const button=document.createElement("button"),image=new Image(),label=document.createElement("span");button.type="button";button.className="photo-record";image.src=photo.src;image.alt="함께 보낸 사진";label.textContent=photo.date.replaceAll("-",".");button.append(image,label);button.onclick=()=>openImageViewer(photo.src);body.append(button)}
-    if(!photos.length)benchmarkEmpty(body,"같이 보낸 첫 사진을 기다려요.");
+    const day=benchmarkTodayKey(),photo=state.room?.dailyPhoto?.date===day?state.room.dailyPhoto:null;
+    $("benchmarkRecordHint").textContent="오늘의 사진 한 장을 둘이 함께 봐요.";body.className="today-photo-page";
+    const card=document.createElement("article"),date=document.createElement("small"),stage=document.createElement("div"),action=document.createElement("button"),note=document.createElement("p");card.className="today-photo-card";date.className="today-photo-date";date.textContent=day.replaceAll("-",".")+" · 오늘";stage.className="today-photo-stage";action.type="button";action.className="today-photo-action";action.disabled=benchmarkSavingTodayPhoto;action.textContent=benchmarkSavingTodayPhoto?"사진 저장 중…":photo?.imageData?"오늘의 사진 바꾸기":"오늘의 사진 올리기";action.onclick=()=>$("benchmarkTodayPhotoInput").click();note.className="today-photo-note";note.textContent="한국 시간 자정에 새 사진 자리로 바뀌어요.";
+    if(photo?.imageData){const imageButton=document.createElement("button"),image=new Image(),by=document.createElement("span");imageButton.type="button";imageButton.className="today-photo-image";image.src=photo.imageData;image.alt="오늘의 사진 크게 보기";imageButton.append(image);imageButton.onclick=()=>openImageViewer(photo.imageData);by.className="today-photo-by";by.textContent="올린 사람 · "+(state.room?.[photo.by]?.name||"우리");stage.append(imageButton,by)}else{const empty=document.createElement("div");empty.className="today-photo-empty";empty.innerHTML="<span aria-hidden='true'>♡</span><strong>오늘의 사진을 골라봐요</strong><small>같이 보고 싶은 한 장이면 충분해요.</small>";stage.append(empty)}
+    card.append(date,stage,action,note);body.append(card);
   }else if(benchmarkRecordTab==="journal"){
     body.className="journal-record-list";$("benchmarkRecordHint").textContent="데이트와 일상을, 둘이 보는 한 장의 일기로.";
     const entries=benchmarkEntries("journal").filter(([,entry])=>typeof entry.date==="string").sort((a,b)=>b[1].date.localeCompare(a[1].date));
@@ -4564,6 +4566,21 @@ function renderBenchmarkHeroPhotos(){
   document.querySelector(".diary-photos").classList.toggle("is-empty",!source);
   document.querySelectorAll(".diary-photos img").forEach((image,index)=>{if(index===0&&source){if(image.src!==source)image.src=source;image.hidden=false}else{image.removeAttribute("src");image.hidden=true}});
   const button=$("benchmarkHeroPhotoButton");if(!button.disabled)button.textContent=chosen?"사진 바꾸기":"사진 넣기";
+}
+function refreshBenchmarkTodayPhoto(){
+  if(!state.roomId)return;
+  const day=benchmarkTodayKey();if(benchmarkTodayPhotoDate===day&&benchmarkTodayPhotoUnsub)return;
+  benchmarkTodayPhotoUnsub?.();benchmarkTodayPhotoDate=day;state.room=state.room||{};state.room.dailyPhoto=null;renderBenchmarkRecords();
+  benchmarkTodayPhotoUnsub=listenRoomPath(`decoInfo/dailyPhotos/${day}`,value=>{state.room.dailyPhoto=value||null;renderBenchmarkRecords()});state.unsubscribers.push(benchmarkTodayPhotoUnsub);
+}
+async function saveBenchmarkTodayPhoto(file){
+  if(!file||benchmarkSavingTodayPhoto)return;
+  if(!file.type.startsWith("image/")){showToast("사진 파일을 골라 주세요");return}
+  if(!state.roomId||!state.mySlot){showToast("로그인한 뒤 사진을 올려 주세요");return}
+  const roomId=state.roomId,slot=state.mySlot;benchmarkSavingTodayPhoto=true;renderBenchmarkRecords();
+  try{const imageData=await compressImage(file,{maxWidth:1000,quality:.7,maxBytes:160000});if(state.roomId!==roomId||state.mySlot!==slot)return;const day=benchmarkTodayKey(),photo={date:day,imageData,by:slot,updatedAt:serverTimestamp()};await update(roomRef(),{[`decoInfo/dailyPhotos/${day}`]:photo});refreshBenchmarkTodayPhoto();if(benchmarkTodayPhotoDate===day)state.room.dailyPhoto={...photo,updatedAt:Date.now()};renderBenchmarkRecords();showToast("오늘의 사진을 함께 볼 수 있어요")}
+  catch(error){console.warn("today photo save failed",error);showToast("사진을 올리지 못했어요. 다시 골라 주세요")}
+  finally{benchmarkSavingTodayPhoto=false;renderBenchmarkRecords()}
 }
 async function saveBenchmarkHeroPhoto(file){
   if(!file)return;
@@ -4609,7 +4626,7 @@ async function redeemBenchmarkCoupon(id){
 async function sendBenchmarkPraise(label){if(!["오늘도 고마워","많이 보고 싶어","늘 네 편이야"].includes(label))return;try{const id=push(ref(db,`rooms/${state.roomId}/decoInfo/play/praise`)).key;await update(roomRef(),{[`decoInfo/play/praise/${id}`]:{label,from:state.mySlot,to:partnerSlot(),createdAt:serverTimestamp()}});showToast("마음을 전했어요 ♡")}catch{showToast("마음을 보내지 못했어요")}}
 async function voteBenchmarkBalance(choice){if(!["바다 보러 가기","동네 카페 가기"].includes(choice))return;try{await update(roomRef(),{[`decoInfo/play/balance/${localDateValue()}/answers/${state.mySlot}`]:choice});showToast("선택을 남겼어요")}catch{showToast("선택을 남기지 못했어요")}}
 const benchmarkOriginalRealtime=startRealtimeListeners;
-startRealtimeListeners=function(){benchmarkOriginalRealtime();for(const field of ["journal","coupons","play"]){state.unsubscribers.push(listenRoomPath(`decoInfo/${field}`,value=>{state.room[field]=value||{};renderBenchmarkCalendar();renderBenchmarkRecords();if(field==="coupons"&&state.messages.length)renderMessages()}));}state.unsubscribers.push(listenRoomPath("decoInfo/heroPhoto",value=>{state.room.heroPhoto=value||null;renderBenchmarkHeroPhotos()}));};
+startRealtimeListeners=function(){benchmarkTodayPhotoUnsub?.();benchmarkTodayPhotoUnsub=null;benchmarkTodayPhotoDate="";benchmarkOriginalRealtime();for(const field of ["journal","coupons","play"]){state.unsubscribers.push(listenRoomPath(`decoInfo/${field}`,value=>{state.room[field]=value||{};renderBenchmarkCalendar();renderBenchmarkRecords();if(field==="coupons"&&state.messages.length)renderMessages()}));}state.unsubscribers.push(listenRoomPath("decoInfo/heroPhoto",value=>{state.room.heroPhoto=value||null;renderBenchmarkHeroPhotos()}));refreshBenchmarkTodayPhoto()};
 const benchmarkOriginalGrouping=canGroupChatMessages;
 canGroupChatMessages=function(before,after){return !before?.couponId&&!after?.couponId&&benchmarkOriginalGrouping(before,after)};
 function renderBenchmarkChatCoupons(){
@@ -4632,7 +4649,7 @@ openMessageActions=function(id){benchmarkOriginalMessageActions(id);compactRepea
 const benchmarkOriginalRoom=renderRoom;
 renderRoom=function(){benchmarkOriginalRoom();renderBenchmarkCalendar();renderBenchmarkRecords();renderBenchmarkHeroPhotos()};
 const benchmarkOriginalSwitch=switchScreen;
-switchScreen=function(id){benchmarkOriginalSwitch(id);for(const screen of ["benchmarkCalendarScreen","benchmarkRecordsScreen"])$(screen).classList.toggle("is-active",id===screen);if(id!=="chatScreen")state.chatOpen=false;document.querySelectorAll("[data-benchmark-action]").forEach(button=>button.classList.toggle("is-active",button.dataset.benchmarkAction===(id==="benchmarkCalendarScreen"?"calendar":id==="benchmarkRecordsScreen"?"records":id==="homeScreen"?"home":"")));if(id==="benchmarkCalendarScreen")renderBenchmarkCalendar();if(id==="benchmarkRecordsScreen")renderBenchmarkRecords()};
+switchScreen=function(id){benchmarkOriginalSwitch(id);for(const screen of ["benchmarkCalendarScreen","benchmarkRecordsScreen"])$(screen).classList.toggle("is-active",id===screen);if(id!=="chatScreen")state.chatOpen=false;document.querySelectorAll("[data-benchmark-action]").forEach(button=>button.classList.toggle("is-active",button.dataset.benchmarkAction===(id==="benchmarkCalendarScreen"?"calendar":id==="benchmarkRecordsScreen"?"records":id==="homeScreen"?"home":"")));if(id==="benchmarkCalendarScreen")renderBenchmarkCalendar();if(id==="benchmarkRecordsScreen"){refreshBenchmarkTodayPhoto();renderBenchmarkRecords()}};
 function bindDiaryBenchmark(){
   for(const backdrop of document.querySelectorAll(".modal-backdrop")){
     const sheet=backdrop.querySelector(".modal-sheet"),handle=sheet?.querySelector(".sheet-handle");if(!handle||!backdrop.id)continue;
@@ -4655,8 +4672,10 @@ function bindDiaryBenchmark(){
   });
   $("benchmarkPreviousMonth").onclick=()=>{benchmarkMonth=new Date(benchmarkMonth.getFullYear(),benchmarkMonth.getMonth()-1,1);renderBenchmarkCalendar()};$("benchmarkNextMonth").onclick=()=>{benchmarkMonth=new Date(benchmarkMonth.getFullYear(),benchmarkMonth.getMonth()+1,1);renderBenchmarkCalendar()};
   $("benchmarkAddDateEvent").onclick=()=>{openEventModal({createNew:true});$("eventDateInput").value=benchmarkDate;};
-  $("benchmarkAddRecord").onclick=()=>{if(benchmarkRecordTab==="photos"){openChat();$("galleryInput").click()}else if(benchmarkRecordTab==="journal")openBenchmarkDiary();else openBenchmarkCoupon()};
+  $("benchmarkAddRecord").onclick=()=>{if(benchmarkRecordTab==="photos")$("benchmarkTodayPhotoInput").click();else if(benchmarkRecordTab==="journal")openBenchmarkDiary();else openBenchmarkCoupon()};
   $("benchmarkDiaryForm").onsubmit=event=>{event.preventDefault();saveBenchmarkDiary()};$("benchmarkCouponForm").onsubmit=event=>{event.preventDefault();createBenchmarkCoupon()};
+  $("benchmarkTodayPhotoInput").onchange=event=>{const file=event.target.files?.[0];event.target.value="";saveBenchmarkTodayPhoto(file)};
+  setInterval(()=>{if(state.roomId&&benchmarkTodayKey()!==benchmarkTodayPhotoDate)refreshBenchmarkTodayPhoto()},30000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshBenchmarkTodayPhoto()});window.addEventListener("pageshow",refreshBenchmarkTodayPhoto);
   $("benchmarkDiaryPhoto").onchange=async event=>{const file=event.target.files[0];if(!file)return;try{benchmarkDiaryPhoto=await compressImage(file,{maxWidth:720,quality:.65,maxBytes:160000});$("benchmarkDiaryPhotoPreview").src=benchmarkDiaryPhoto;$("benchmarkDiaryPhotoPreview").hidden=false;}catch(error){$("benchmarkDiaryStatus").textContent="사진을 열지 못했어요."}};
   $("benchmarkHeroPhotoButton").onclick=()=>$("benchmarkHeroPhotoInput").click();$("benchmarkHeroPhotoInput").onchange=event=>{const file=event.target.files?.[0];event.target.value="";saveBenchmarkHeroPhoto(file)};
 }
