@@ -220,11 +220,13 @@ body,body *{font-family:var(--hand)!important}
 .event-date-stamp{width:46px!important;min-width:46px!important;flex:0 0 46px!important;height:70px!important;display:flex;flex-direction:column;overflow:hidden}
 .event-date-stamp span{height:25px;flex:0 0 25px;display:flex;align-items:center;justify-content:center;padding:0!important;font-size:18px!important;line-height:1!important}
 .event-date-stamp strong{flex:1;display:flex;align-items:center;justify-content:center;padding:0!important;font-size:38px!important;line-height:1!important}
-.spring-binding{position:absolute;top:0;left:0;right:0;height:calc(31px + env(safe-area-inset-top));z-index:90;pointer-events:none;background:linear-gradient(to bottom,#f0f1f4 0 calc(13px + env(safe-area-inset-top)),#fff calc(13px + env(safe-area-inset-top)) 100%);border-bottom:1px solid #e9e9ed}
-.spring-coils{position:absolute;left:7px;right:7px;top:env(safe-area-inset-top);height:31px;display:flex;justify-content:space-around;align-items:flex-start}
-.spring-coil{position:relative;flex:0 0 18px;width:18px;height:30px}
-.spring-coil:before{content:"";position:absolute;width:12px;height:5px;left:3px;top:20px;border-radius:50%;background:#c9cbd1;box-shadow:inset 0 1px 2px #9396a2}
-.spring-coil:after{content:"";position:absolute;width:12px;height:23px;left:2px;top:1px;border:3px solid #8e94a2;border-top-color:#c9cdd5;border-left-color:#a9aeb9;border-radius:48% 48% 45% 45%;transform:rotate(-9deg);box-shadow:1px 1px 0 #fff,2px 2px 1px #747c8a4d}
+.spring-binding{position:absolute;top:0;left:0;right:0;height:calc(34px + env(safe-area-inset-top));z-index:90;pointer-events:none;background:#fff;border-bottom:1px solid #ece9eb}
+.spring-binding:before{content:"";position:absolute;left:5px;right:5px;top:calc(13px + env(safe-area-inset-top));height:4px;border-radius:45% 55% 48% 52%;background:#29272a;transform:rotate(-.25deg)}
+.spring-coils{position:absolute;left:7px;right:7px;top:env(safe-area-inset-top);height:33px;display:flex;justify-content:space-around;align-items:flex-start}
+.spring-coil{position:relative;flex:0 0 20px;width:20px;height:33px}
+.spring-coil:before{content:"";position:absolute;width:8px;height:6px;left:5px;top:23px;border-radius:50%;background:#343134;transform:rotate(-15deg)}
+.spring-coil:after{content:"";position:absolute;width:14px;height:24px;left:2px;top:2px;border:4px solid #272528;border-right-color:transparent;border-radius:53% 48% 46% 51%;transform:rotate(-22deg);box-shadow:-1px 0 0 #27252833}
+.spring-coil:nth-child(4n+2):after{transform:rotate(-18deg) translateY(1px)}.spring-coil:nth-child(4n+3):after{transform:rotate(-25deg) translateX(1px)}.spring-coil:nth-child(4n):after{transform:rotate(-20deg) translateY(-1px)}
 .benchmark-header{padding-top:calc(39px + env(safe-area-inset-top))}.simple-header{padding-top:calc(39px + env(safe-area-inset-top))}.chat-header{padding-top:calc(39px + env(safe-area-inset-top))}
 .diary-photos.is-empty{display:grid;place-items:center;background:linear-gradient(135deg,#f6e6ee,#ece7f5 56%,#e7ecf3)}
 .diary-photos.is-empty:before{content:"대화에서 사진을 보내면 여기에 쌓여요";font-size:23px;color:#856f86;padding:45px 32px 0;text-align:center}
