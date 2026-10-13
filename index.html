@@ -11,15 +11,15 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.13.8">
+  <meta name="wooriduri-version" content="2026.10.13.9">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 
-  <link rel="stylesheet" href="./ui.css?v=2026.10.13.8">
-  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.13.8","changes":["홈 맨 위에 사진 두 장을 화면 폭에 맞춰 나란히 보여줘요.","꾸미기 메뉴에서 사진을 각각 바꾸고 설정을 열 수 있어요.","다음 약속과 쿠폰 카드의 높이를 맞췄어요."]}</script>
+  <link rel="stylesheet" href="./ui.css?v=2026.10.13.9">
+  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.13.9","changes":["사진 아래에 가까운 기념일과 약속의 D-day를 보여줘요.","날짜 띠를 누르면 달력으로 이동해요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -81,7 +81,7 @@
         </div>
 
         <section class="photo-diary-hero" aria-label="둘만의 사진과 기념일"><div class="diary-photos"><div class="hero-photo-slot"><img hidden alt="왼쪽 홈 사진"></div><div class="hero-photo-slot"><img hidden alt="오른쪽 홈 사진"></div></div><span class="photo-caption">우리두리</span><svg class="plane-sticker" viewBox="0 0 74 70" aria-hidden="true"><path d="M7 8l58 18-24 10-13 21-5-29z" fill="#fff" stroke="#67788a" stroke-width="1.5"/><path d="M7 8l34 28M23 28l42-2M28 57l-5-29" fill="none" stroke="#67788a" stroke-width="1.3"/><path d="M57 47c13-14 21 10 4 11-17 1-12 12-2 11" fill="none" stroke="#d0a4b5" stroke-width="2" stroke-dasharray="3 3"/></svg><article class="dday-card sticky-anniversary"><div class="paper-binding" aria-hidden="true">● ● ● ● ● ● ●</div><div class="dday-label">함께한 지</div><div class="dday-value"><strong id="ddayValue">0</strong><span>일</span></div><div id="ddaySub" class="dday-sub"></div><span class="paper-fold" aria-hidden="true"></span></article></section>
-        <section class="couple-connection" aria-label="두 사람"><div class="mini-person"><div id="homeMyAvatar" class="avatar"></div><span id="homeMyName"></span></div><div class="connection-copy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20S3 15 3 8c0-6 8-6 9-1 2-5 9-5 9 1 0 7-9 12-9 12z"/></svg><span id="partnerStatusText">상대방 대기 중</span><button id="homeBatteryBadge" class="profile-battery-badge" aria-label="배터리 설정">배터리 —</button></div><div class="mini-person"><div id="homePartnerAvatar" class="avatar partner"></div><span id="homePartnerName"></span></div></section>
+        <button id="homeMilestoneStrip" class="home-milestone-strip" type="button" data-benchmark-action="calendar" aria-label="다가오는 기념일과 약속 보기"><span class="home-strip-hearts" aria-hidden="true"><i>♥</i><i>♥</i></span><span class="home-strip-row"><span id="homeMilestoneSymbol0" class="home-strip-symbol" aria-hidden="true">♡</span><span id="homeMilestoneTitle0" class="home-strip-title">함께할 날을 적어봐요</span><span id="homeMilestoneCount0" class="home-strip-count">—</span></span><span class="home-strip-row"><span id="homeMilestoneSymbol1" class="home-strip-symbol" aria-hidden="true">♡</span><span id="homeMilestoneTitle1" class="home-strip-title">다음 약속을 적어봐요</span><span id="homeMilestoneCount1" class="home-strip-count">—</span></span></button><section class="couple-connection" aria-label="두 사람"><div class="mini-person"><div id="homeMyAvatar" class="avatar"></div><span id="homeMyName"></span></div><div class="connection-copy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20S3 15 3 8c0-6 8-6 9-1 2-5 9-5 9 1 0 7-9 12-9 12z"/></svg><span id="partnerStatusText">상대방 대기 중</span><button id="homeBatteryBadge" class="profile-battery-badge" aria-label="배터리 설정">배터리 —</button></div><div class="mini-person"><div id="homePartnerAvatar" class="avatar partner"></div><span id="homePartnerName"></span></div></section>
         <button class="upcoming-anniversary" data-benchmark-action="calendar"><span>♡</span><b id="benchmarkMilestone">다가오는 기념일</b><span>달력 보기 ↗</span></button>
         <article id="homeUpdateCard" class="card content-card home-update-card" hidden aria-labelledby="homeUpdateTitle">
           <h2 id="homeUpdateTitle"></h2><ul id="homeUpdateChanges"></ul><button id="toggleUpdateDetails" class="update-details-toggle" type="button" aria-expanded="false" hidden>변경 내용 더 보기</button>
@@ -4475,6 +4475,7 @@ const benchmarkToday=new Date();
 let benchmarkMonth=new Date(benchmarkToday.getFullYear(),benchmarkToday.getMonth(),1),benchmarkDate=localDateValue(benchmarkToday),benchmarkRecordTab="photos",benchmarkCouponView="received",benchmarkDiaryPhoto="";
 let benchmarkSavingDiary=false,benchmarkSavingCoupon=false,benchmarkSavingTodayPhoto=false;
 let benchmarkTodayPhotoDate="",benchmarkTodayPhotoUnsub=null;
+let benchmarkHomeStripDate="";
 const benchmarkRedeeming=new Set();
 function benchmarkTodayKey(date=new Date()){return new Date(date.getTime()+9*60*60*1000).toISOString().slice(0,10)}
 function benchmarkTodayPhotoFor(slot,day=benchmarkTodayKey()){
@@ -4495,7 +4496,35 @@ function benchmarkMilestone(){
   const date=new Date(start+"T12:00:00");date.setDate(date.getDate()+next-1);
   return {date:localDateValue(date),title:`함께한 ${next}일`,remaining:next-days};
 }
+function benchmarkDaysUntil(date){
+  if(calendarDayCount(date)===null)return null;
+  const today=benchmarkTodayKey();
+  return Math.round((Date.parse(date+"T00:00:00Z")-Date.parse(today+"T00:00:00Z"))/86400000);
+}
+function renderHomeMilestoneStrip(){
+  benchmarkHomeStripDate=benchmarkTodayKey();
+  const rows=[];
+  const event=state.room?.nextEvent,untilEvent=benchmarkDaysUntil(event?.date);
+  if(typeof event?.title==="string"&&event.title.trim()&&untilEvent!==null&&untilEvent>=0)rows.push({title:event.title.trim().slice(0,30),remaining:untilEvent,symbol:"✦"});
+  const milestone=benchmarkMilestone(),untilMilestone=benchmarkDaysUntil(milestone?.date);
+  if(milestone&&untilMilestone!==null&&untilMilestone>=0)rows.push({title:milestone.title,remaining:untilMilestone,symbol:"♥"});
+  const start=state.room?.anniversary,daysTogether=calendarDayCount(start);
+  if(daysTogether!==null&&daysTogether>=1){
+    const [startYear,month,day]=start.split("-").map(Number),todayYear=Number(benchmarkHomeStripDate.slice(0,4));
+    let year=Math.max(startYear+1,todayYear),date=new Date(Date.UTC(year,month-1,day)).toISOString().slice(0,10);
+    if(benchmarkDaysUntil(date)<0){year++;date=new Date(Date.UTC(year,month-1,day)).toISOString().slice(0,10)}
+    rows.push({title:`${year-startYear}주년`,remaining:benchmarkDaysUntil(date),symbol:"♥"});
+  }
+  rows.sort((a,b)=>a.remaining-b.remaining);
+  for(let index=0;index<2;index++){
+    const row=rows[index],empty=index===0?"함께할 날을 적어봐요":"다음 약속을 적어봐요";
+    $("homeMilestoneSymbol"+index).textContent=row?.symbol||"♡";
+    $("homeMilestoneTitle"+index).textContent=row?.title||empty;
+    $("homeMilestoneCount"+index).textContent=row?row.remaining===0?"D-day":`D−${row.remaining}`:"—";
+  }
+}
 function renderBenchmarkCalendar(){
+  renderHomeMilestoneStrip();
   const milestone=benchmarkMilestone();
   $("benchmarkMilestone").textContent=milestone?`다음 ${Math.ceil((calendarDayCount(state.room?.anniversary)+1)/100)*100}일까지 ${milestone.remaining}일`:"우리의 기념일을 함께 정해요";
   if(!$("benchmarkCalendarScreen").classList.contains("is-active"))return;
@@ -4679,7 +4708,7 @@ function bindDiaryBenchmark(){
   $("benchmarkAddRecord").onclick=()=>{if(benchmarkRecordTab==="photos")$("benchmarkTodayPhotoInput").click();else if(benchmarkRecordTab==="journal")openBenchmarkDiary();else openBenchmarkCoupon()};
   $("benchmarkDiaryForm").onsubmit=event=>{event.preventDefault();saveBenchmarkDiary()};$("benchmarkCouponForm").onsubmit=event=>{event.preventDefault();createBenchmarkCoupon()};
   $("benchmarkTodayPhotoInput").onchange=event=>{const file=event.target.files?.[0];event.target.value="";saveBenchmarkTodayPhoto(file)};
-  setInterval(()=>{if(state.roomId&&benchmarkTodayKey()!==benchmarkTodayPhotoDate)refreshBenchmarkTodayPhoto()},30000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshBenchmarkTodayPhoto()});window.addEventListener("pageshow",refreshBenchmarkTodayPhoto);
+  setInterval(()=>{if(state.roomId&&benchmarkTodayKey()!==benchmarkTodayPhotoDate)refreshBenchmarkTodayPhoto();if(state.roomId&&benchmarkTodayKey()!==benchmarkHomeStripDate)renderHomeMilestoneStrip()},30000);document.addEventListener("visibilitychange",()=>{if(!document.hidden){refreshBenchmarkTodayPhoto();renderHomeMilestoneStrip()}});window.addEventListener("pageshow",()=>{refreshBenchmarkTodayPhoto();renderHomeMilestoneStrip()});
   $("benchmarkDiaryPhoto").onchange=async event=>{const file=event.target.files[0];if(!file)return;try{benchmarkDiaryPhoto=await compressImage(file,{maxWidth:720,quality:.65,maxBytes:160000});$("benchmarkDiaryPhotoPreview").src=benchmarkDiaryPhoto;$("benchmarkDiaryPhotoPreview").hidden=false;}catch(error){$("benchmarkDiaryStatus").textContent="사진을 열지 못했어요."}};
   for(const [side,buttonId,inputId] of [["left","benchmarkHeroPhotoButton","benchmarkHeroPhotoInput"],["right","benchmarkHeroPhotoRightButton","benchmarkHeroPhotoRightInput"]]){$(buttonId).onclick=()=>$(inputId).click();$(inputId).onchange=event=>{const file=event.target.files?.[0];event.target.value="";saveBenchmarkHeroPhoto(file,side)}}
 }
