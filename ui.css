@@ -351,3 +351,7 @@ body{font-size:15px}
 /* Keep both anniversary labels and countdowns comfortably inside the short rules. */
 #homeScreen .home-milestone-strip{padding-right:72px;padding-left:72px}
 @media(max-width:350px){#homeScreen .home-milestone-strip{padding-right:59px;padding-left:59px}#homeScreen .couple-connection{grid-template-columns:minmax(0,1fr) 102px minmax(0,1fr)}#homeScreen .mini-person{gap:12px}#homeScreen .mood-badge{width:26px;height:26px;font-size:18px}}
+.home-gift-book{margin:0 0 14px;padding:18px 20px;border:1px solid #262126;border-radius:8px;background:#111;color:#fff;box-shadow:3px 4px 0 #e9e2e7}
+.home-gift-book>span{display:block;color:#c6b6c0;font-size:14px}
+.home-gift-book h2{margin:4px 0 15px;color:#fff;font:400 27px/1.25 var(--hand)}
+.home-gift-book button{min-height:40px;padding:6px 14px;border:1px solid #d8d0d5;border-radius:7px;background:#faf6f8;color:#4c3d49;font-size:17px}

@@ -18,7 +18,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 
-  <link rel="stylesheet" href="./ui.css?v=2026.10.14.4">
+  <link rel="stylesheet" href="./ui.css?v=2026.10.14.4-gift">
   <script id="appReleaseNotes" type="application/json">{"version":"2026.10.14.4","changes":["생리 기록의 종료일은 미래 날짜도 직접 골라 저장할 수 있어요.","날짜 입력이 잘못되었을 때 이유를 분명히 알려줘요."]}</script>
 </head>
 <body>
@@ -86,6 +86,10 @@
         <article id="homeUpdateCard" class="card content-card home-update-card" hidden aria-labelledby="homeUpdateTitle">
           <h2 id="homeUpdateTitle"></h2><ul id="homeUpdateChanges"></ul><button id="toggleUpdateDetails" class="update-details-toggle" type="button" aria-expanded="false" hidden>변경 내용 더 보기</button>
           <div class="home-update-actions"><button id="dismissAppUpdateButton" type="button" class="cancel-button">나중에</button><button id="homeApplyAppUpdateButton" type="button" class="confirm-button">업데이트</button></div>
+        </article>
+        <article id="homeGiftBookCard" class="home-gift-book" hidden aria-labelledby="homeGiftBookTitle">
+          <span>준호가 보낸 수첩</span><h2 id="homeGiftBookTitle">우리의 첫 번째 1년</h2>
+          <button id="openGiftBookButton" type="button">수첩 열어보기 →</button>
         </article>
 
 <div class="home-two-cards">        <article class="card content-card event-card" aria-labelledby="nextEventHeading">
@@ -4245,6 +4249,7 @@
     enterApp=async function enterAppReliable(){
       $("anniversaryBookEntry").hidden=!(state.mySlot==="user1"&&state.authUser?.email?.toLowerCase()==="user1@wooriduri.app");
       await enterAppBeforeReliability();
+      startGiftBookListener();
       const draft=$("messageInput");
       if(draft&&!draft.value){try{draft.value=localStorage.getItem(draftKey())||""}catch{}}
       resizeMessageInput();
@@ -4255,6 +4260,19 @@
     };
 
     const APP_VERSION=document.querySelector('meta[name="wooriduri-version"]').content;
+    let giftBookUnsubscribe=null;
+    function startGiftBookListener(){
+      giftBookUnsubscribe?.();giftBookUnsubscribe=null;
+      $("homeGiftBookCard").hidden=true;
+      if(state.mySlot!=="user2"||state.authUser?.email?.toLowerCase()!=="user2@wooriduri.app")return;
+      giftBookUnsubscribe=onValue(ref(db,"rooms/main/decoInfo/anniversaryGiftMeta"),snapshot=>{
+        const meta=snapshot.val();
+        const visible=!!(meta?.publishedAt&&meta?.by==="user1"&&typeof meta.title==="string");
+        $("homeGiftBookCard").hidden=!visible;
+        if(visible)$("homeGiftBookTitle").textContent=meta.title.slice(0,100);
+      },error=>{console.warn("gift book listener failed",error);$("homeGiftBookCard").hidden=true;});
+      state.unsubscribers.push(giftBookUnsubscribe);
+    }
     let pendingAppVersion="";
     let checkingAppUpdate=false;
     async function checkAppUpdate(options={}){
@@ -4442,14 +4460,14 @@ renderRoom=function renderRoomWithCompactStatus(){
 function showInstalledUpdate(){
   // Keep the surprise off the shared release feed. Only Junho sees this installed update.
   if(APP_VERSION==="2026.10.14.4"&&state.mySlot==="user1"&&state.authUser?.email?.toLowerCase()==="user1@wooriduri.app"){
-    const privateRelease="2026.10.14.4-junho-book";
+    const privateRelease="2026.10.14.4-junho-deploy";
     try{if(localStorage.getItem("wooriduri_junho_release_acknowledged")===privateRelease)return;}catch{}
     showAppUpdateCard(document,APP_VERSION,false);
     const card=$("homeUpdateCard"),list=$("homeUpdateChanges");
     card.dataset.kind="private-installed";card.dataset.version=privateRelease;
     $("homeUpdateTitle").textContent="준호에게 업데이트가 도착했어요";
     list.replaceChildren();
-    for(const change of ["1주년 수첩을 만들 수 있어요.","사진을 끌어 놓으면 글이 그 자리에 맞춰 줄바꿈돼요.","PDF와 이미지로 저장할 수 있어요."]){const item=document.createElement("li");item.textContent=change;list.append(item);}
+    for(const change of ["1주년 수첩을 만들 수 있어요.","사진을 끌어 놓으면 글이 그 자리에 맞춰 줄바꿈돼요.","Deploy를 누르면 세은에게 바로 공개돼요."]){const item=document.createElement("li");item.textContent=change;list.append(item);}
     $("toggleUpdateDetails").hidden=false;
     $("dismissAppUpdateButton").textContent="확인했어요";$("homeApplyAppUpdateButton").hidden=true;
     return;
@@ -4465,6 +4483,7 @@ function showInstalledUpdate(){
 }
 function bindServiceEnhancements(){
   $("anniversaryBookButton").addEventListener("click",()=>{if(state.mySlot==="user1"&&state.authUser?.email?.toLowerCase()==="user1@wooriduri.app")location.href="./secret-book.html"});
+  $("openGiftBookButton").addEventListener("click",()=>{if(state.mySlot==="user2"&&state.authUser?.email?.toLowerCase()==="user2@wooriduri.app")location.href="./secret-book.html?gift=1"});
   $("homeBatteryBadge").addEventListener("click",openAccountSettings);
   $("newNextEventButton").addEventListener("click",()=>openEventModal({createNew:true}));
   $("messageReplyAction").addEventListener("click",()=>{const message=state.messages.find(item=>item.id===selectedMessageId);closeModal("messageActionsModal");if(message)setReplyTarget(message)});
