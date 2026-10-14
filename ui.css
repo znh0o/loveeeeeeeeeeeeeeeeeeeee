@@ -329,3 +329,25 @@ body{font-size:15px}
 #benchmarkPeriodModal .period-delete{margin-right:auto;color:#a96d82}
 #benchmarkPeriodStatus{min-height:20px;margin:8px 0;color:#a76d85;font-size:15px}
 @media(max-width:350px){#benchmarkCalendarScreen .calendar-legend{gap:4px 9px;font-size:14px}.period-tracker{padding:12px}.period-tracker p{font-size:16px}}
+/* Small mirrored mood circles sit on the inside of the two portraits. */
+#homeScreen .couple-connection{display:grid;grid-template-columns:minmax(0,1fr) clamp(102px,33vw,134px) minmax(0,1fr);align-items:start;gap:4px;padding-right:8px;padding-left:8px}
+#homeScreen .mini-person{min-width:0;display:flex;flex-direction:row;align-items:flex-start;gap:14px}
+#homeScreen .mini-person-self{justify-content:flex-end}
+#homeScreen .mini-person-partner{justify-content:flex-start}
+#homeScreen .profile-photo-column{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:50px}
+#homeScreen .profile-photo-column .avatar{flex:none}
+#homeScreen .profile-photo-column span{max-width:76px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#homeScreen .connection-copy{width:100%;min-width:0;overflow:hidden;text-align:center}
+#homeScreen .connection-copy #partnerStatusText{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#homeScreen .mood-badge{display:grid;place-items:center;flex:none;width:28px;height:28px;margin-top:11px;padding:0;border:1px solid #d7c4d0;border-radius:50%;background:#fff9fc;color:#a77b94;font:600 20px/1 "Segoe UI Symbol",sans-serif;box-shadow:0 1px 3px #6e4a6317}
+#homeScreen .mood-badge .mood-glyph{display:block;color:inherit;font-size:inherit;line-height:1;transform:translateY(2px)}
+#homeScreen button.mood-badge:active{background:#f8e9f0}
+#homeScreen .mood-badge.has-mood{background:#f9e9f1;color:#9b6784;border-color:#d9aec3}
+.mood-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:15px 0 10px}
+.mood-choice-grid button{display:flex;align-items:center;gap:11px;min-height:52px;padding:8px 13px;border:1px solid #ead8e3;border-radius:12px;background:#fffafd;color:#866c80;text-align:left;font-size:19px}
+.mood-choice-grid button b{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#f8e8f0;color:#a27592;font:600 23px/1 "Segoe UI Symbol",sans-serif}
+#benchmarkMoodClear{display:block;min-height:35px;margin-left:auto;padding:4px 9px;background:transparent;color:#a08d9c;font-size:16px}
+#benchmarkMoodStatus{min-height:21px;margin:4px 0;color:#a76d85;font-size:15px}
+/* Keep both anniversary labels and countdowns comfortably inside the short rules. */
+#homeScreen .home-milestone-strip{padding-right:72px;padding-left:72px}
+@media(max-width:350px){#homeScreen .home-milestone-strip{padding-right:59px;padding-left:59px}#homeScreen .couple-connection{grid-template-columns:minmax(0,1fr) 102px minmax(0,1fr)}#homeScreen .mini-person{gap:12px}#homeScreen .mood-badge{width:26px;height:26px;font-size:18px}}
