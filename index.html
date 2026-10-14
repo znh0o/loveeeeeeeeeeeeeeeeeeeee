@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.14.5">
+  <meta name="wooriduri-version" content="2026.10.14.6">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -19,7 +19,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 
   <link rel="stylesheet" href="./ui.css?v=2026.10.14.4-gift">
-  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.14.5","changes":["채팅 메시지가 보낸 순서대로 표시돼요."]}</script>
+  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.14.6","changes":["받은 쿠폰을 채팅에서 바로 사용할 수 있고, 사용 기록도 대화에 남아요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -4771,9 +4771,22 @@ async function createBenchmarkCoupon(){
   finally{benchmarkSavingCoupon=false;$("benchmarkCouponSave").disabled=false;}
 }
 async function redeemBenchmarkCoupon(id){
-  const coupon=state.room?.coupons?.[id];if(!coupon||coupon.usedAt||coupon.to!==state.mySlot||benchmarkRedeeming.has(id))return;
+  const coupon=state.room?.coupons?.[id];if(!state.roomId||!coupon||coupon.usedAt||coupon.to!==state.mySlot||benchmarkRedeeming.has(id))return;
   benchmarkRedeeming.add(id);renderBenchmarkRecords();
-  try{await update(roomRef(),{[`decoInfo/coupons/${id}/usedAt`]:serverTimestamp(),[`decoInfo/coupons/${id}/usedBy`]:state.mySlot});showToast("함께 쓰기로 했어요 ♡");}
+  try{
+    const latest=(await get(ref(db,`rooms/${state.roomId}/decoInfo/coupons/${id}`))).val();
+    if(!latest||latest.usedAt||latest.to!==state.mySlot){showToast("이미 사용한 쿠폰이에요");return;}
+    const messageId=push(messagesRef()).key,now=Date.now();
+    const message={sender:state.myName,senderSlot:state.mySlot,senderName:state.myName,type:"text",text:"🎟️ 쿠폰을 사용했어요",imageData:"",couponId:id,couponEvent:"redeemed",timestamp:now,clientCreatedAt:now,createdAt:now};
+    await update(ref(db),{
+      [`rooms/${state.roomId}/decoInfo/coupons/${id}/usedAt`]:serverTimestamp(),
+      [`rooms/${state.roomId}/decoInfo/coupons/${id}/usedBy`]:state.mySlot,
+      [`rooms/${state.roomId}/decoInfo/coupons/${id}/usedMessageId`]:messageId,
+      [`chat/${state.roomId}/${messageId}`]:message
+    });
+    requestBackgroundPush(messageId).catch(error=>console.warn("coupon redemption push request failed",error));
+    showToast("쿠폰 사용을 대화에 남겼어요 ♡");
+  }
   catch(error){showToast("쿠폰을 사용하지 못했어요");}
   finally{benchmarkRedeeming.delete(id);renderBenchmarkRecords();}
 }
@@ -4832,8 +4845,9 @@ canGroupChatMessages=function(before,after){return !before?.couponId&&!after?.co
 function renderBenchmarkChatCoupons(){
   for(const message of state.messages){if(!message.couponId)continue;const row=$("chatMessages").querySelector(`[data-message-id="${CSS.escape(message.id)}"]`),body=row?.querySelector(".message-body");if(!body)continue;
     const coupon=state.room?.coupons?.[message.couponId],card=document.createElement("button"),label=document.createElement("small"),title=document.createElement("strong"),status=document.createElement("span");
-    card.type="button";card.className="chat-coupon-card"+(coupon?.usedAt?" is-used":"");label.textContent=coupon?.to===state.mySlot?"받은 쿠폰":"보낸 쿠폰";title.textContent=coupon?.title||"쿠폰";status.textContent=coupon?.usedAt?"사용 완료 ♡":coupon?.to===state.mySlot?"사용할 수 있어요 · 쿠폰함 열기 ↗":"상대가 사용할 수 있어요 · 쿠폰함 열기 ↗";
-    card.append(label,title,status);card.onclick=event=>{event.stopPropagation();benchmarkRecordTab="coupons";benchmarkCouponView=coupon?.to===state.mySlot?"received":"sent";switchScreen("benchmarkRecordsScreen")};body.append(card);
+    const used=!!coupon?.usedAt||message.couponEvent==="redeemed",canRedeem=!used&&coupon?.to===state.mySlot;
+    card.type="button";card.className="chat-coupon-card"+(used?" is-used":"");label.textContent=message.couponEvent==="redeemed"?"사용한 쿠폰":coupon?.to===state.mySlot?"받은 쿠폰":"보낸 쿠폰";title.textContent=coupon?.title||"쿠폰";status.textContent=used?"사용 완료 ♡":canRedeem?"눌러서 사용하기 ↗":"상대가 사용할 수 있어요 · 쿠폰함 열기 ↗";
+    card.append(label,title,status);card.onclick=event=>{event.stopPropagation();if(canRedeem){if(window.confirm(`“${coupon.title}” 쿠폰을 사용할까요?`))redeemBenchmarkCoupon(message.couponId);return;}benchmarkRecordTab="coupons";benchmarkCouponView=coupon?.to===state.mySlot?"received":"sent";switchScreen("benchmarkRecordsScreen")};body.append(card);
   }
 }
 const benchmarkOriginalMessages=renderMessages;
