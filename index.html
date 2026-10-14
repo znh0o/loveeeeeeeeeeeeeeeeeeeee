@@ -4309,7 +4309,9 @@
       location.replace(url.href);
     }
     function dismissAppUpdateCard(){
-      try{localStorage.setItem($("homeUpdateCard").dataset.kind==="installed"?"wooriduri_release_acknowledged":"wooriduri_update_dismissed",$("homeUpdateCard").dataset.version||pendingAppVersion)}catch{}
+      const kind=$("homeUpdateCard").dataset.kind;
+      const key=kind==="private-installed"?"wooriduri_junho_release_acknowledged":kind==="installed"?"wooriduri_release_acknowledged":"wooriduri_update_dismissed";
+      try{localStorage.setItem(key,$("homeUpdateCard").dataset.version||pendingAppVersion)}catch{}
       $("homeUpdateCard").hidden=true;
     }
     function showAppUpdateCard(page,version,automatic){
@@ -4438,6 +4440,20 @@ renderRoom=function renderRoomWithCompactStatus(){
   if($("typingStatus").textContent)$("partnerStatusText").textContent=`${state.partnerName} · 입력 중…`;
 };
 function showInstalledUpdate(){
+  // Keep the surprise off the shared release feed. Only Junho sees this installed update.
+  if(APP_VERSION==="2026.10.14.4"&&state.mySlot==="user1"&&state.authUser?.email?.toLowerCase()==="user1@wooriduri.app"){
+    const privateRelease="2026.10.14.4-junho-book";
+    try{if(localStorage.getItem("wooriduri_junho_release_acknowledged")===privateRelease)return;}catch{}
+    showAppUpdateCard(document,APP_VERSION,false);
+    const card=$("homeUpdateCard"),list=$("homeUpdateChanges");
+    card.dataset.kind="private-installed";card.dataset.version=privateRelease;
+    $("homeUpdateTitle").textContent="준호에게 업데이트가 도착했어요";
+    list.replaceChildren();
+    for(const change of ["1주년 수첩을 만들 수 있어요.","사진을 끌어 놓으면 글이 그 자리에 맞춰 줄바꿈돼요.","PDF와 이미지로 저장할 수 있어요."]){const item=document.createElement("li");item.textContent=change;list.append(item);}
+    $("toggleUpdateDetails").hidden=false;
+    $("dismissAppUpdateButton").textContent="확인했어요";$("homeApplyAppUpdateButton").hidden=true;
+    return;
+  }
   if(state.mySlot==="user2"&&APP_VERSION==="2026.10.14.4"){$("homeUpdateCard").hidden=true;return;}
   if($("homeUpdateCard").dataset.kind==="available"&&!$("homeUpdateCard").hidden)return;
   try{if(localStorage.getItem("wooriduri_release_acknowledged")===APP_VERSION)return;}catch{}
