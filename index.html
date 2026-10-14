@@ -654,14 +654,14 @@
     const PUSH_ID_ALPHABET="-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
 
     function pushIdTimestamp(id=""){
-      if(typeof id!=="string"||id.length<8) return 0;
+      if(typeof id!=="string"||!/^[-0-9A-Z_a-z]{20}$/.test(id)) return 0;
       let value=0;
       for(let index=0;index<8;index++){
         const digit=PUSH_ID_ALPHABET.indexOf(id[index]);
         if(digit<0) return 0;
         value=value*64+digit;
       }
-      return value;
+      return value>=1262304000000&&value<4102444800000?value:0;
     }
 
     function messageTimestamp(message={}){
@@ -670,6 +670,19 @@
         || timestampMs(message.createdAt,0)
         || pushIdTimestamp(message.id)
         || 0;
+    }
+
+    // Firebase reads chat pages by Push ID. Keep that same order on screen;
+    // clientCreatedAt can differ between the two devices' clocks.
+    function messageOrderTime(message={}){
+      return pushIdTimestamp(message.id)||messageTimestamp(message);
+    }
+
+    function compareMessageOrder(a,b){
+      const difference=messageOrderTime(a)-messageOrderTime(b);
+      if(difference) return difference;
+      const first=String(a.id||""),second=String(b.id||"");
+      return first<second?-1:first>second?1:0;
     }
 
     function isChatActuallyVisible(){
@@ -687,6 +700,13 @@
       if(readId){
         const exactIndex=state.messages.findIndex(message=>message.id===readId);
         if(exactIndex>=0) return exactIndex;
+        if(pushIdTimestamp(readId)){
+          let index=-1;
+          state.messages.forEach((message,messageIndex)=>{
+            if(pushIdTimestamp(message.id)&&message.id<=readId) index=messageIndex;
+          });
+          return index;
+        }
       }
 
       const readMessageAt=Number(user.lastReadMessageAt)||Number(user.lastReadAt)||0;
@@ -1854,7 +1874,7 @@
       const index=state.messages.findIndex(item=>item.id===next.id);
       if(index>=0) state.messages[index]=next;
       else state.messages.push(next);
-      state.messages.sort((a,b)=>messageTimestamp(a)-messageTimestamp(b)||String(a.id).localeCompare(String(b.id)));
+      state.messages.sort(compareMessageOrder);
       scheduleMessageCacheSave();
       scheduleMessagesRender(true);
     }
@@ -1875,7 +1895,7 @@
           .map(([id,value])=>({id,...value}));
         const known=new Set(state.messages.map(item=>item.id));
         rows.forEach(item=>{if(!known.has(item.id)) state.messages.push(item)});
-        state.messages.sort((a,b)=>messageTimestamp(a)-messageTimestamp(b)||String(a.id).localeCompare(String(b.id)));
+        state.messages.sort(compareMessageOrder);
         if(Object.keys(raw).length<MESSAGE_PAGE_SIZE) state.hasMoreMessages=false;
         scheduleMessageCacheSave();
         renderMessages();
@@ -1898,7 +1918,8 @@
       state.unsubscribers=[];
       clearTimeout(state.messageRenderTimer);
       const cachedMessages=loadMessageCache();
-      state.messages=cachedMessages;      state.hasMoreMessages=true;
+      state.messages=cachedMessages.sort(compareMessageOrder);
+      state.hasMoreMessages=true;
       state.loadingOlderMessages=false;
       state.messageIdsSeen.clear();
       cachedMessages.forEach(message=>state.messageIdsSeen.add(message.id));
@@ -2139,7 +2160,7 @@
       const lastMyIndex=[...state.messages].map((message,index)=>isMine(message)?index:-1).filter(index=>index>=0).at(-1);
 
       state.messages.forEach((message,index)=>{
-        const messageMs=messageTimestamp(message);
+        const messageMs=messageOrderTime(message);
         const dateLabel=formatDate(messageMs);
         if(dateLabel!==previousDate){
           const divider=document.createElement("div");
@@ -3710,9 +3731,9 @@
     function canGroupChatMessages(before,after){
       if(!before||!after||before.replyTo||after.replyTo) return false;
       if((before.type||"text")!=="text"||(after.type||"text")!=="text") return false;
-      const sender=chatSenderKey(before),gap=messageTimestamp(after)-messageTimestamp(before);
+      const sender=chatSenderKey(before),gap=messageOrderTime(after)-messageOrderTime(before);
       return !!sender&&sender===chatSenderKey(after)&&gap>=0&&gap<=120000
-        &&formatDate(messageTimestamp(before))===formatDate(messageTimestamp(after));
+        &&formatDate(messageOrderTime(before))===formatDate(messageOrderTime(after));
     }
 
     renderMessages=function renderMessagesRefined(){
@@ -3746,7 +3767,7 @@
       const lastMyIndex=[...state.messages].map((message,index)=>isMine(message)?index:-1).filter(index=>index>=0).at(-1);
 
       state.messages.forEach((message,index)=>{
-        const messageMs=messageTimestamp(message);
+        const messageMs=messageOrderTime(message);
         const dateLabel=formatDate(messageMs);
         if(dateLabel!==previousDate){
           const divider=document.createElement("div");
@@ -3856,7 +3877,7 @@
         const time=document.createElement("span");
         time.className="message-time";
         time.textContent=formatTime(messageMs);
-        time.hidden=groupedAfter&&formatTime(messageMs)===formatTime(messageTimestamp(state.messages[index+1]));
+        time.hidden=groupedAfter&&formatTime(messageMs)===formatTime(messageOrderTime(state.messages[index+1]));
         status.appendChild(time);
         meta.appendChild(status);
 
@@ -3931,7 +3952,7 @@
       const optimistic={id:created.key,...payload};
       state.pendingMessageIds.add(created.key);
       state.messages.push(optimistic);
-      state.messages.sort((a,b)=>messageTimestamp(a)-messageTimestamp(b)||String(a.id).localeCompare(String(b.id)));
+      state.messages.sort(compareMessageOrder);
       clearReplyTarget();
       renderMessages();
       requestAnimationFrame(()=>{$("chatMessages").scrollTop=$("chatMessages").scrollHeight});
@@ -4093,7 +4114,7 @@
         state.pendingMessageIds.add(row.id);
       }
       if(rows.length){
-        state.messages.sort((a,b)=>messageTimestamp(a)-messageTimestamp(b)||String(a.id).localeCompare(String(b.id)));
+        state.messages.sort(compareMessageOrder);
         renderMessages();
       }
       showConnectionState();
@@ -4155,7 +4176,7 @@
       focusMessageInput();
       if(!state.messages.some(message=>message.id===created.key)) state.messages.push({id:created.key,...payload});
       state.pendingMessageIds.add(created.key);
-      state.messages.sort((a,b)=>messageTimestamp(a)-messageTimestamp(b)||String(a.id).localeCompare(String(b.id)));
+      state.messages.sort(compareMessageOrder);
       renderMessages();
       requestAnimationFrame(()=>{$("chatMessages").scrollTop=$("chatMessages").scrollHeight});
       flushOutbox().catch(console.warn);
@@ -4694,7 +4715,7 @@ function renderBenchmarkRecords(){
 function benchmarkEmpty(parent,text){const empty=document.createElement("p");empty.className="benchmark-empty";empty.textContent=text;parent.append(empty)}
 function renderBenchmarkHeroPhotos(){
   const chosen=[state.room?.heroPhoto?.imageData,state.room?.heroPhotoRight?.imageData];
-  const recent=state.messages.filter(item=>item.type==="image"&&item.imageData).sort((a,b)=>messageTimestamp(b)-messageTimestamp(a)).map(item=>item.imageData);
+  const recent=state.messages.filter(item=>item.type==="image"&&item.imageData).sort((a,b)=>compareMessageOrder(b,a)).map(item=>item.imageData);
   const first=typeof chosen[0]==="string"&&chosen[0].startsWith("data:image/")?chosen[0]:recent[0];
   const second=typeof chosen[1]==="string"&&chosen[1].startsWith("data:image/")?chosen[1]:recent.find(source=>source!==first)||first;
   document.querySelectorAll(".hero-photo-slot").forEach((slot,index)=>{const source=index?second:first,image=slot.querySelector("img");slot.classList.toggle("is-empty",!source);if(source){if(image.src!==source)image.src=source;image.hidden=false}else{image.removeAttribute("src");image.hidden=true}});
