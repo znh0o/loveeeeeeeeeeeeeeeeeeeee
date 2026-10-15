@@ -11,15 +11,15 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.15.3">
+  <meta name="wooriduri-version" content="2026.10.15.4">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 
-  <link rel="stylesheet" href="./ui.css?v=2026.10.15.3">
-  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.15.3","changes":["채팅 상단바를 부드럽게 흐리고 배경이 살짝만 비치게 했어요."]}</script>
+  <link rel="stylesheet" href="./ui.css?v=2026.10.15.4">
+  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.15.4","changes":["채팅 검색과 로그아웃 시 기기 데이터 보호를 개선했어요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -2453,8 +2453,20 @@
       if(!state.searchHits.length){$("searchCount").textContent="없음";return}
 
       const escaped=queryText.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
-      const regex=new RegExp(`(${escaped})`,"gi");
-      state.searchHits.forEach(item=>item.element.innerHTML=item.text.replace(regex,"<mark>$1</mark>"));
+      const regex=new RegExp(escaped,"gi");
+      state.searchHits.forEach(item=>{
+        const fragment=document.createDocumentFragment();
+        let from=0;
+        for(const match of item.text.matchAll(regex)){
+          fragment.append(document.createTextNode(item.text.slice(from,match.index)));
+          const mark=document.createElement("mark");
+          mark.textContent=match[0];
+          fragment.append(mark);
+          from=match.index+match[0].length;
+        }
+        fragment.append(document.createTextNode(item.text.slice(from)));
+        item.element.replaceChildren(fragment);
+      });
       state.searchIndex=0;
       $("searchCount").textContent=`1/${state.searchHits.length}`;
       state.searchHits[0].row.scrollIntoView({behavior:"smooth",block:"center"});
@@ -2882,7 +2894,13 @@
 
     // 기존 '커플 코드 로그아웃' 대신 Firebase 계정 로그아웃으로 교체합니다.
     logout=async function fixedAccountLogout(){
-      if(!confirm("이 기기에서 로그아웃할까요?")) return;
+      let hasDraft=Boolean($("messageInput").value.trim());
+      try{hasDraft=hasDraft||Boolean(localStorage.getItem(draftKey())?.trim())}catch{}
+      const hasUnsent=readOutbox().length>0||hasDraft;
+      if(!confirm(hasUnsent
+        ?"미전송 메시지와 작성 중인 글이 이 기기에서 삭제돼요. 로그아웃할까요?"
+        :"이 기기의 대화 임시 저장본을 지우고 로그아웃할까요?")) return;
+      localSessionEpoch++;
       try{await Promise.race([setPresence(false),wait(700)])}catch{}
       await Promise.race([stopLivePresence(),wait(900)]).catch(()=>{});
       await Promise.race([detachPushFromCurrentRoom(),wait(700)]).catch(()=>{});
@@ -2890,9 +2908,14 @@
       clearInterval(state.heartbeatTimer);state.heartbeatTimer=null;
       state.roomUnsubscribe?.();state.roomUnsubscribe=null;
       state.unsubscribers.forEach(unsub=>unsub?.());state.unsubscribers=[];
+      const localDataCleared=clearPrivateLocalData(state.roomId,state.mySlot);
       clearSession();
+      state.messages=[];state.pendingMessageIds.clear();state.messageIdsSeen.clear();
+      state.searchItems=[];state.searchHits=[];state.upload={active:false,label:"",detail:""};
+      $("messageInput").value="";
       state.roomId="";state.mySlot="";state.myName="";state.partnerName="";state.room=null;
       await signOut(auth);
+      if(!localDataCleared) showToast("기기에 남은 대화를 지우지 못했어요. 브라우저 저장 공간을 확인해 주세요.");
     };
 
     async function bootFixedAuth(){
@@ -4081,9 +4104,23 @@
     const OUTBOX_PREFIX="wdm_outbox_v2";
     const DRAFT_PREFIX="wdm_draft_v2";
     let outboxFlushing=false;
+    let localSessionEpoch=0;
     let lastPushResult=null;
     const outboxKey=()=>`${OUTBOX_PREFIX}:${state.roomId}:${state.mySlot}`;
     const draftKey=()=>`${DRAFT_PREFIX}:${state.roomId}:${state.mySlot}`;
+    function clearPrivateLocalData(roomId,slot){
+      clearTimeout(state.messageCacheTimer);state.messageCacheTimer=null;
+      if(!roomId||!slot)return true;
+      let cleared=true;
+      for(const key of [
+        `${MESSAGE_CACHE_PREFIX}:${roomId}:${slot}`,
+        `${OUTBOX_PREFIX}:${roomId}:${slot}`,
+        `${DRAFT_PREFIX}:${roomId}:${slot}`
+      ]){
+        try{localStorage.removeItem(key)}catch{cleared=false}
+      }
+      return cleared;
+    }
     function readOutbox(){
       if(!state.roomId||!state.mySlot) return [];
       try{return parseOutbox(localStorage.getItem(outboxKey()))}catch{return []}
@@ -4123,16 +4160,19 @@
     async function flushOutbox(){
       if(outboxFlushing||!state.roomId||!state.mySlot||!auth.currentUser||!navigator.onLine) return;
       const key=outboxKey();
+      const epoch=localSessionEpoch;
       outboxFlushing=true;
       try{
         for(const row of readOutbox()){
-          if(outboxKey()!==key || !auth.currentUser || row.payload.senderSlot!==state.mySlot) break;
+          if(epoch!==localSessionEpoch || outboxKey()!==key || !auth.currentUser || row.payload.senderSlot!==state.mySlot) break;
           try{
             const msgRef=messageItemRef(row.id);
             // Reusing the same Firebase Push ID prevents duplicate messages after lost acknowledgements.
             const existing=await get(msgRef);
+            if(epoch!==localSessionEpoch || outboxKey()!==key || !auth.currentUser) break;
             if(!existing.exists()){
               await set(msgRef,row.payload);
+              if(epoch!==localSessionEpoch || outboxKey()!==key || !auth.currentUser) break;
               // Push is best effort, message stays stored even when push fails.
               requestBackgroundPush(row.id);
             }
@@ -4151,7 +4191,8 @@
         }
       }finally{
         outboxFlushing=false;
-        renderMessages();showConnectionState();
+        if(epoch===localSessionEpoch){renderMessages();showConnectionState();}
+        else if(state.roomId&&auth.currentUser)queueMicrotask(()=>flushOutbox().catch(console.warn));
       }
     }
     // Preserve text through reload/crashes, then send with an immutable message ID.
