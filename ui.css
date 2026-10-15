@@ -359,6 +359,6 @@ body{font-size:15px}
 /* Let the chat wallpaper continue behind the floating composer and translucent header. */
 #chatScreen{background-color:#f7f5f8}
 #chatScreen #chatMessages{background:transparent}
-#chatScreen>.chat-header.glass{position:relative;z-index:2;background:rgba(255,255,255,.82);opacity:1;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+#chatScreen>.chat-header.glass{position:relative;z-index:2;background:rgba(255,255,255,.92);opacity:1;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 #chatScreen .chat-input-bar{z-index:2;width:calc(100% - 28px);margin:8px 14px calc(14px + env(safe-area-inset-bottom));padding:7px 8px;border:1px solid #decbd9;border-radius:24px;background:#fff;box-shadow:0 10px 28px #513c4d26,0 2px 6px #513c4d13}
 body.keyboard-open #chatScreen .chat-input-bar{margin-bottom:8px}
