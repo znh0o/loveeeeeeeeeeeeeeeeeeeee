@@ -9,6 +9,7 @@ async function clearRoomNotifications(roomId=""){
     const notifications = await self.registration.getNotifications();
 
     for(const notification of notifications){
+      if(String(notification.tag||"").startsWith("wooriduri-period-")) continue;
       const notificationRoom = notification.data?.roomId || "";
 
       const sameRoom =

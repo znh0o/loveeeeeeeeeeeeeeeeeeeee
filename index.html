@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.28.2">
+  <meta name="wooriduri-version" content="2026.10.28.3">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -19,7 +19,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png?v=2026.10.15.5">
 
   <link rel="stylesheet" href="./ui.css?v=2026.10.15.4">
-  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.28.2","changes":["로그아웃하면 로그인 화면으로 바로 돌아가요."]}</script>
+  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.28.3","changes":["생리 예정일 2주 전에 준호에게 알림을 보내요.","종료 예정일 이틀 뒤 다음 날짜가 없으면 세은에게 알려줘요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -1176,6 +1176,7 @@
         if(!registration?.getNotifications) return;
         const notifications=await registration.getNotifications();
         for(const notification of notifications){
+          if(String(notification.tag||"").startsWith("wooriduri-period-")) continue;
           const notificationRoom=notification.data?.roomId||"";
           const sameRoom=!notificationRoom||notificationRoom===state.roomId||notification.tag===`wooriduri-${state.roomId}`;
           if(sameRoom) notification.close();
@@ -1290,6 +1291,7 @@
         updatedAt:Date.now(),
         userAgent:navigator.userAgent.slice(0,240)
       });
+      queuePeriodSync();
     }
 
     function pushPreferenceEnabled(){
@@ -1377,6 +1379,7 @@
     async function detachPushFromCurrentRoom(){
       if(state.roomId&&state.mySlot){
         try{await remove(pushSubscriptionRef())}catch(error){console.warn("push detach failed",error)}
+        await periodSyncNow().catch(()=>{});
       }
       state.pushSubscription=null;
     }
@@ -1439,6 +1442,7 @@
         if(payload.roomId&&payload.roomId!==state.roomId) return;
         if(document.visibilityState==="visible"){
           showToast(payload.body||"새 알림이 도착했어요");
+          if(payload.kind==="period-reminder") return;
           if(isChatActuallyVisible()){
             clearLocalChatNotifications().catch(()=>{});
             scheduleCrossDeviceNotificationClear();
@@ -2904,7 +2908,9 @@
       localSessionEpoch++;
       try{await Promise.race([setPresence(false),wait(700)])}catch{}
       await Promise.race([stopLivePresence(),wait(900)]).catch(()=>{});
-      await Promise.race([detachPushFromCurrentRoom(),wait(700)]).catch(()=>{});
+      // Invalidate the local endpoint before removing its Firebase/KV copy.
+      try{const subscription=await state.pushRegistration?.pushManager.getSubscription();await subscription?.unsubscribe()}catch{}
+      await Promise.race([detachPushFromCurrentRoom(),wait(2500)]).catch(()=>{});
       stopLocationSharing(false);
       clearInterval(state.heartbeatTimer);state.heartbeatTimer=null;
       state.roomUnsubscribe?.();state.roomUnsubscribe=null;
@@ -3383,13 +3389,14 @@
     clearPushOpenRequest=function clearPushOpenRequestRefined(){
       const url=new URL(location.href);
       const needsChat=url.searchParams.get("open")==="chat";
+      const needsCalendar=url.searchParams.get("open")==="calendar";
       const room=url.searchParams.get("room")||"";
-      if(!needsChat) return {needsChat:false,room:""};
-      return {needsChat:true,room};
+      return {needsChat,needsCalendar,room};
     }
 
     handlePushOpenRequest=function handlePushOpenRequestRefined(){
       const request=clearPushOpenRequest();
+      if(request.needsCalendar){switchScreen("benchmarkCalendarScreen");return;}
       if(!request.needsChat) return;
       if(request.room&&request.room!==state.roomId) return;
       openChat();
@@ -3412,6 +3419,7 @@
       await syncExistingPushSubscription(true);
       if(localStorage.getItem(locationPreferenceKey())==="on") startLocationSharing(false);
       if(pushRequest.needsChat&&(!pushRequest.room||pushRequest.room===state.roomId)) setTimeout(()=>openChat(),0);
+      else if(pushRequest.needsCalendar) setTimeout(()=>switchScreen("benchmarkCalendarScreen"),0);
     }
 
     function replyPreviewText(message){
@@ -4241,6 +4249,28 @@
       }
       return {response,result};
     }
+    let periodSyncTimer=0,periodSyncRetry=0;
+    function queuePeriodSync(delay=350,retry=false){
+      if(!retry) periodSyncRetry=0;
+      clearTimeout(periodSyncTimer);
+      periodSyncTimer=setTimeout(async()=>{
+        try{if(await periodSyncNow()){periodSyncRetry=0;return}}
+        catch(error){console.warn("period reminder sync pending",error?.message||error)}
+        if(auth.currentUser&&state.mySlot&&periodSyncRetry<3){
+          queuePeriodSync([5000,30000,120000][periodSyncRetry++],true);
+        }
+      },delay);
+    }
+    window.addEventListener("online",()=>queuePeriodSync());
+    async function periodSyncNow(){
+      if(!auth.currentUser||state.roomId!=="main"||!state.mySlot) return false;
+      const {response,result}=await workerCall("/period-sync",{});
+      if(!response.ok||!result.ok){
+        console.warn("period reminder sync pending",result.error||response.status);
+        return false;
+      }
+      return true;
+    }
     requestBackgroundPush=async function requestBackgroundPushVerified(messageId){
       if(!messageId||!state.roomId||!state.mySlot) return;
       for(let attempt=0;attempt<3;attempt++){
@@ -4882,7 +4912,7 @@ async function deleteBenchmarkPeriod(){
   finally{benchmarkPeriodSaving=false;$("benchmarkPeriodDelete").disabled=false;}
 }
 const benchmarkOriginalRealtime=startRealtimeListeners;
-startRealtimeListeners=function(){benchmarkTodayPhotoUnsub?.();benchmarkTodayPhotoUnsub=null;benchmarkTodayPhotoDate="";benchmarkOriginalRealtime();for(const field of ["journal","coupons","play","periodTracking","moods"]){state.unsubscribers.push(listenRoomPath(`decoInfo/${field}`,value=>{state.room[field]=value||{};if(field==="moods"){renderBenchmarkMoods();return}renderBenchmarkCalendar();renderBenchmarkRecords();if(field==="coupons"&&state.messages.length)renderMessages()}));}for(const field of ["heroPhoto","heroPhotoRight"]){state.unsubscribers.push(listenRoomPath(`decoInfo/${field}`,value=>{state.room[field]=value||null;renderBenchmarkHeroPhotos()}))}refreshBenchmarkTodayPhoto()};
+startRealtimeListeners=function(){benchmarkTodayPhotoUnsub?.();benchmarkTodayPhotoUnsub=null;benchmarkTodayPhotoDate="";benchmarkOriginalRealtime();for(const field of ["journal","coupons","play","periodTracking","moods"]){state.unsubscribers.push(listenRoomPath(`decoInfo/${field}`,value=>{state.room[field]=value||{};if(field==="periodTracking")queuePeriodSync();if(field==="moods"){renderBenchmarkMoods();return}renderBenchmarkCalendar();renderBenchmarkRecords();if(field==="coupons"&&state.messages.length)renderMessages()}));}for(const field of ["heroPhoto","heroPhotoRight"]){state.unsubscribers.push(listenRoomPath(`decoInfo/${field}`,value=>{state.room[field]=value||null;renderBenchmarkHeroPhotos()}))}refreshBenchmarkTodayPhoto()};
 const benchmarkOriginalGrouping=canGroupChatMessages;
 canGroupChatMessages=function(before,after){return !before?.couponId&&!after?.couponId&&benchmarkOriginalGrouping(before,after)};
 function renderBenchmarkChatCoupons(){
