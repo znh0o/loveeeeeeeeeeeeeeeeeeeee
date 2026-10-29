@@ -4,6 +4,65 @@ const APP_URL = "./index.html";
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", event => event.waitUntil(self.clients.claim()));
 
+// Public app files only. Never intercept Firebase data, Auth, release checks or push APIs.
+const PUBLIC_SHELL_CACHE="wooriduri-public-shell-v1";
+const PUBLIC_ROOT=self.registration.scope;
+const PUBLIC_INDEX=new URL("index.html",PUBLIC_ROOT).href;
+const PUBLIC_PATHS=new Set([
+  "index.html","app-core.js","ui.css","NanumPenScript-Regular.woff2",
+  "manifest.webmanifest","apple-touch-icon.png","icon-192.png","icon-512.png"
+].map(file=>new URL(file,PUBLIC_ROOT).href));
+const PUBLIC_SDK=new Set(["app","auth","database"].map(name=>
+  `https://www.gstatic.com/firebasejs/10.12.0/firebase-${name}.js`));
+const PUBLIC_WARM_URLS=[
+  PUBLIC_INDEX,new URL("app-core.js?v=2026.10.29.1",PUBLIC_ROOT).href,
+  new URL("ui.css?v=2026.10.15.4",PUBLIC_ROOT).href,
+  new URL("NanumPenScript-Regular.woff2",PUBLIC_ROOT).href,...PUBLIC_SDK
+];
+
+async function fetchPublicFile(request,key){
+  const response=await fetch(request);
+  if(response.ok&&response.type!=="opaque"){
+    try{await (await caches.open(PUBLIC_SHELL_CACHE)).put(key,response.clone())}catch{}
+  }
+  return response;
+}
+async function readPublicFile(key){
+  try{return await (await caches.open(PUBLIC_SHELL_CACHE)).match(key)}catch{return null}
+}
+async function cachedVersionSatisfies(response,requested){
+  if(!requested||!/^\d{4}\.\d{2}\.\d{2}\.\d+$/.test(requested))return true;
+  const html=await response.clone().text();
+  const version=html.match(/name="wooriduri-version"\s+content="([^"]+)"/)?.[1];
+  return !!version&&version.localeCompare(requested,undefined,{numeric:true})>=0;
+}
+self.addEventListener("fetch",event=>{
+  const request=event.request;
+  if(request.method!=="GET")return;
+  const url=new URL(request.url),canonical=url.origin+url.pathname;
+  const navigation=request.mode==="navigate"&&(canonical===PUBLIC_INDEX||canonical===PUBLIC_ROOT);
+  if(!navigation&&!PUBLIC_PATHS.has(canonical)&&!PUBLIC_SDK.has(canonical))return;
+  const key=navigation?PUBLIC_INDEX:request.url;
+  const freshRequest=navigation?new Request(request,{cache:"no-cache"}):request;
+  const network=fetchPublicFile(freshRequest,key);
+  event.waitUntil(network.then(()=>{},()=>{}));
+  event.respondWith((async()=>{
+    const saved=await readPublicFile(key);
+    const refresh=request.cache==="reload"||request.cache==="no-store"||url.searchParams.has("_updateCheck");
+    if(saved&&!refresh&&(!navigation||await cachedVersionSatisfies(saved,url.searchParams.get("_appVersion"))))return saved;
+    try{return await network}catch(error){if(saved)return saved;throw error}
+  })());
+});
+self.addEventListener("message",event=>{
+  if(event.data?.type!=="WOORIDURI_WARM_PUBLIC_CACHE")return;
+  // The page cannot supply a URL to cache; this list contains no user content.
+  event.waitUntil(Promise.allSettled(PUBLIC_WARM_URLS.map(async url=>{
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);
+    try{await fetchPublicFile(new Request(url,{mode:"cors",signal:controller.signal}),url)}
+    finally{clearTimeout(timer)}
+  })));
+});
+
 async function clearRoomNotifications(roomId=""){
   try{
     const notifications = await self.registration.getNotifications();

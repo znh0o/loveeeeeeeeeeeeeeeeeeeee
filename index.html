@@ -11,15 +11,29 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.28.3">
+  <meta name="wooriduri-version" content="2026.10.29.1">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=2026.10.15.5">
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png?v=2026.10.15.5">
 
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://first-app-ffb0b-default-rtdb.asia-southeast1.firebasedatabase.app" crossorigin>
+  <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js" crossorigin>
+  <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js" crossorigin>
+  <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js" crossorigin>
+  <link rel="modulepreload" href="./app-core.js?v=2026.10.29.1">
+  <link rel="preload" href="./NanumPenScript-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="./ui.css?v=2026.10.15.4">
-  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.28.3","changes":["생리 예정일 2주 전에 준호에게 알림을 보내요.","종료 예정일 이틀 뒤 다음 날짜가 없으면 세은에게 알려줘요."]}</script>
+  <script>
+    // Registration does not request notification permission or wait for sign-in.
+    if("serviceWorker" in navigator){
+      window.wooriduriWorkerReady=navigator.serviceWorker.register("./push-sw.js",{scope:"./",updateViaCache:"none"})
+        .catch(()=>null);
+    }
+  </script>
+  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.29.1","changes":["앱을 처음 열 때 불필요한 로그인 대기를 줄였어요.","앱 화면 파일을 기기에 보관해 다음 실행을 더 빠르게 준비해요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -27,7 +41,7 @@
       <div class="splash-content">
         <div class="splash-logo">♡</div>
         <div class="splash-title">우리두리</div>
-        <div class="splash-sub">둘만의 조용한 공간</div>
+        <div class="splash-sub" id="startupStatus" role="status" aria-live="polite">우리두리를 열고 있어요…</div>
         <div class="dots"><i></i><i></i><i></i></div>
       </div>
     </div>
@@ -386,11 +400,11 @@
       limitToLast, startAt, endBefore, onDisconnect, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
     import {
-      getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut,
-      setPersistence, browserLocalPersistence, updatePassword, updateProfile
+      initializeAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut,
+      setPersistence, browserLocalPersistence, indexedDBLocalPersistence, updatePassword, updateProfile
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    import {calendarDayCount,nextDayMilestone,parseOutbox,upsertOutbox,removeOutbox,isTransientSendFailure} from "./app-core.js";
+    import {calendarDayCount,nextDayMilestone,parseOutbox,upsertOutbox,removeOutbox,isTransientSendFailure} from "./app-core.js?v=2026.10.29.1";
 
     /* =========================================================
        CONFIG / STATE
@@ -406,8 +420,9 @@
     };
 
     const app = initializeApp(firebaseConfig);
+    // Email/password sign-in needs no popup/redirect iframe on mobile startup.
+    const auth = initializeAuth(app,{persistence:[browserLocalPersistence,indexedDBLocalPersistence]});
     const db = getDatabase(app);
-    const auth = getAuth(app);
 
     const $ = id => document.getElementById(id);
     const SESSION_KEY = "wdm_session";
@@ -841,7 +856,17 @@
       syncVisualViewport();
     }
 
-    function hideSplash(){setTimeout(()=>$("splash").classList.add("is-hidden"),180)}
+    let publicCacheWarmQueued=false;
+    function hideSplash(){
+      $("splash").classList.add("is-hidden");
+      document.documentElement.dataset.appReadyMs=String(Math.round(performance.now()));
+      if(!publicCacheWarmQueued&&window.wooriduriWorkerReady){
+        publicCacheWarmQueued=true;
+        // Warm only public files after the first screen has had time to paint.
+        setTimeout(()=>window.wooriduriWorkerReady.then(registration=>registration?navigator.serviceWorker.ready:null)
+          .then(registration=>registration?.active?.postMessage({type:"WOORIDURI_WARM_PUBLIC_CACHE"})).catch(()=>{}),1200);
+      }
+    }
 
     function openModal(id){$(id).classList.add("is-open")}
     function closeModal(id){$(id).classList.remove("is-open")}
@@ -2927,8 +2952,8 @@
     };
 
     async function bootFixedAuth(){
+      $("startupStatus").textContent="로그인 확인 중…";
       selectFixedUser("user1");
-      await setPersistence(auth,browserLocalPersistence).catch(()=>{});
       onAuthStateChanged(auth,user=>{
         if(!user){
           state.authUser=null;
@@ -3200,10 +3225,12 @@
 
     getPushRegistration=async function getPushRegistrationRefined(){
       if(!pushSupported()) return null;
-      const registration=await navigator.serviceWorker.register(PUSH_SW_PATH,{scope:"./",updateViaCache:"none"});
+      if(state.pushRegistration) return state.pushRegistration;
+      const registration=await window.wooriduriWorkerReady
+        || await navigator.serviceWorker.register(PUSH_SW_PATH,{scope:"./",updateViaCache:"none"});
       await navigator.serviceWorker.ready;
-      await registration.update().catch(()=>{});
       state.pushRegistration=registration;
+      registration.update().catch(()=>{});
       return registration;
     }
 
@@ -3416,7 +3443,8 @@
       startLivePresence();
       startHeartbeat();
       startBatterySync().catch(error=>console.warn("battery setup failed",error));
-      await syncExistingPushSubscription(true);
+      requestAnimationFrame(()=>requestAnimationFrame(()=>
+        syncExistingPushSubscription(true).catch(error=>console.warn("background push setup failed",error))));
       if(localStorage.getItem(locationPreferenceKey())==="on") startLocationSharing(false);
       if(pushRequest.needsChat&&(!pushRequest.room||pushRequest.room===state.roomId)) setTimeout(()=>openChat(),0);
       else if(pushRequest.needsCalendar) setTimeout(()=>switchScreen("benchmarkCalendarScreen"),0);
