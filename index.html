@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.10.29.1">
+  <meta name="wooriduri-version" content="2026.11.09.1">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -25,7 +25,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js" crossorigin>
   <link rel="modulepreload" href="./app-core.js?v=2026.10.29.1">
   <link rel="preload" href="./NanumPenScript-Regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./ui.css?v=2026.10.15.4">
+  <link rel="stylesheet" href="./ui.css?v=2026.11.09.1">
   <script>
     // Registration does not request notification permission or wait for sign-in.
     if("serviceWorker" in navigator){
@@ -33,7 +33,7 @@
         .catch(()=>null);
     }
   </script>
-  <script id="appReleaseNotes" type="application/json">{"version":"2026.10.29.1","changes":["앱을 처음 열 때 불필요한 로그인 대기를 줄였어요.","앱 화면 파일을 기기에 보관해 다음 실행을 더 빠르게 준비해요."]}</script>
+  <script id="appReleaseNotes" type="application/json">{"version":"2026.11.09.1","changes":["할로윈, 빼빼로데이, 크리스마스에 홈이 그날의 장식으로 바뀌어요."]}</script>
 </head>
 <body>
   <div class="app-frame">
@@ -94,7 +94,28 @@
           <button class="quick-action" data-action="open-deco"><span class="quick-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 12-12-3-3L5 16zM14 7l3 3"/></svg></span><small>꾸미기</small></button>
         </div>
 
-        <section class="photo-diary-hero" aria-label="둘만의 사진과 기념일"><div class="diary-photos"><div class="hero-photo-slot"><img hidden alt="왼쪽 홈 사진"></div><div class="hero-photo-slot"><img hidden alt="오른쪽 홈 사진"></div></div><span class="photo-caption">우리두리</span><svg class="plane-sticker" viewBox="0 0 74 70" aria-hidden="true"><path d="M7 8l58 18-24 10-13 21-5-29z" fill="#fff" stroke="#67788a" stroke-width="1.5"/><path d="M7 8l34 28M23 28l42-2M28 57l-5-29" fill="none" stroke="#67788a" stroke-width="1.3"/><path d="M57 47c13-14 21 10 4 11-17 1-12 12-2 11" fill="none" stroke="#d0a4b5" stroke-width="2" stroke-dasharray="3 3"/></svg><article class="dday-card sticky-anniversary"><div class="paper-binding" aria-hidden="true">● ● ● ● ● ● ●</div><div class="dday-label">함께한 지</div><div class="dday-value"><strong id="ddayValue">0</strong><span>일</span></div><div id="ddaySub" class="dday-sub"></div><span class="paper-fold" aria-hidden="true"></span></article></section>
+        <section class="photo-diary-hero" aria-label="둘만의 사진과 기념일"><div class="diary-photos"><div class="hero-photo-slot"><img hidden alt="왼쪽 홈 사진"></div><div class="hero-photo-slot"><img hidden alt="오른쪽 홈 사진"></div></div><span class="photo-caption">우리두리</span>
+          <div id="seasonStamp" class="season-stamp" hidden>
+          <svg viewBox="0 0 42 42" class="season-halloween" aria-hidden="true">
+            <path d="M20 15c-5-4-11-3-14 3C2 26 7 35 15 35c2 2 5 2 8 0 8 1 13-6 11-13-2-8-8-10-14-7Z" fill="#e8a04e" stroke="#f4bc70"/>
+            <path d="M20 15c-1-3 0-6 3-7m-6 8c-5 6-5 13-2 19m9-19c4 5 4 12 0 19" fill="none" stroke="#9c542f"/>
+            <path d="m11 24 4-5 2 6Zm13 1 3-6 3 5ZM15 28l4 2 5-1 3-2-2 5-6 1Z" fill="#3c2b3b" stroke="none"/>
+            <path d="m28 5 4 2 2-2 2 2 5-2-2 6-3-1-2 2-2-2-3 1Z" fill="#e7d5ea" stroke="none"/>
+          </svg>
+          <svg viewBox="0 0 42 42" class="season-pepero" aria-hidden="true">
+            <path d="M16 38 9 8m15 30 8-28" fill="none" stroke="#bd7d39" stroke-width="5.5"/>
+            <path d="M14 30 9 8m17 22 6-20" fill="none" stroke="#633728" stroke-width="7.5"/>
+            <path d="m8 9 2 2m0 5 2 1m0 6 2 2m16-15 3 1m-5 6 2 2m-4 7 2 1" fill="none" stroke="#b7774a" stroke-width="2"/>
+            <path d="M17 5v6m-3-3h6m4 4 1-2" fill="none" stroke="#a96b35"/>
+          </svg>
+          <svg viewBox="0 0 42 42" class="season-christmas" aria-hidden="true">
+            <path d="M12 33c5-7 11-16 18-24m-12 17c1-8 0-13-1-16m3 14c7 1 13-1 17-4m-13 0c0-6 0-10-1-13m3 11c5 0 9-3 12-6m-6 14 4-1m-17-8-4-3m10-1 4-5" fill="none" stroke="#3f6b50" stroke-width="1.6"/>
+            <path d="M15 29c-6-7-12-5-9-1 1 2 5 2 9 1Zm0 0c9-2 13 3 8 4-3 0-6-3-8-4Zm0 0-3 9m3-9 3 8" fill="none" stroke="#ac4c54" stroke-width="1.7"/>
+            <circle cx="29" cy="25" r="2.1" fill="#b84f57" stroke="none"/><circle cx="34" cy="24" r="1.7" fill="#b84f57" stroke="none"/><circle cx="31" cy="29" r="1.6" fill="#d17772" stroke="none"/>
+          </svg>
+          <span class="season-stamp-copy"><small id="seasonStampDate"></small><span id="seasonStampLabel"></span></span>
+        </div>
+          <svg class="plane-sticker" viewBox="0 0 74 70" aria-hidden="true"><path d="M7 8l58 18-24 10-13 21-5-29z" fill="#fff" stroke="#67788a" stroke-width="1.5"/><path d="M7 8l34 28M23 28l42-2M28 57l-5-29" fill="none" stroke="#67788a" stroke-width="1.3"/><path d="M57 47c13-14 21 10 4 11-17 1-12 12-2 11" fill="none" stroke="#d0a4b5" stroke-width="2" stroke-dasharray="3 3"/></svg><article class="dday-card sticky-anniversary"><div class="paper-binding" aria-hidden="true">● ● ● ● ● ● ●</div><div class="dday-label">함께한 지</div><div class="dday-value"><strong id="ddayValue">0</strong><span>일</span></div><div id="ddaySub" class="dday-sub"></div><span class="paper-fold" aria-hidden="true"></span></article></section>
         <button id="homeMilestoneStrip" class="home-milestone-strip" type="button" data-benchmark-action="calendar" aria-label="다가오는 기념일과 약속 보기"><span class="home-strip-hearts" aria-hidden="true"><i>♥</i><i>♥</i></span><span class="home-strip-row"><span id="homeMilestoneSymbol0" class="home-strip-symbol" aria-hidden="true">♡</span><span id="homeMilestoneTitle0" class="home-strip-title">함께할 날을 적어봐요</span><span id="homeMilestoneCount0" class="home-strip-count">—</span></span><span class="home-strip-row"><span id="homeMilestoneSymbol1" class="home-strip-symbol" aria-hidden="true">♡</span><span id="homeMilestoneTitle1" class="home-strip-title">다음 약속을 적어봐요</span><span id="homeMilestoneCount1" class="home-strip-count">—</span></span></button><section class="couple-connection" aria-label="두 사람"><div class="mini-person mini-person-self"><div class="profile-photo-column"><div id="homeMyAvatar" class="avatar"></div><span id="homeMyName"></span></div><button id="homeMyMood" class="mood-badge" type="button" aria-label="내 기분 선택하기"><span class="mood-glyph" aria-hidden="true">+</span></button></div><div class="connection-copy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20S3 15 3 8c0-6 8-6 9-1 2-5 9-5 9 1 0 7-9 12-9 12z"/></svg><span id="partnerStatusText">상대방 대기 중</span><button id="homeBatteryBadge" class="profile-battery-badge" aria-label="배터리 설정">배터리 —</button></div><div class="mini-person mini-person-partner"><div id="homePartnerMood" class="mood-badge" role="img" aria-label="상대가 아직 기분을 고르지 않았어요"><span class="mood-glyph" aria-hidden="true">·</span></div><div class="profile-photo-column"><div id="homePartnerAvatar" class="avatar partner"></div><span id="homePartnerName"></span></div></div></section>
         <button class="upcoming-anniversary" data-benchmark-action="calendar"><span>♡</span><b id="benchmarkMilestone">다가오는 기념일</b><span>달력 보기 ↗</span></button>
         <article id="homeUpdateCard" class="card content-card home-update-card" hidden aria-labelledby="homeUpdateTitle">
@@ -854,6 +875,7 @@
       ["loginScreen","homeScreen","chatScreen","decoScreen"].forEach(id=>$(id).classList.toggle("is-active",id===screenId));
       document.body.classList.toggle("chat-mode",screenId==="chatScreen");
       syncVisualViewport();
+      if(screenId==="homeScreen"||screenId==="loginScreen") refreshSeasonalHome();
     }
 
     let publicCacheWarmQueued=false;
@@ -4373,6 +4395,7 @@
       $("anniversaryBookEntry").hidden=!(state.mySlot==="user1"&&state.authUser?.email?.toLowerCase()==="user1@wooriduri.app");
       await enterAppBeforeReliability();
       startGiftBookListener();
+      refreshSeasonalHome();
       const draft=$("messageInput");
       if(draft&&!draft.value){try{draft.value=localStorage.getItem(draftKey())||""}catch{}}
       resizeMessageInput();
@@ -4383,6 +4406,48 @@
     };
 
     const APP_VERSION=document.querySelector('meta[name="wooriduri-version"]').content;
+    const HOME_SEASON_DAYS = {
+      "10-31": { id:"halloween", label:"할로윈", date:"10.31" },
+      "11-11": { id:"pepero", label:"빼빼로데이", date:"11.11" },
+      "12-25": { id:"christmas", label:"크리스마스", date:"12.25" }
+    };
+    const HOME_DAY_MS = 86400000;
+    let homeSeasonTimer;
+
+    function homeSeasonAt(now=Date.now()){
+      const koreaTime=now+9*60*60*1000;
+      return {
+        theme:HOME_SEASON_DAYS[new Date(koreaTime).toISOString().slice(5,10)] || null,
+        untilMidnight:HOME_DAY_MS-koreaTime%HOME_DAY_MS
+      };
+    }
+
+    function refreshSeasonalHome(){
+      clearTimeout(homeSeasonTimer);
+      const frame=document.querySelector(".app-frame");
+      const slot=fixedSlotFromUser(auth.currentUser);
+      const active=!!slot && slot===state.mySlot && state.roomId===FIXED_ROOM_ID
+        && !$("loginScreen").classList.contains("is-active");
+      const {theme,untilMidnight}=homeSeasonAt();
+      const stamp=$("seasonStamp");
+      stamp.hidden=!(active && theme);
+      if(active && theme){
+        frame.dataset.season=theme.id;
+        $("seasonStampDate").textContent=theme.date;
+        $("seasonStampLabel").textContent=theme.label;
+      }else{
+        delete frame.dataset.season;
+      }
+      if(active) homeSeasonTimer=setTimeout(refreshSeasonalHome,untilMidnight+100);
+    }
+
+    function bindSeasonalHome(){
+      document.addEventListener("visibilitychange",()=>{
+        if(!document.hidden) refreshSeasonalHome();
+      });
+      window.addEventListener("pageshow",refreshSeasonalHome);
+    }
+
     let giftBookUnsubscribe=null;
     function startGiftBookListener(){
       giftBookUnsubscribe?.();giftBookUnsubscribe=null;
@@ -5000,6 +5065,7 @@ function bindDiaryBenchmark(){
   for(const [side,buttonId,inputId] of [["left","benchmarkHeroPhotoButton","benchmarkHeroPhotoInput"],["right","benchmarkHeroPhotoRightButton","benchmarkHeroPhotoRightInput"]]){$(buttonId).onclick=()=>$(inputId).click();$(inputId).onchange=event=>{const file=event.target.files?.[0];event.target.value="";saveBenchmarkHeroPhoto(file,side)}}
 }
 bindDiaryBenchmark();
+    bindSeasonalHome();
     bindAppUpdates();
     bindEvents();
     bindRefinedEnhancements();

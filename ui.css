@@ -362,3 +362,98 @@ body{font-size:15px}
 #chatScreen>.chat-header.glass{position:relative;z-index:2;background:rgba(255,255,255,.92);opacity:1;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 #chatScreen .chat-input-bar{z-index:2;width:calc(100% - 28px);margin:8px 14px calc(14px + env(safe-area-inset-bottom));padding:7px 8px;border:1px solid #decbd9;border-radius:24px;background:#fff;box-shadow:0 10px 28px #513c4d26,0 2px 6px #513c4d13}
 body.keyboard-open #chatScreen .chat-input-bar{margin-bottom:8px}
+
+/* The stamp sits where the paper plane is normally pinned, without moving the photos. */
+.app-frame[data-season="halloween"] {
+  --season-paper:#fbf7fb; --season-tint:#eee3f3; --season-line:#d5c4dc; --season-ink:#654c72; --season-accent:#a76336;
+}
+.app-frame[data-season="pepero"] {
+  --season-paper:#fffbf4; --season-tint:#f6ead1; --season-line:#dec8a6; --season-ink:#765032; --season-accent:#9b672c;
+}
+.app-frame[data-season="christmas"] {
+  --season-paper:#f7fbf8; --season-tint:#e3efe5; --season-line:#bfd2c4; --season-ink:#3d654f; --season-accent:#a6515b;
+}
+.app-frame[data-season] :is(#homeScreen,#decoScreen,#benchmarkCalendarScreen,#benchmarkRecordsScreen) {
+  background: var(--season-paper);
+}
+.app-frame[data-season] .bottom-nav.glass {
+  background: var(--season-paper)!important;
+  border-color: var(--season-line)!important;
+}
+.app-frame[data-season] .bottom-nav .nav-item { color: var(--season-ink); }
+.app-frame[data-season] .bottom-nav .nav-item.is-active {
+  background: var(--season-tint);
+  color: var(--season-ink);
+}
+.app-frame[data-season] .home-milestone-strip::before,
+.app-frame[data-season] .home-milestone-strip::after { background: var(--season-line); }
+.app-frame[data-season] .home-milestone-strip .home-strip-hearts { background: var(--season-paper); }
+.app-frame[data-season] .home-strip-hearts i { color: var(--season-accent); }
+.app-frame[data-season] .home-strip-hearts i+i { color: var(--season-ink); }
+.app-frame[data-season] .home-two-cards .event-card { background:#fff; box-shadow:inset 0 0 0 1px var(--season-line); }
+.app-frame[data-season] .event-date-stamp span { background:var(--season-tint); color:var(--season-ink); }
+.app-frame[data-season] .home-two-cards .coupon-home-card { background:var(--season-tint); color:var(--season-ink); }
+.app-frame[data-season] .coupon-home-card>span:last-child { color:var(--season-ink); }
+.app-frame[data-season] .coupon-home-card::after { background:linear-gradient(135deg,var(--season-line) 50%,var(--season-paper) 51%); }
+.app-frame[data-season] .coupon-doodle { text-shadow:1px 1px 0 var(--season-line); }
+.app-frame[data-season] .photo-diary-hero .plane-sticker { display: none; }
+.season-stamp {
+  position: absolute; top: 14px; right: 13px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 10px 5px 7px;
+  color: var(--season-ink); background: var(--season-paper);
+  box-shadow: 1px 3px 5px #2c231b29;
+  font: 22px/1 var(--hand); pointer-events: none;
+}
+.season-stamp-copy { display:grid; gap:3px; white-space:nowrap; }
+.season-stamp-copy small { font:600 9px/1 system-ui,sans-serif; font-family:system-ui,sans-serif!important; letter-spacing:.09em; }
+.season-stamp svg {
+  display: none; width: 37px; height: 37px;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* An admission ticket, a torn wrapper and a postage stamp use different silhouettes. */
+[data-season="halloween"] .season-stamp {
+  padding-inline: 9px 14px; color:#fff1e4; background:#3e2d45; transform:rotate(-6deg);
+  clip-path:polygon(0 0,100% 0,100% 38%,95% 50%,100% 62%,100% 100%,0 100%,0 62%,5% 50%,0 38%);
+}
+[data-season="halloween"] .season-stamp-copy { padding-left:7px; border-left:1px dashed #a88aa9; }
+[data-season="halloween"] .season-stamp-copy small { color:#f7c07d; }
+[data-season="pepero"] .season-stamp {
+  padding-right:17px; color:#573326; background:#f4d58e; transform:rotate(5deg);
+  clip-path:polygon(0 3%,100% 0,98% 10%,100% 20%,98% 30%,100% 40%,98% 50%,100% 60%,98% 70%,100% 80%,98% 90%,100% 100%,0 98%,2% 88%,0 78%,2% 68%,0 58%,2% 48%,0 38%,2% 28%,0 18%,2% 8%);
+}
+[data-season="pepero"] .season-stamp::after {
+  content:''; position:absolute; inset:0 0 0 auto; width:8px;
+  background:repeating-linear-gradient(0deg,#85513a 0 2px,#633c2d 2px 4px);
+}
+[data-season="christmas"] .season-stamp {
+  color:#37634e; background:#fffdf1; border:1px dashed #6c947d;
+  outline:2px solid #fffdf1; transform:rotate(-4deg); padding-right:12px;
+}
+[data-season="christmas"] .season-stamp-copy small { color:#a6515b; }
+
+.app-frame[data-season="halloween"] .home-two-cards .coupon-home-card {
+  background:#47324d; color:#fff0e4; outline:1px dashed #a080a5; outline-offset:-5px;
+}
+[data-season="halloween"] .coupon-home-card .coupon-doodle { color:#ffd197; text-shadow:none; }
+.app-frame[data-season="halloween"] .coupon-home-card>span:last-child { color:#f1dcec; }
+.app-frame[data-season="halloween"] .coupon-home-card::after {
+  right:-4px; bottom:calc(50% - 5px); width:10px; height:10px;
+  border-radius:50%; background:var(--season-paper);
+}
+[data-season="pepero"] .coupon-home-card::before {
+  content:''; position:absolute; top:0; inset-inline:8px; height:6px;
+  background:repeating-linear-gradient(90deg,#b97f4933 0 1px,transparent 1px 3px);
+  border-bottom:1px solid #b97f4933;
+}
+.app-frame[data-season="christmas"] .home-two-cards .coupon-home-card {
+  background:#e5f0e7; border:1px dashed #7a9c85; overflow:hidden;
+}
+[data-season="christmas"] .coupon-home-card::before {
+  content:''; position:absolute; top:7px; right:-18px; width:59px; height:8px;
+  background:#ad5960; transform:rotate(43deg);
+}
+[data-season="halloween"] .season-halloween,
+[data-season="pepero"] .season-pepero,
+[data-season="christmas"] .season-christmas { display: block; }
