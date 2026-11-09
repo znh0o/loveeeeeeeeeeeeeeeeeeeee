@@ -1,12 +1,13 @@
 export const PAGE_WIDTH=900;
 export const PAGE_HEIGHT=1273;
+export const MAX_COVER_PHOTOS=3;
 const MAX_PAGES=40;
 const MAX_BLOCKS=80;
 const imageCache=new Map();
 const bounded=(value,fallback,min,max)=>Number.isFinite(Number(value))?Math.max(min,Math.min(max,Number(value))):fallback;
 
 export function emptyBook(){
-  return {title:"우리의 첫 번째 1년",pages:[{blocks:[{type:"text",text:"",size:18}]}]};
+  return {title:"우리의 첫 번째 1년",coverPhotos:[],pages:[{blocks:[{type:"text",text:"",size:18}]}]};
 }
 
 export function normalizeBook(value){
@@ -14,6 +15,8 @@ export function normalizeBook(value){
   const pages=Array.isArray(source.pages)?source.pages.slice(0,MAX_PAGES):[];
   return {
     title:String(source.title||"우리의 첫 번째 1년").slice(0,100),
+    coverPhotos:(Array.isArray(source.coverPhotos)?source.coverPhotos:[]).slice(0,MAX_COVER_PHOTOS).filter(data=>
+      typeof data==="string"&&data.length<2500000&&/^data:image\/(?:jpeg|png|webp);base64,/i.test(data)),
     pages:(pages.length?pages:[{blocks:[]}]).map(page=>({
       blocks:(Array.isArray(page?.blocks)?page.blocks:[]).slice(0,MAX_BLOCKS).flatMap(block=>{
         if(block?.type==="text")return [{type:"text",text:String(block.text||"").slice(0,4000),size:Math.max(12,Math.min(32,Number(block.size)||18))}];
@@ -41,6 +44,39 @@ function loadImage(data){
   imageCache.set(data,promise);
   if(imageCache.size>16)imageCache.delete(imageCache.keys().next().value);
   return promise;
+}
+
+function drawFillingPhoto(ctx,image,x,y,width,height,angle=0){
+  const iw=image.naturalWidth||image.width,ih=image.naturalHeight||image.height;
+  const scale=Math.max(width/iw,height/ih);
+  const sw=width/scale,sh=height/scale;
+  ctx.save();
+  ctx.translate(x+width/2,y+height/2);
+  ctx.rotate(angle);
+  if(angle){
+    ctx.shadowColor="#0007";
+    ctx.shadowBlur=13;
+    ctx.shadowOffsetY=3;
+  }
+  ctx.drawImage(image,(iw-sw)/2,(ih-sh)/2,sw,sh,-width/2,-height/2,width,height);
+  ctx.restore();
+}
+
+export async function drawBookCover(photos,canvas=document.createElement("canvas")){
+  const images=await Promise.all(photos.slice(0,MAX_COVER_PHOTOS).map(loadImage));
+  const w=canvas.width=PAGE_WIDTH,h=canvas.height=PAGE_HEIGHT;
+  const ctx=canvas.getContext("2d");
+  ctx.fillStyle="#111";
+  ctx.fillRect(0,0,w,h);
+  if(!images.length)return canvas;
+  drawFillingPhoto(ctx,images[0],0,0,w,h);
+  if(images.length===2){
+    drawFillingPhoto(ctx,images[1],-.08*w,.49*h,1.18*w,.57*h,.065);
+  }else if(images.length===3){
+    drawFillingPhoto(ctx,images[1],-.07*w,.49*h,.72*w,.56*h,-.06);
+    drawFillingPhoto(ctx,images[2],.49*w,.42*h,.58*w,.65*h,.085);
+  }
+  return canvas;
 }
 
 export async function drawPage(page,pageNumber,total,canvas=document.createElement("canvas")){

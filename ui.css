@@ -351,10 +351,6 @@ body{font-size:15px}
 /* Keep both anniversary labels and countdowns comfortably inside the short rules. */
 #homeScreen .home-milestone-strip{padding-right:72px;padding-left:72px}
 @media(max-width:350px){#homeScreen .home-milestone-strip{padding-right:59px;padding-left:59px}#homeScreen .couple-connection{grid-template-columns:minmax(0,1fr) 102px minmax(0,1fr)}#homeScreen .mini-person{gap:12px}#homeScreen .mood-badge{width:26px;height:26px;font-size:18px}}
-.home-gift-book{margin:0 0 14px;padding:18px 20px;border:1px solid #262126;border-radius:8px;background:#111;color:#fff;box-shadow:3px 4px 0 #e9e2e7}
-.home-gift-book>span{display:block;color:#c6b6c0;font-size:14px}
-.home-gift-book h2{margin:4px 0 15px;color:#fff;font:400 27px/1.25 var(--hand)}
-.home-gift-book button{min-height:40px;padding:6px 14px;border:1px solid #d8d0d5;border-radius:7px;background:#faf6f8;color:#4c3d49;font-size:17px}
 
 /* Let the chat wallpaper continue behind the floating composer and translucent header. */
 #chatScreen{background-color:#f7f5f8}
@@ -457,3 +453,33 @@ body.keyboard-open #chatScreen .chat-input-bar{margin-bottom:8px}
 [data-season="halloween"] .season-halloween,
 [data-season="pepero"] .season-pepero,
 [data-season="christmas"] .season-christmas { display: block; }
+
+/* Anniversary gift home */
+.anniversary-postmark {
+  position:absolute; z-index:2; top:9px; right:12px; width:89px; height:auto;
+  transform:rotate(6deg); filter:drop-shadow(0 1px 1px #261c1a24); pointer-events:none;
+}
+.postmark-date { font:600 14px Georgia,serif; font-family:Georgia,serif!important; fill:#87434e; }
+.postmark-label { font:17px var(--hand); fill:#87434e; }
+.app-frame[data-anniversary] .photo-diary-hero .plane-sticker { display:none; }
+.app-frame[data-anniversary] .home-milestone-strip::before,
+.app-frame[data-anniversary] .home-milestone-strip::after { background:#ccafb6; }
+.app-frame[data-anniversary] #homeMilestoneTitle0,
+.app-frame[data-anniversary] #homeMilestoneCount0 { color:#914f5b; }
+.app-frame[data-anniversary] .home-strip-hearts i+i { color:#90535e; }
+.app-frame[data-anniversary] .bottom-nav.glass { background:#fffafb!important; border-color:#e7d7db!important; }
+.app-frame[data-anniversary] .bottom-nav .nav-item.is-active { color:#8f5261; background:#f6e6eb; }
+.gift-arrival {
+  position:relative; width:100%; min-height:94px; display:grid; grid-template-columns:minmax(0,1fr) 94px;
+  align-items:center; gap:10px; padding:10px 12px 10px 15px; margin:8px 0 2px;
+  border:1px solid #e5cfd3; border-radius:5px 8px 6px 4px; text-align:left;
+  background:#fffaf6; color:#584049; box-shadow:1px 2px 0 #e6d5d258;
+}
+.gift-arrival:hover { background:#fff5f2; }
+.gift-arrival::before { content:''; position:absolute; inset:0 auto 0 0; width:3px; border-radius:4px 0 0 4px; background:#c88c96; }
+.arrival-copy { display:grid; gap:2px; min-width:0; }
+.arrival-copy small { font:17px/1.1 var(--hand); color:#795d62; }
+.arrival-copy strong { font:33px/1 var(--hand); color:#6f3948; }
+.arrival-copy>span { color:#775560; font:16px/1 var(--hand); }
+.arrival-copy>span span { margin-left:3px; }
+.arrival-envelope { display:block; width:94px; height:auto; justify-self:end; }

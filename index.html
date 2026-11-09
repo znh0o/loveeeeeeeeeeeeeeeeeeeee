@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="우리두리">
   <meta name="format-detection" content="telephone=no,address=no,email=no">
   <meta name="description" content="둘만의 실시간 커플 메신저, 우리두리">
-  <meta name="wooriduri-version" content="2026.11.09.1">
+  <meta name="wooriduri-version" content="2026.11.09.2">
 
   <title>우리두리</title>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -25,7 +25,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js" crossorigin>
   <link rel="modulepreload" href="./app-core.js?v=2026.10.29.1">
   <link rel="preload" href="./NanumPenScript-Regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./ui.css?v=2026.11.09.1">
+  <link rel="stylesheet" href="./ui.css?v=2026.11.09.2">
   <script>
     // Registration does not request notification permission or wait for sign-in.
     if("serviceWorker" in navigator){
@@ -115,6 +115,13 @@
           </svg>
           <span class="season-stamp-copy"><small id="seasonStampDate"></small><span id="seasonStampLabel"></span></span>
         </div>
+          <svg id="anniversaryPostmark" class="anniversary-postmark" viewBox="0 0 103 67" aria-hidden="true" hidden>
+            <path d="M45 15c-11-3-19 4-30 1m27 8C31 21 23 29 10 26m32 7C32 31 21 39 6 35" fill="none" stroke="#9f5662" stroke-width="1.35" stroke-linecap="round"/>
+            <path d="M97 31c3 16-7 30-22 31C58 64 45 55 43 40 41 24 50 11 67 9c16-2 28 7 30 22Z" fill="#fffbf3" stroke="#a46971" stroke-width="1.15"/>
+            <path d="M92 32c2 12-5 24-18 26-13 2-24-6-26-18-2-13 6-24 19-26 12-2 23 6 25 18Z" fill="none" stroke="#a46971" stroke-width=".75" stroke-dasharray="2 1.7"/>
+            <text x="70" y="35" text-anchor="middle" class="postmark-date">11.25</text>
+            <text x="70" y="48" text-anchor="middle" class="postmark-label">1주년</text>
+          </svg>
           <svg class="plane-sticker" viewBox="0 0 74 70" aria-hidden="true"><path d="M7 8l58 18-24 10-13 21-5-29z" fill="#fff" stroke="#67788a" stroke-width="1.5"/><path d="M7 8l34 28M23 28l42-2M28 57l-5-29" fill="none" stroke="#67788a" stroke-width="1.3"/><path d="M57 47c13-14 21 10 4 11-17 1-12 12-2 11" fill="none" stroke="#d0a4b5" stroke-width="2" stroke-dasharray="3 3"/></svg><article class="dday-card sticky-anniversary"><div class="paper-binding" aria-hidden="true">● ● ● ● ● ● ●</div><div class="dday-label">함께한 지</div><div class="dday-value"><strong id="ddayValue">0</strong><span>일</span></div><div id="ddaySub" class="dday-sub"></div><span class="paper-fold" aria-hidden="true"></span></article></section>
         <button id="homeMilestoneStrip" class="home-milestone-strip" type="button" data-benchmark-action="calendar" aria-label="다가오는 기념일과 약속 보기"><span class="home-strip-hearts" aria-hidden="true"><i>♥</i><i>♥</i></span><span class="home-strip-row"><span id="homeMilestoneSymbol0" class="home-strip-symbol" aria-hidden="true">♡</span><span id="homeMilestoneTitle0" class="home-strip-title">함께할 날을 적어봐요</span><span id="homeMilestoneCount0" class="home-strip-count">—</span></span><span class="home-strip-row"><span id="homeMilestoneSymbol1" class="home-strip-symbol" aria-hidden="true">♡</span><span id="homeMilestoneTitle1" class="home-strip-title">다음 약속을 적어봐요</span><span id="homeMilestoneCount1" class="home-strip-count">—</span></span></button><section class="couple-connection" aria-label="두 사람"><div class="mini-person mini-person-self"><div class="profile-photo-column"><div id="homeMyAvatar" class="avatar"></div><span id="homeMyName"></span></div><button id="homeMyMood" class="mood-badge" type="button" aria-label="내 기분 선택하기"><span class="mood-glyph" aria-hidden="true">+</span></button></div><div class="connection-copy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20S3 15 3 8c0-6 8-6 9-1 2-5 9-5 9 1 0 7-9 12-9 12z"/></svg><span id="partnerStatusText">상대방 대기 중</span><button id="homeBatteryBadge" class="profile-battery-badge" aria-label="배터리 설정">배터리 —</button></div><div class="mini-person mini-person-partner"><div id="homePartnerMood" class="mood-badge" role="img" aria-label="상대가 아직 기분을 고르지 않았어요"><span class="mood-glyph" aria-hidden="true">·</span></div><div class="profile-photo-column"><div id="homePartnerAvatar" class="avatar partner"></div><span id="homePartnerName"></span></div></div></section>
         <button class="upcoming-anniversary" data-benchmark-action="calendar"><span>♡</span><b id="benchmarkMilestone">다가오는 기념일</b><span>달력 보기 ↗</span></button>
@@ -122,9 +129,20 @@
           <h2 id="homeUpdateTitle"></h2><ul id="homeUpdateChanges"></ul><button id="toggleUpdateDetails" class="update-details-toggle" type="button" aria-expanded="false" hidden>변경 내용 더 보기</button>
           <div class="home-update-actions"><button id="dismissAppUpdateButton" type="button" class="cancel-button">나중에</button><button id="homeApplyAppUpdateButton" type="button" class="confirm-button">업데이트</button></div>
         </article>
-        <article id="homeGiftBookCard" class="home-gift-book" hidden aria-labelledby="homeGiftBookTitle">
-          <span>준호가 보낸 수첩</span><h2 id="homeGiftBookTitle">우리의 첫 번째 1년</h2>
-          <button id="openGiftBookButton" type="button">수첩 열어보기 →</button>
+        <article id="homeGiftBookCard" hidden>
+          <button id="openGiftBookButton" class="gift-arrival" type="button" aria-label="준호가 보낸 1주년 수첩 열기">
+          <span class="arrival-copy"><small>준호가 남긴 1주년 수첩</small><strong>세은에게</strong><span>수첩 열기 <span aria-hidden="true">→</span></span></span>
+          <svg class="arrival-envelope" viewBox="0 0 104 74" aria-hidden="true">
+            <g transform="rotate(-7 53 40)">
+              <path d="M17 25 52 8l35 17v38H17Z" fill="#f4e6df" stroke="#bb9996" stroke-width="1.2" stroke-linejoin="round"/>
+              <path d="m27 46-2-25 49-5 3 32Z" fill="#fffdf8" stroke="#c2aaa2" stroke-width="1" stroke-linejoin="round"/>
+              <path d="m33 25 31-3m-30 8 27-3" stroke="#d4bfb4" stroke-width="1" stroke-linecap="round"/>
+              <path d="m17 26 35 23 35-23v37H17Z" fill="#faf0e9" stroke="#bb9996" stroke-width="1.2" stroke-linejoin="round"/>
+              <path d="m18 61 24-20m44 20L62 42" stroke="#cfaaa4" stroke-width="1.05"/>
+              <path d="M52 45c-8-10-16-9-13-4 2 3 8 4 13 4Zm0 0c7-10 15-10 13-5-1 4-8 5-13 5Zm0 0c-3 4-4 8-8 11m8-11c3 3 3 8 8 11" fill="none" stroke="#a15461" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+          </svg>
+        </button>
         </article>
 
 <div class="home-two-cards">        <article class="card content-card event-card" aria-labelledby="nextEventHeading">
@@ -4416,8 +4434,10 @@
 
     function homeSeasonAt(now=Date.now()){
       const koreaTime=now+9*60*60*1000;
+      const date=new Date(koreaTime).toISOString().slice(0,10);
       return {
-        theme:HOME_SEASON_DAYS[new Date(koreaTime).toISOString().slice(5,10)] || null,
+        date,
+        theme:HOME_SEASON_DAYS[date.slice(5)] || null,
         untilMidnight:HOME_DAY_MS-koreaTime%HOME_DAY_MS
       };
     }
@@ -4428,7 +4448,7 @@
       const slot=fixedSlotFromUser(auth.currentUser);
       const active=!!slot && slot===state.mySlot && state.roomId===FIXED_ROOM_ID
         && !$("loginScreen").classList.contains("is-active");
-      const {theme,untilMidnight}=homeSeasonAt();
+      const {theme,untilMidnight,date}=homeSeasonAt();
       const stamp=$("seasonStamp");
       stamp.hidden=!(active && theme);
       if(active && theme){
@@ -4438,6 +4458,13 @@
       }else{
         delete frame.dataset.season;
       }
+      const giftCard=$("homeGiftBookCard");
+      if(!active || slot!=="user2") giftCard.hidden=true;
+      const anniversary=!giftCard.hidden && date==="2026-11-25";
+      const anniversaryChanged=frame.hasAttribute("data-anniversary")!==anniversary;
+      frame.toggleAttribute("data-anniversary",anniversary);
+      $("anniversaryPostmark").toggleAttribute("hidden",!anniversary);
+      if(anniversaryChanged && active) renderHomeMilestoneStrip();
       if(active) homeSeasonTimer=setTimeout(refreshSeasonalHome,untilMidnight+100);
     }
 
@@ -4449,16 +4476,28 @@
     }
 
     let giftBookUnsubscribe=null;
+    function isGiftBookRecipient(){
+      return state.mySlot==="user2" && fixedSlotFromUser(auth.currentUser)==="user2"
+        && state.roomId===FIXED_ROOM_ID && !$("loginScreen").classList.contains("is-active");
+    }
+
     function startGiftBookListener(){
       giftBookUnsubscribe?.();giftBookUnsubscribe=null;
       $("homeGiftBookCard").hidden=true;
-      if(state.mySlot!=="user2"||state.authUser?.email?.toLowerCase()!=="user2@wooriduri.app")return;
+      if(!isGiftBookRecipient())return;
+      const recipientUid=auth.currentUser.uid;
       giftBookUnsubscribe=onValue(ref(db,"rooms/main/decoInfo/anniversaryGiftMeta"),snapshot=>{
+        if(!isGiftBookRecipient()||auth.currentUser.uid!==recipientUid)return;
         const meta=snapshot.val();
         const visible=!!(meta?.publishedAt&&meta?.by==="user1"&&typeof meta.title==="string");
         $("homeGiftBookCard").hidden=!visible;
-        if(visible)$("homeGiftBookTitle").textContent=meta.title.slice(0,100);
-      },error=>{console.warn("gift book listener failed",error);$("homeGiftBookCard").hidden=true;});
+        refreshSeasonalHome();
+      },error=>{
+        if(!isGiftBookRecipient()||auth.currentUser.uid!==recipientUid)return;
+        console.warn("gift book listener failed",error);
+        $("homeGiftBookCard").hidden=true;
+        refreshSeasonalHome();
+      });
       state.unsubscribers.push(giftBookUnsubscribe);
     }
     let pendingAppVersion="";
@@ -4664,6 +4703,8 @@ function showInstalledUpdate(){
   if($("homeUpdateCard").dataset.kind==="available"&&!$("homeUpdateCard").hidden)return;
   try{if(localStorage.getItem("wooriduri_release_acknowledged")===APP_VERSION)return;}catch{}
   let notes={};try{notes=JSON.parse($("appReleaseNotes").textContent)}catch{}
+  // A surprise can ship in the app shell without a public update announcement.
+  if(notes.version!==APP_VERSION)return;
   showAppUpdateCard(document,APP_VERSION,false);
   $("homeUpdateCard").dataset.kind="installed";$("homeUpdateCard").dataset.version=APP_VERSION;
   $("homeUpdateTitle").textContent=`업데이트됐어요 · v${APP_VERSION}`;
@@ -4671,7 +4712,7 @@ function showInstalledUpdate(){
 }
 function bindServiceEnhancements(){
   $("anniversaryBookButton").addEventListener("click",()=>{if(state.mySlot==="user1"&&state.authUser?.email?.toLowerCase()==="user1@wooriduri.app")location.href="./secret-book.html"});
-  $("openGiftBookButton").addEventListener("click",()=>{if(state.mySlot==="user2"&&state.authUser?.email?.toLowerCase()==="user2@wooriduri.app")location.href="./secret-book.html?gift=1"});
+  $("openGiftBookButton").addEventListener("click",()=>{if(isGiftBookRecipient()&&!$("homeGiftBookCard").hidden)location.href="./secret-book.html?gift=1"});
   $("homeBatteryBadge").addEventListener("click",openAccountSettings);
   $("newNextEventButton").addEventListener("click",()=>openEventModal({createNew:true}));
   $("messageReplyAction").addEventListener("click",()=>{const message=state.messages.find(item=>item.id===selectedMessageId);closeModal("messageActionsModal");if(message)setReplyTarget(message)});
@@ -4736,12 +4777,14 @@ function benchmarkDaysUntil(date){
 function renderHomeMilestoneStrip(){
   benchmarkHomeStripDate=benchmarkTodayKey();
   const rows=[];
+  const anniversary=document.querySelector(".app-frame").hasAttribute("data-anniversary");
+  if(anniversary)rows.push({title:"우리의 1주년",remaining:0,symbol:"♡",today:"오늘"});
   const event=state.room?.nextEvent,untilEvent=benchmarkDaysUntil(event?.date);
   if(typeof event?.title==="string"&&event.title.trim()&&untilEvent!==null&&untilEvent>=0)rows.push({title:event.title.trim().slice(0,30),remaining:untilEvent,symbol:"✦"});
   const milestone=benchmarkMilestone(),untilMilestone=benchmarkDaysUntil(milestone?.date);
   if(milestone&&untilMilestone!==null&&untilMilestone>=0)rows.push({title:milestone.title,remaining:untilMilestone,symbol:"♥"});
   const start=state.room?.anniversary,daysTogether=calendarDayCount(start);
-  if(daysTogether!==null&&daysTogether>=1){
+  if(!anniversary&&daysTogether!==null&&daysTogether>=1){
     const [startYear,month,day]=start.split("-").map(Number),todayYear=Number(benchmarkHomeStripDate.slice(0,4));
     let year=Math.max(startYear+1,todayYear),date=new Date(Date.UTC(year,month-1,day)).toISOString().slice(0,10);
     if(benchmarkDaysUntil(date)<0){year++;date=new Date(Date.UTC(year,month-1,day)).toISOString().slice(0,10)}
@@ -4752,7 +4795,7 @@ function renderHomeMilestoneStrip(){
     const row=rows[index],empty=index===0?"함께할 날을 적어봐요":"다음 약속을 적어봐요";
     $("homeMilestoneSymbol"+index).textContent=row?.symbol||"♡";
     $("homeMilestoneTitle"+index).textContent=row?.title||empty;
-    $("homeMilestoneCount"+index).textContent=row?row.remaining===0?"D-day":`D−${row.remaining}`:"—";
+    $("homeMilestoneCount"+index).textContent=row?row.remaining===0?(row.today||"D-day"):`D−${row.remaining}`:"—";
   }
 }
 function renderBenchmarkMoods(){
