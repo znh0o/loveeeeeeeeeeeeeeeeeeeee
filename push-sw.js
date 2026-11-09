@@ -16,7 +16,7 @@ const PUBLIC_SDK=new Set(["app","auth","database"].map(name=>
   `https://www.gstatic.com/firebasejs/10.12.0/firebase-${name}.js`));
 const PUBLIC_WARM_URLS=[
   PUBLIC_INDEX,new URL("app-core.js?v=2026.10.29.1",PUBLIC_ROOT).href,
-  new URL("ui.css?v=2026.11.09.2",PUBLIC_ROOT).href,
+  new URL("ui.css?v=2026.11.09.3",PUBLIC_ROOT).href,
   new URL("NanumPenScript-Regular.woff2",PUBLIC_ROOT).href,...PUBLIC_SDK
 ];
 

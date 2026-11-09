@@ -1,6 +1,6 @@
 export const PAGE_WIDTH=900;
 export const PAGE_HEIGHT=1273;
-export const MAX_COVER_PHOTOS=3;
+export const MAX_COVER_PHOTOS=10;
 const MAX_PAGES=40;
 const MAX_BLOCKS=80;
 const imageCache=new Map();
@@ -62,6 +62,23 @@ function drawFillingPhoto(ctx,image,x,y,width,height,angle=0){
   ctx.restore();
 }
 
+function drawPhotoRows(ctx,images,w,h){
+  const rowCounts={6:[2,2,2],7:[2,3,2],8:[2,3,3],9:[2,3,2,2],10:[2,3,2,3]}[images.length];
+  let imageIndex=0;
+  for(const [row,count] of rowCounts.entries()){
+    const widths=count===2?(row===0?[.56,.44]:[.44,.56]):[.32,.37,.31];
+    const rowHeight=h/rowCounts.length;
+    let left=0;
+    for(const [column,share] of widths.entries()){
+      const angle=(row+column)%2===0?-.054:.06;
+      const lift=column%2===0?0:.013*h;
+      drawFillingPhoto(ctx,images[imageIndex++],left-.033*w,row*rowHeight-.028*h+lift,
+        share*w+.067*w,rowHeight+.067*h,angle);
+      left+=share*w;
+    }
+  }
+}
+
 export async function drawBookCover(photos,canvas=document.createElement("canvas")){
   const images=await Promise.all(photos.slice(0,MAX_COVER_PHOTOS).map(loadImage));
   const w=canvas.width=PAGE_WIDTH,h=canvas.height=PAGE_HEIGHT;
@@ -75,6 +92,14 @@ export async function drawBookCover(photos,canvas=document.createElement("canvas
   }else if(images.length===3){
     drawFillingPhoto(ctx,images[1],-.07*w,.49*h,.72*w,.56*h,-.06);
     drawFillingPhoto(ctx,images[2],.49*w,.42*h,.58*w,.65*h,.085);
+  }else if(images.length===4||images.length===5){
+    const middleHeight=images.length===5?.51*h:.72*h;
+    drawFillingPhoto(ctx,images[1],.51*w,-.04*h,.55*w,.46*h,.075);
+    drawFillingPhoto(ctx,images[2],-.07*w,.33*h,.66*w,middleHeight,-.07);
+    drawFillingPhoto(ctx,images[3],.47*w,.34*h,.61*w,middleHeight,.075);
+    if(images.length===5)drawFillingPhoto(ctx,images[4],-.08*w,.71*h,1.18*w,.36*h,-.055);
+  }else if(images.length>=6){
+    drawPhotoRows(ctx,images,w,h);
   }
   return canvas;
 }
